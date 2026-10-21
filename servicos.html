@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serviços — Antecipey</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #1A1919;
+            --card-bg: #1a2020;
+            --earth: #00E082;
+            --earth-light: #4BFFB3;
+            --white: #FFFFFF;
+            --green: var(--earth);
+        }
+        * { box-sizing: border-box; }
+        body { font-family: 'Sora', sans-serif; margin: 0; background: var(--bg); color: #fff; overflow-x: hidden; }
+        .grad-text {
+            background: radial-gradient(ellipse at center, var(--earth) 0%, var(--earth-light) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .cta-btn {
+            display: inline-flex; align-items: center; gap: 14px;
+            border: 2.2px solid white; border-radius: 999px;
+            padding: 14px 24px 14px 36px; font-weight: 600; font-size: 18px; color: #fff;
+            background: radial-gradient(ellipse at center, var(--earth), var(--earth-light));
+            cursor: pointer; transition: opacity 0.2s; text-decoration: none;
+        }
+        .cta-btn:hover { opacity: 0.9; }
+        .cta-btn-icon {
+            width: 56px; height: 56px; border-radius: 50%; background: white;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .cta-btn-sm { font-size: 14px; padding: 10px 18px 10px 28px; gap: 10px; }
+        .cta-btn-sm .cta-btn-icon { width: 44px; height: 44px; }
+        .cta-btn-icon img { width: 14px; height: 14px; object-fit: contain; }
+        .site-nav { background: var(--bg); }
+        .brand-logo {
+            display: block; width: 174px; height: 53px;
+            background: url("assets/antecipey-logo-transparent.png") transparent 50% / contain no-repeat;
+        }
+        .curved-nav {
+            position: absolute; top: 0; left: 50%;
+            width: clamp(500px, 47vw, 620px); height: 86px;
+            transform: translateX(-50%); justify-content: center;
+            color: var(--bg); overflow: hidden;
+        }
+        .curved-nav-shape { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; pointer-events: none; }
+        .curved-nav a { position: relative; z-index: 2; }
+        .nav-active { text-decoration: underline; text-underline-offset: 4px; }
+
+        /* Hero serviços (layout Figma) */
+        .services-hero {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: calc(100vh - 96px);
+            padding: 24px 20px 48px;
+            background: var(--bg);
+            text-align: center;
+        }
+        .services-hero h1 {
+            max-width: 900px;
+            margin: 32px 0 0;
+            font-size: clamp(28px, 4.5vw, 52px);
+            font-weight: 700;
+            line-height: 1.15;
+            letter-spacing: -0.03em;
+            color: #fff;
+        }
+        .services-hero .hero-lead {
+            margin-top: 20px;
+            max-width: 720px;
+            font-size: clamp(15px, 2.2vw, 22px);
+            font-weight: 300;
+            line-height: 1.45;
+            color: rgba(255,255,255,0.75);
+        }
+        .hero-logo-glass {
+            width: min(380px, 72vw);
+            height: auto;
+            margin-top: clamp(20px, 4vh, 40px);
+            object-fit: contain;
+            opacity: 0.92;
+        }
+        .hero-scroll {
+            position: absolute;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px;
+            opacity: 0.85;
+            transition: opacity 0.2s, transform 0.2s;
+        }
+        .hero-scroll:hover { opacity: 1; }
+        .hero-scroll img { width: 22px; height: auto; display: block; opacity: 0.7; }
+
+        .catalog-section {
+            position: relative;
+            background: #00FF9D;
+            padding: 64px 48px 88px;
+        }
+        .catalog-inner { max-width: 1200px; margin: 0 auto; }
+        .catalog-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+        .catalog-heading {
+            font-size: clamp(32px, 4.5vw, 48px);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            color: #000;
+            margin: 0;
+            line-height: 1.1;
+        }
+        .catalog-filter {
+            appearance: none;
+            background: #fff;
+            border: none;
+            border-radius: 999px;
+            padding: 14px 32px;
+            font-family: 'Sora', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            color: #000;
+            cursor: pointer;
+            min-width: 140px;
+            text-align: center;
+        }
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+        .svc-card-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        .svc-card {
+            background: #00C46E;
+            border-radius: 24px;
+            padding: 28px 26px 26px;
+            display: flex;
+            flex-direction: column;
+            min-height: 340px;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+        .svc-card-link:hover .svc-card {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+        }
+        .svc-card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 6px;
+        }
+        .svc-name {
+            font-size: 22px;
+            font-weight: 700;
+            color: #fff;
+            margin: 0;
+            line-height: 1.2;
+            flex: 1;
+            min-width: 0;
+        }
+        .svc-sub {
+            font-size: 15px;
+            font-weight: 400;
+            color: #fff;
+            margin: 0 0 0;
+            line-height: 1.35;
+        }
+        .svc-cat-badge {
+            flex-shrink: 0;
+            font-size: 12px;
+            font-weight: 600;
+            color: #000;
+            background: #C8FFE8;
+            padding: 8px 16px;
+            border-radius: 999px;
+            white-space: nowrap;
+            margin-top: 2px;
+        }
+        .svc-desc {
+            flex: 1;
+            font-size: 14px;
+            line-height: 1.6;
+            color: rgba(0, 0, 0, 0.72);
+            margin: 18px 0 24px;
+        }
+        .svc-btn {
+            display: block;
+            width: 100%;
+            text-align: center;
+            background: #fff;
+            color: #000;
+            font-family: 'Sora', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            padding: 16px 24px;
+            border-radius: 999px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            margin-top: auto;
+        }
+        .svc-btn:hover { opacity: 0.9; }
+        .catalog-loading, .catalog-empty {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 48px 20px;
+            color: #000;
+            font-weight: 500;
+        }
+
+        /* Mais serviços */
+        .mais-section {
+            background: var(--bg);
+            padding: 80px 48px 100px;
+        }
+        .mais-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1.15fr;
+            gap: 48px;
+            align-items: start;
+        }
+        .mais-left h2 {
+            font-size: clamp(36px, 5vw, 56px);
+            font-weight: 700;
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+            margin: 0 0 16px;
+            color: #fff;
+        }
+        .mais-left .mais-sub {
+            font-size: clamp(15px, 2vw, 20px);
+            font-weight: 300;
+            color: rgba(255,255,255,0.85);
+            line-height: 1.45;
+            margin: 0 0 32px;
+            max-width: 380px;
+        }
+        .mais-photo-wrap {
+            background: #00FF9D;
+            border-radius: 24px;
+            overflow: hidden;
+            aspect-ratio: 1;
+            max-width: 420px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+        .mais-photo-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+        }
+        .mais-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .mais-card-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        .mais-card {
+            background: #252525;
+            border-radius: 20px;
+            padding: 22px 20px 20px;
+            display: flex;
+            flex-direction: column;
+            min-height: 280px;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+        .mais-card-link:hover .mais-card {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+        }
+        .mais-card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 4px;
+        }
+        .mais-card .mais-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+            margin: 0;
+            flex: 1;
+            line-height: 1.2;
+        }
+        .mais-card .mais-cat-badge {
+            font-size: 11px;
+            font-weight: 600;
+            color: #000;
+            background: #00FF9D;
+            padding: 6px 12px;
+            border-radius: 999px;
+            flex-shrink: 0;
+        }
+        .mais-card .mais-sub {
+            font-size: 13px;
+            color: rgba(255,255,255,0.55);
+            margin: 0 0 12px;
+        }
+        .mais-card .mais-desc {
+            flex: 1;
+            font-size: 12px;
+            line-height: 1.55;
+            color: rgba(255,255,255,0.45);
+            margin: 0 0 16px;
+        }
+        .mais-card .mais-btn {
+            display: block;
+            width: 100%;
+            text-align: center;
+            background: #fff;
+            color: #000;
+            font-family: 'Sora', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 12px 16px;
+            border-radius: 999px;
+            text-decoration: none;
+            margin-top: auto;
+        }
+        .mais-card .mais-btn:hover { opacity: 0.9; }
+
+        /* 3 Passos */
+        .passos-section {
+            background: var(--bg);
+            padding: 88px 24px 108px;
+        }
+        .passos-inner { max-width: 790px; margin: 0 auto; width: 100%; }
+        .passos-heading {
+            text-align: center;
+            font-size: clamp(34px, 5vw, 52px);
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: -0.03em;
+            margin: 0 0 56px;
+            line-height: 1.08;
+        }
+        .passos-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 44px;
+            margin-bottom: 48px;
+            padding-top: 4px;
+        }
+        .passo-card {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            min-height: 405px;
+            background: linear-gradient(180deg, #202928 0%, #121918 62%, #06100f 100%);
+            border: 1px solid rgba(0, 255, 157, 0.65);
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 0 16px rgba(0, 255, 157, 0.12), inset 0 1px 0 rgba(255,255,255,0.04);
+            opacity: 0;
+            transform: translateY(58px) scale(0.96);
+            transition: box-shadow 0.25s ease;
+        }
+        .passo-card:nth-child(1) { --stack-top: 92px; z-index: 1; }
+        .passo-card:nth-child(2) { --stack-top: 144px; z-index: 2; }
+        .passo-card:nth-child(3) { --stack-top: 196px; z-index: 3; }
+        .passos-stack.is-stacking .passo-card {
+            position: sticky;
+            top: var(--stack-top);
+        }
+        .passos-stack.is-visible .passo-card {
+            animation: passoStackIn 0.75s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+        .passos-stack.is-visible .passo-card:nth-child(2) { animation-delay: 0.16s; }
+        .passos-stack.is-visible .passo-card:nth-child(3) { animation-delay: 0.32s; }
+        @keyframes passoStackIn {
+            0% {
+                opacity: 0;
+                transform: translateY(58px) scale(0.96);
+            }
+            72% {
+                opacity: 1;
+                transform: translateY(-8px) scale(1.01);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        .passo-inner {
+            min-height: 268px;
+            padding: 34px 40px 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+        .passo-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            min-height: 40px;
+        }
+        .passo-num {
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff;
+            flex-shrink: 0;
+        }
+        .passo-title {
+            font-size: clamp(34px, 5vw, 42px);
+            font-weight: 700;
+            color: #fff;
+            text-align: right;
+            line-height: 1;
+            max-width: 330px;
+        }
+        .passo-title .accent { color: #00FF9D; }
+        .passo-desc {
+            display: block;
+            max-width: 410px;
+            margin-top: 84px;
+            font-size: 18px;
+            line-height: 1.25;
+            color: rgba(255,255,255,0.82);
+        }
+        .passo-bar {
+            display: block;
+            height: 82px;
+            background: #00FF9D;
+            width: 100%;
+            margin: 0;
+            flex-shrink: 0;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .passo-card {
+                opacity: 1;
+                transform: none;
+            }
+            .passos-stack.is-visible .passo-card {
+                animation: none;
+            }
+        }
+        .passos-cta-wrap { display: flex; justify-content: center; }
+        .passos-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            border: 2px solid rgba(255,255,255,0.9);
+            border-radius: 999px;
+            padding: 14px 28px 14px 40px;
+            font-weight: 600;
+            font-size: 18px;
+            color: #fff;
+            background: radial-gradient(ellipse at center, var(--earth), var(--earth-light));
+            text-decoration: none;
+            box-shadow: 0 0 32px rgba(0, 224, 130, 0.35);
+            transition: opacity 0.2s, box-shadow 0.2s;
+        }
+        .passos-cta:hover {
+            opacity: 0.95;
+            box-shadow: 0 0 40px rgba(0, 224, 130, 0.45);
+        }
+        .passos-cta .cta-btn-icon { width: 48px; height: 48px; }
+
+        /* Liberdade Financeira CTA */
+        .liberdade-section {
+            position: relative;
+            padding: 100px 32px 88px;
+            background:
+                radial-gradient(ellipse 70% 45% at 50% 0%, rgba(0, 255, 157, 0.22) 0%, transparent 58%),
+                linear-gradient(180deg, #1a1919 0%, #141414 100%);
+            text-align: center;
+        }
+        .liberdade-heading {
+            font-size: clamp(30px, 4.5vw, 48px);
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: -0.03em;
+            line-height: 1.12;
+            margin: 0 auto 48px;
+            max-width: 720px;
+        }
+        .liberdade-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 560px;
+            width: 100%;
+            min-height: 380px;
+            margin: 0 auto 40px;
+            background: #00FF9D;
+            border-radius: 24px;
+            padding: 36px 40px 0;
+            text-align: center;
+            overflow: hidden;
+        }
+        .liberdade-card p {
+            font-size: 16px;
+            line-height: 1.55;
+            color: #000;
+            font-weight: 500;
+            margin: 0;
+            max-width: 100%;
+        }
+        .liberdade-people-wrap {
+            margin-top: auto;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            line-height: 0;
+            padding-top: 20px;
+        }
+        .liberdade-people {
+            width: min(85%, 300px);
+            height: auto;
+            max-height: 145px;
+            object-fit: contain;
+            object-position: bottom center;
+            display: block;
+            margin: 0;
+            filter: brightness(0);
+        }
+        .liberdade-cta-wrap { display: flex; justify-content: center; }
+        .liberdade-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            border: 2px solid rgba(255,255,255,0.95);
+            border-radius: 999px;
+            padding: 14px 32px 14px 44px;
+            font-weight: 600;
+            font-size: 18px;
+            color: #fff;
+            background: radial-gradient(ellipse at center, var(--earth), var(--earth-light));
+            text-decoration: none;
+            box-shadow: 0 0 36px rgba(0, 224, 130, 0.4);
+        }
+        .liberdade-cta:hover { opacity: 0.92; }
+        .liberdade-cta .cta-btn-icon { width: 52px; height: 52px; }
+
+        /* Footer */
+        .site-footer {
+            background: #fff;
+            padding: 48px 32px;
+            border-top: 1px solid #ebebeb;
+        }
+        .site-footer-inner {
+            max-width: 1160px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px 48px;
+            align-items: flex-start;
+        }
+        .site-footer-brand img { width: 72px; height: 72px; object-fit: contain; }
+        .site-footer-brand p {
+            font-size: 15px;
+            font-weight: 500;
+            color: #111;
+            max-width: 200px;
+            line-height: 1.45;
+            margin: 14px 0 0;
+        }
+        .site-footer-links {
+            display: flex;
+            gap: 48px;
+            padding-left: 48px;
+            border-left: 1px solid #e0e0e0;
+        }
+        .site-footer-links ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .site-footer-links a {
+            color: #222;
+            font-size: 14px;
+            text-decoration: none;
+            transition: color 0.15s;
+        }
+        .site-footer-links a:hover { color: #00cc80; }
+        .site-footer-legal {
+            flex: 1;
+            min-width: 220px;
+            max-width: 320px;
+            font-size: 12px;
+            color: #999;
+            line-height: 1.65;
+            margin: 0;
+        }
+
+        @media (max-width: 1024px) {
+            .mais-inner { grid-template-columns: 1fr; gap: 40px; }
+            .mais-photo-wrap { max-width: 100%; }
+            .services-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 768px) {
+            .brand-logo { width: 130px; height: 40px; }
+            .curved-nav { display: none !important; }
+            .cta-btn { font-size: 14px; padding: 10px 16px 10px 24px; }
+            .cta-btn .cta-btn-icon { width: 40px; height: 40px; }
+            .services-hero { min-height: 100svh; padding-bottom: 72px; }
+            .services-hero h1 { font-size: 26px; margin-top: 20px; }
+            .hero-logo-glass { width: min(260px, 65vw); }
+            .catalog-section { padding: 40px 16px 64px; }
+            .catalog-header { flex-direction: column; align-items: flex-start; }
+            .services-grid { grid-template-columns: 1fr; gap: 16px; }
+            .catalog-filter { width: 100%; }
+            .mais-section { padding: 48px 16px 64px; }
+            .mais-grid { grid-template-columns: 1fr; }
+            .passos-section { padding: 48px 16px 72px; }
+            .passos-stack { gap: 28px; }
+            .passo-card:nth-child(1) { --stack-top: 78px; }
+            .passo-card:nth-child(2) { --stack-top: 126px; }
+            .passo-card:nth-child(3) { --stack-top: 174px; }
+            .passo-card { min-height: 360px; }
+            .passo-inner { min-height: 238px; padding: 28px 24px 0; }
+            .passo-row { align-items: flex-start; }
+            .passo-num { font-size: 20px; }
+            .passo-title { font-size: 30px; }
+            .passo-desc { margin-top: 64px; font-size: 16px; max-width: 100%; }
+            .passo-bar { height: 72px; width: 100%; margin: 0; }
+            .liberdade-section { padding: 64px 16px 56px; }
+            .liberdade-card {
+                min-height: 320px;
+                padding: 28px 24px 0;
+                border-radius: 20px;
+            }
+            .liberdade-card p { font-size: 15px; }
+            .liberdade-people {
+                width: min(82%, 240px);
+                max-height: 110px;
+            }
+            .site-footer-links { padding-left: 0; border-left: none; flex-direction: column; gap: 24px; }
+            .site-footer-inner { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="site-nav relative z-10 mx-auto flex max-w-7xl items-center justify-between px-6 py-7 md:px-10">
+    <a href="index.html" class="relative z-10 flex items-center" aria-label="Antecipey">
+        <span class="brand-logo" role="img" aria-label="Antecipey"></span>
+    </a>
+    <div class="curved-nav hidden md:flex items-center gap-12 text-xs font-semibold text-zinc-900">
+        <svg class="curved-nav-shape" xmlns="http://www.w3.org/2000/svg" viewBox="0 -43 846 162" fill="none" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M4.84943 -11.7525C-4.07247 -23.0078 3.4476 -43 17.8101 -43H827.84C842.203 -43 849.723 -23.0078 840.801 -11.7525C833.684 -2.77354 827.173 7.49267 823.577 18.1471C815.514 42.0437 818.274 79.2894 820.961 101.204C822.102 110.506 814.935 119 805.563 119H40.0875C30.7152 119 23.5488 110.506 24.6896 101.204C27.377 79.2894 30.1366 42.0437 22.0731 18.1471C18.4779 7.49267 11.9669 -2.77353 4.84943 -11.7525Z" fill="#21EE98"/>
+            <defs>
+                <linearGradient id="navGlow" x1="422.825" y1="71.5" x2="423.325" y2="128.5" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="white" stop-opacity="0"/><stop offset="1" stop-color="white"/>
+                </linearGradient>
+            </defs>
+        </svg>
+        <a href="servicos.html" class="nav-active transition hover:underline">Serviços</a>
+        <a href="index.html#solucoes" class="transition hover:underline">Soluções</a>
+        <a href="index.html#depoimentos" class="transition hover:underline">Testemunhos</a>
+        <a href="index.html#preco" class="transition hover:underline">Preço</a>
+    </div>
+    <a href="#" class="cta-btn cta-btn-sm hidden md:inline-flex">
+        Contratar Serviços
+        <span class="cta-btn-icon">
+            <img src="assets/cta-arrow-green.png" alt="">
+        </span>
+    </a>
+    <button id="menu-btn" class="md:hidden text-white p-2" aria-label="Menu">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
+    </button>
+</nav>
+
+<div id="mobile-menu" class="hidden md:hidden flex flex-col items-center gap-6 py-8 bg-[#1a1919] text-white">
+    <a href="servicos.html" class="text-emerald-400">Serviços</a>
+    <a href="index.html#solucoes" class="hover:text-emerald-400">Soluções</a>
+    <a href="index.html#depoimentos" class="hover:text-emerald-400">Testemunhos</a>
+    <a href="index.html#preco" class="hover:text-emerald-400">Preço</a>
+    <a href="#" class="cta-btn cta-btn-sm">Contratar Serviços<span class="cta-btn-icon"><img src="assets/cta-arrow-green.png" alt=""></span></a>
+</div>
+
+<!-- Hero serviços -->
+<main class="services-hero">
+    <h1>Os serviços que a <span class="grad-text">Antecipey</span> pode te proporcionar:</h1>
+    <p class="hero-lead">Descubra as soluções de crédito pensadas para quem busca segurança, taxas justas e dinheiro rápido.</p>
+    <img src="assets/logo-glass.png" alt="Logo Antecipey" class="hero-logo-glass" width="520" height="520">
+    <a href="#catalogo" class="hero-scroll" aria-label="Ver catálogo de serviços">
+        <img src="assets/arrow-scroll.png" alt="">
+    </a>
+</main>
+
+<!-- Principais Serviços -->
+<section id="catalogo" class="catalog-section">
+    <div class="catalog-inner">
+        <div class="catalog-header">
+            <h2 class="catalog-heading">Principais Serviços:</h2>
+            <select id="category-filter" class="catalog-filter" aria-label="Filtrar por categoria">
+                <option value="">Categoria</option>
+            </select>
+        </div>
+        <div class="services-grid" id="services-grid">
+            <p class="catalog-loading">Carregando serviços…</p>
+        </div>
+    </div>
+</section>
+
+<!-- Mais serviços -->
+<section class="mais-section" id="mais-servicos">
+    <div class="mais-inner">
+        <div class="mais-left">
+            <h2>Mais serviços <span class="grad-text">da Antecipey</span></h2>
+            <p class="mais-sub">Seu futuro financeiro começa aqui, sem complicação.</p>
+            <div class="mais-photo-wrap">
+                <img src="assets/homem-feliz.png" alt="Cliente feliz com crédito Antecipey">
+            </div>
+        </div>
+        <div class="mais-grid" id="mais-grid">
+            <p class="catalog-loading" style="color:rgba(255,255,255,0.5);grid-column:1/-1;">Carregando…</p>
+        </div>
+    </div>
+</section>
+
+<!-- Seu Crédito em 3 Passos -->
+<section class="passos-section" id="passos">
+    <div class="passos-inner">
+        <h2 class="passos-heading">Seu Crédito em <span class="grad-text">3 Passos.</span></h2>
+        <div class="passos-stack">
+            <div class="passo-card" data-passo="1">
+                <div class="passo-inner">
+                    <div class="passo-row">
+                        <span class="passo-num">Passo 1</span>
+                        <span class="passo-title">Simule <span class="accent">Online</span></span>
+                    </div>
+                    <p class="passo-desc">Escolha o serviço ideal para você e faça uma simulação rápida em nosso site. Em poucos segundos, você já sabe o valor disponível.</p>
+                </div>
+                <div class="passo-bar" aria-hidden="true"></div>
+            </div>
+            <div class="passo-card" data-passo="2">
+                <div class="passo-inner">
+                    <div class="passo-row">
+                        <span class="passo-num">Passo 2</span>
+                        <span class="passo-title">Documentação <span class="accent">Descomplicada</span></span>
+                    </div>
+                    <p class="passo-desc">Envie seus documentos de forma 100% digital, sem papelada ou burocracia. Nosso sistema inteligente valida tudo em tempo real.</p>
+                </div>
+                <div class="passo-bar" aria-hidden="true"></div>
+            </div>
+            <div class="passo-card" data-passo="3">
+                <div class="passo-inner">
+                    <div class="passo-row">
+                        <span class="passo-num">Passo 3</span>
+                        <span class="passo-title">Dinheiro na <span class="accent">Conta</span></span>
+                    </div>
+                    <p class="passo-desc">Após a aprovação, o dinheiro é liberado diretamente na sua conta, com rapidez, segurança e transparência.</p>
+                </div>
+                <div class="passo-bar" aria-hidden="true"></div>
+            </div>
+        </div>
+        <div class="passos-cta-wrap">
+            <a href="#catalogo" class="passos-cta cta-btn">
+                Ver serviços
+                <span class="cta-btn-icon">
+                    <img src="assets/cta-arrow-green.png" alt="">
+                </span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Liberdade Financeira -->
+<section class="liberdade-section">
+    <h2 class="liberdade-heading">Pronto para Conquistar Sua <span class="grad-text">Liberdade Financeira</span>?</h2>
+    <div class="liberdade-card">
+        <p>Milhares de trabalhadores já transformaram suas vidas com a Antecipey. Junte-se a eles e descubra como é fácil ter o controle do seu dinheiro.</p>
+        <div class="liberdade-people-wrap">
+            <img src="assets/people-silhouettes.png?v=2" alt="" class="liberdade-people" width="240" height="171">
+        </div>
+    </div>
+    <div class="liberdade-cta-wrap">
+        <a href="#catalogo" class="liberdade-cta cta-btn">
+            Ver serviços
+            <span class="cta-btn-icon">
+                <img src="assets/cta-arrow-green.png" alt="">
+            </span>
+        </a>
+    </div>
+</section>
+
+<footer class="site-footer">
+    <div class="site-footer-inner">
+        <div class="site-footer-brand">
+            <img src="assets/antecipey-logo-transparent.png" alt="Antecipey">
+            <p>Seu crédito inteligente, ágil e seguro.</p>
+        </div>
+        <div class="site-footer-links">
+            <ul>
+                <li><a href="index.html">Início</a></li>
+                <li><a href="servicos.html">Serviços</a></li>
+                <li><a href="index.html#faq">Perguntas Frequentes</a></li>
+                <li><a href="#">Contato</a></li>
+            </ul>
+            <ul>
+                <li><a href="#">Termos de Uso</a></li>
+                <li><a href="#">Política de Privacidade</a></li>
+            </ul>
+        </div>
+        <p class="site-footer-legal">Antecipey não é uma Instituição financeira, mas atua como correspondente bancário seguindo as diretrizes do Banco Central do Brasil... CNPJ: XX.XXX.XXX/0001-XX. Endereço Completo.</p>
+    </div>
+</footer>
+
+<script>
+    document.getElementById('menu-btn').addEventListener('click', () => {
+        document.getElementById('mobile-menu').classList.toggle('hidden');
+    });
+
+    const passosStack = document.querySelector('.passos-stack');
+    if (passosStack) {
+        const showPassos = () => passosStack.classList.add('is-visible', 'is-stacking');
+
+        if ('IntersectionObserver' in window) {
+            const passosObserver = new IntersectionObserver((entries, observer) => {
+                if (!entries[0].isIntersecting) return;
+                showPassos();
+                observer.disconnect();
+            }, { threshold: 0.28 });
+
+            passosObserver.observe(passosStack);
+        } else {
+            showPassos();
+        }
+    }
+
+    function esc(s) {
+        if (!s) return '';
+        const d = document.createElement('div');
+        d.textContent = s;
+        return d.innerHTML;
+    }
+
+    let allServices = [];
+
+    const CATALOG_SERVICES = [
+        {
+            id: '',
+            name: 'Possibilidade de crédito até para negativados',
+            subtitle: 'Condições acessíveis',
+            category: 'Crédito',
+            paragraph: 'Condições acessíveis para te ajudar a organizar sua vida financeira sem complicação.',
+        },
+        {
+            id: '',
+            name: '100% digital e seguro.',
+            subtitle: 'Direto pelo celular',
+            category: 'Digital',
+            paragraph: 'Tudo de forma rápida, simples e sem burocracia, direto pelo celular.',
+        },
+        {
+            id: '',
+            name: 'As melhores taxas com total transparência',
+            subtitle: 'Sem letras miúdas',
+            category: 'Taxas',
+            paragraph: 'Sem letras miúdas e com condições claras para você contratar com confiança.',
+        },
+    ];
+    const DEMO_SERVICES = CATALOG_SERVICES;
+
+    function renderCards(list, isDemo = false) {
+        const grid = document.getElementById('services-grid');
+        if (!list.length) {
+            grid.innerHTML = '<p class="catalog-empty">Nenhum serviço nesta categoria.</p>';
+            return;
+        }
+        grid.innerHTML = list.map(s => {
+            const href = s.id
+                ? `servico.html?id=${encodeURIComponent(s.id)}`
+                : 'servico.html?demo=1';
+            const wrapStart = `<a href="${href}" class="svc-card-link"><article class="svc-card">`;
+            const wrapEnd = '</article></a>';
+            const btn = isDemo
+                ? '<span class="svc-btn">Ver serviço</span>'
+                : '<span class="svc-btn">Ver serviço</span>';
+            return `${wrapStart}
+                <div class="svc-card-top">
+                    <h3 class="svc-name">${esc(s.name)}</h3>
+                    <span class="svc-cat-badge">${esc(s.category || 'Categoria')}</span>
+                </div>
+                <p class="svc-sub">${esc(s.subtitle || 'Sub Título')}</p>
+                <p class="svc-desc">${esc(s.paragraph || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.')}</p>
+                ${btn}
+            ${wrapEnd}`;
+        }).join('');
+    }
+
+    function renderMaisCards(list, isDemo = false) {
+        const grid = document.getElementById('mais-grid');
+        const items = list.slice(0, 4);
+        while (items.length < 4 && isDemo) {
+            items.push({ ...DEMO_SERVICES[0], id: '' });
+        }
+        if (!items.length) {
+            grid.innerHTML = '<p style="color:rgba(255,255,255,0.5);grid-column:1/-1;">Nenhum serviço adicional.</p>';
+            return;
+        }
+        grid.innerHTML = items.map(s => {
+            const href = s.id
+                ? `servico.html?id=${encodeURIComponent(s.id)}`
+                : 'servico.html?demo=1';
+            const wrapStart = `<a href="${href}" class="mais-card-link"><article class="mais-card">`;
+            const wrapEnd = '</article></a>';
+            return `${wrapStart}
+                <div class="mais-card-top">
+                    <h3 class="mais-name">${esc(s.name)}</h3>
+                    <span class="mais-cat-badge">${esc(s.category || 'Categoria')}</span>
+                </div>
+                <p class="mais-sub">${esc(s.subtitle || 'Sub Título')}</p>
+                <p class="mais-desc">${esc(s.paragraph || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.')}</p>
+                <span class="mais-btn">Ver serviço</span>
+            ${wrapEnd}`;
+        }).join('');
+    }
+
+    function fillCategoryFilter(services) {
+        const sel = document.getElementById('category-filter');
+        const cats = [...new Set(services.map(s => s.category).filter(Boolean))];
+        cats.forEach(c => {
+            const opt = document.createElement('option');
+            opt.value = c;
+            opt.textContent = c;
+            sel.appendChild(opt);
+        });
+        sel.addEventListener('change', () => {
+            const v = sel.value;
+            renderCards(v ? allServices.filter(s => s.category === v) : allServices);
+        });
+    }
+
+    (async () => {
+        const grid = document.getElementById('services-grid');
+        try {
+            const apiServices = await fetch('/api/services').then(r => r.ok ? r.json() : []);
+            allServices = CATALOG_SERVICES;
+
+            if (!allServices.length) {
+                renderCards(CATALOG_SERVICES, true);
+                renderMaisCards(CATALOG_SERVICES, true);
+                return;
+            }
+            fillCategoryFilter(allServices);
+            renderCards(allServices, true);
+            renderMaisCards(apiServices.length ? apiServices : allServices, !apiServices.length);
+        } catch {
+            allServices = CATALOG_SERVICES;
+            fillCategoryFilter(allServices);
+            renderCards(allServices, true);
+            renderMaisCards(allServices, true);
+        }
+    })();
+</script>
+</body>
+</html>

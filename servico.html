@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serviço — Antecipey</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #121212;
+            --card-dark: #161616;
+            --earth: #00E082;
+            --earth-light: #4BFFB3;
+            --pill-green: linear-gradient(90deg, #00E082 0%, #4BFFB3 100%);
+        }
+        * { box-sizing: border-box; }
+        body { font-family: 'Sora', sans-serif; margin: 0; background: var(--bg); color: #fff; overflow-x: hidden; }
+        .cta-btn {
+            display: inline-flex; align-items: center; gap: 12px;
+            border: 2px solid #fff; border-radius: 999px;
+            padding: 12px 22px 12px 32px; font-weight: 600; font-size: 17px; color: #fff;
+            background: radial-gradient(ellipse at center, var(--earth), var(--earth-light));
+            cursor: pointer; transition: opacity 0.2s; text-decoration: none;
+            box-shadow: 0 0 40px rgba(0, 224, 130, 0.5), 0 0 80px rgba(0, 224, 130, 0.2);
+        }
+        .cta-btn:hover { opacity: 0.92; }
+        .cta-btn-icon {
+            width: 52px; height: 52px; border-radius: 50%; background: #fff;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .cta-btn-sm { font-size: 14px; padding: 10px 18px 10px 28px; gap: 10px; box-shadow: 0 0 28px rgba(0, 224, 130, 0.35); }
+        .cta-btn-sm .cta-btn-icon { width: 44px; height: 44px; }
+        .cta-btn-icon img { width: 14px; height: 14px; object-fit: contain; }
+        .site-nav { background: #1A1919; }
+        .brand-logo {
+            display: block; width: 174px; height: 53px;
+            background: url("assets/antecipey-logo-transparent.png") transparent 50% / contain no-repeat;
+        }
+        .curved-nav {
+            position: absolute; top: 0; left: 50%;
+            width: clamp(500px, 47vw, 620px); height: 86px;
+            transform: translateX(-50%); justify-content: center;
+            color: #1A1919; overflow: hidden;
+        }
+        .curved-nav-shape { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; pointer-events: none; }
+        .curved-nav a { position: relative; z-index: 2; }
+        .nav-active { text-decoration: underline; text-underline-offset: 4px; }
+
+        .svc-page {
+            padding: 40px 32px 96px;
+            min-height: calc(100vh - 96px);
+            background: var(--bg);
+        }
+        .svc-page-inner {
+            max-width: 1240px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: minmax(0, 1.12fr) minmax(0, 0.88fr);
+            gap: 32px;
+            align-items: stretch;
+        }
+
+        /* Card esquerdo — Figma */
+        .svc-main-card {
+            background: var(--card-dark);
+            border: 1px solid rgba(0, 224, 130, 0.35);
+            border-radius: 28px;
+            padding: 36px 36px 40px;
+            display: flex;
+            flex-direction: column;
+            min-height: 580px;
+            box-shadow: 0 0 0 1px rgba(0, 224, 130, 0.08);
+        }
+        .svc-main-card h1 {
+            font-size: clamp(28px, 3.5vw, 40px);
+            font-weight: 700;
+            line-height: 1.12;
+            letter-spacing: -0.03em;
+            margin: 0 0 18px;
+            color: #fff;
+        }
+        .svc-main-desc {
+            font-size: 15px;
+            font-weight: 300;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.78);
+            margin: 0 0 28px;
+            max-width: 100%;
+        }
+        .svc-cover {
+            flex: 1;
+            border-radius: 18px;
+            overflow: hidden;
+            margin-bottom: 32px;
+            min-height: 280px;
+            background: #d6d6d6;
+        }
+        .svc-cover img {
+            width: 100%;
+            height: 100%;
+            min-height: 280px;
+            object-fit: cover;
+            display: block;
+        }
+        .svc-cover-placeholder {
+            width: 100%;
+            height: 100%;
+            min-height: 280px;
+            background: #d4d4d4;
+        }
+        .svc-simular {
+            align-self: flex-start;
+            margin-top: auto;
+            flex-shrink: 0;
+        }
+
+        /* Coluna direita */
+        .svc-side {
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+            min-height: 580px;
+        }
+        .svc-offers {
+            flex: 1;
+            background: #fff;
+            border-radius: 24px;
+            padding: 32px 32px 36px;
+            color: #000;
+            display: flex;
+            flex-direction: column;
+        }
+        .svc-offers h2 {
+            font-size: 22px;
+            font-weight: 700;
+            margin: 0 0 12px;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+        }
+        .svc-offers-lead {
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.55;
+            color: #1a1a1a;
+            margin: 0 0 24px;
+        }
+        .svc-topics {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-top: auto;
+        }
+        .svc-topic {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            min-height: 52px;
+            padding: 14px 22px;
+            border-radius: 999px;
+            background: var(--pill-green);
+            font-size: 15px;
+            font-weight: 600;
+            color: #000;
+            line-height: 1.25;
+        }
+        .svc-topic-dot {
+            flex-shrink: 0;
+            font-size: 20px;
+            font-weight: 700;
+            line-height: 1;
+        }
+        .svc-duvidas {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 26px 32px;
+            border-radius: 24px;
+            background: var(--pill-green);
+            flex-shrink: 0;
+        }
+        .svc-duvidas h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #000;
+            margin: 0;
+            letter-spacing: -0.02em;
+        }
+        .svc-duvidas-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 28px;
+            border-radius: 999px;
+            background: #fff;
+            color: #000;
+            font-family: 'Sora', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            text-decoration: none;
+            white-space: nowrap;
+            transition: opacity 0.2s;
+            flex-shrink: 0;
+        }
+        .svc-duvidas-btn:hover { opacity: 0.88; }
+        .svc-duvidas-btn .dot {
+            font-size: 18px;
+            line-height: 1;
+        }
+
+        .loading-state, .error-state {
+            text-align: center;
+            padding: 120px 24px;
+            color: #9b9b9b;
+        }
+        .error-state a { color: var(--earth); }
+
+        @media (max-width: 960px) {
+            .svc-page-inner { grid-template-columns: 1fr; }
+            .svc-main-card, .svc-side { min-height: auto; }
+        }
+        @media (max-width: 768px) {
+            .brand-logo { width: 130px; height: 40px; }
+            .curved-nav { display: none !important; }
+            .svc-page { padding: 24px 16px 64px; }
+            .svc-main-card { padding: 28px 22px 32px; border-radius: 22px; }
+            .svc-offers { padding: 26px 22px 28px; border-radius: 20px; }
+            .svc-duvidas { padding: 22px 20px; flex-wrap: wrap; border-radius: 20px; }
+            .svc-cover, .svc-cover img, .svc-cover-placeholder { min-height: 200px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="site-nav relative z-10 mx-auto flex max-w-7xl items-center justify-between px-6 py-7 md:px-10">
+    <a href="index.html" class="relative z-10" aria-label="Antecipey">
+        <span class="brand-logo" role="img"></span>
+    </a>
+    <div class="curved-nav hidden md:flex items-center gap-12 text-xs font-semibold text-zinc-900">
+        <svg class="curved-nav-shape" xmlns="http://www.w3.org/2000/svg" viewBox="0 -43 846 162" fill="none" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M4.84943 -11.7525C-4.07247 -23.0078 3.4476 -43 17.8101 -43H827.84C842.203 -43 849.723 -23.0078 840.801 -11.7525C833.684 -2.77354 827.173 7.49267 823.577 18.1471C815.514 42.0437 818.274 79.2894 820.961 101.204C822.102 110.506 814.935 119 805.563 119H40.0875C30.7152 119 23.5488 110.506 24.6896 101.204C27.377 79.2894 30.1366 42.0437 22.0731 18.1471C18.4779 7.49267 11.9669 -2.77353 4.84943 -11.7525Z" fill="#21EE98"/>
+        </svg>
+        <a href="servicos.html" class="nav-active transition hover:underline">Serviços</a>
+        <a href="index.html#solucoes" class="transition hover:underline">Soluções</a>
+        <a href="index.html#depoimentos" class="transition hover:underline">Testemunhos</a>
+        <a href="index.html#preco" class="transition hover:underline">Preço</a>
+    </div>
+    <a href="servicos.html" class="cta-btn cta-btn-sm hidden md:inline-flex">
+        Contratar Serviços
+        <span class="cta-btn-icon">
+            <img src="assets/cta-arrow-green.png" alt="">
+        </span>
+    </a>
+    <button id="menu-btn" class="md:hidden text-white p-2" aria-label="Menu">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
+    </button>
+</nav>
+
+<div id="mobile-menu" class="hidden md:hidden flex flex-col items-center gap-6 py-8 bg-[#1a1919] text-white">
+    <a href="servicos.html" class="text-emerald-400">Serviços</a>
+    <a href="index.html#solucoes" class="hover:text-emerald-400">Soluções</a>
+    <a href="index.html#depoimentos" class="hover:text-emerald-400">Testemunhos</a>
+    <a href="index.html#preco" class="hover:text-emerald-400">Preço</a>
+</div>
+
+<div id="app">
+    <p class="loading-state">Carregando serviço…</p>
+</div>
+
+<script>
+    document.getElementById('menu-btn').addEventListener('click', () => {
+        document.getElementById('mobile-menu').classList.toggle('hidden');
+    });
+
+    function esc(s) {
+        if (!s) return '';
+        const d = document.createElement('div');
+        d.textContent = s;
+        return d.innerHTML;
+    }
+
+    const LOREM = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.';
+    const LOREM_SHORT = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.';
+    const DEFAULT_TOPICS = [
+        'Tópicos a ser falado',
+        'Tópicos a ser falado',
+        'Tópicos a ser falado',
+        'Tópicos a ser falado',
+    ];
+
+    const DEMO_SERVICE = {
+        name: '[Título do Serviço selecionado]',
+        subtitle: LOREM_SHORT,
+        paragraph: LOREM,
+        features: DEFAULT_TOPICS,
+        cover_url: null,
+    };
+
+    function renderService(app, s) {
+            document.title = (s.name || 'Serviço') + ' — Antecipey';
+
+            const desc = s.paragraph || LOREM;
+            const offersLead = s.subtitle || LOREM_SHORT;
+            let features = Array.isArray(s.features) && s.features.length ? [...s.features] : [...DEFAULT_TOPICS];
+            while (features.length < 4) features.push('Tópicos a ser falado');
+            features = features.slice(0, 4);
+
+            const topicsHtml = features.map(f => `
+                <div class="svc-topic">
+                    <span class="svc-topic-dot" aria-hidden="true">•</span>
+                    <span>${esc(f)}</span>
+                </div>`).join('');
+
+            const coverHtml = s.cover_url
+                ? `<div class="svc-cover"><img src="${esc(s.cover_url)}" alt=""></div>`
+                : `<div class="svc-cover"><div class="svc-cover-placeholder" aria-hidden="true"></div></div>`;
+
+            app.innerHTML = `
+                <main class="svc-page">
+                    <div class="svc-page-inner">
+                        <article class="svc-main-card">
+                            <h1>${esc(s.name)}</h1>
+                            <p class="svc-main-desc">${esc(desc)}</p>
+                            ${coverHtml}
+                            <a href="#" class="cta-btn svc-simular">Simular Agora
+                                <span class="cta-btn-icon">
+                                    <img src="assets/cta-arrow-green.png" alt="">
+                                </span>
+                            </a>
+                        </article>
+                        <aside class="svc-side">
+                            <div class="svc-offers">
+                                <h2>O que esse serviço vai te oferecer:</h2>
+                                <p class="svc-offers-lead">${esc(offersLead)}</p>
+                                <div class="svc-topics">${topicsHtml}</div>
+                            </div>
+                            <div class="svc-duvidas">
+                                <h3>Ficou com Dúvidas?</h3>
+                                <a href="index.html#faq" class="svc-duvidas-btn"><span class="dot" aria-hidden="true">•</span> Clique Aqui</a>
+                            </div>
+                        </aside>
+                    </div>
+                </main>`;
+    }
+
+    const params = new URLSearchParams(location.search);
+    const id = params.get('id');
+    const isDemo = params.get('demo') === '1';
+
+    (async () => {
+        const app = document.getElementById('app');
+        if (isDemo) {
+            renderService(app, DEMO_SERVICE);
+            return;
+        }
+        if (!id) {
+            app.innerHTML = '<p class="error-state">Serviço não encontrado. <a href="servicos.html">Voltar ao catálogo</a></p>';
+            return;
+        }
+        try {
+            const res = await fetch('/api/services');
+            let list = [];
+            if (res.ok) {
+                const data = await res.json();
+                list = Array.isArray(data) ? data : [];
+            }
+            const s = list.find(x => String(x.id) === String(id));
+            if (!s) {
+                const errMsg = !res.ok
+                    ? 'Não foi possível carregar os serviços (verifique as variáveis na Vercel: SUPABASE_URL, SUPABASE_SERVICE_KEY).'
+                    : 'Serviço não encontrado.';
+                app.innerHTML = `<p class="error-state">${errMsg} <a href="servicos.html">Voltar ao catálogo</a> · <a href="servico.html?demo=1">Ver layout de exemplo</a></p>`;
+                return;
+            }
+            renderService(app, s);
+        } catch {
+            app.innerHTML = '<p class="error-state">Erro ao carregar. <a href="servicos.html">Voltar</a> · <a href="servico.html?demo=1">Ver layout de exemplo</a></p>';
+        }
+    })();
+</script>
+</body>
+</html>

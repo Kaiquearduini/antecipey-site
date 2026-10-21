@@ -1,0 +1,2611 @@
+<!DOCTYPE html>
+<html lang="pt-pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Antecipey</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #1a1919;
+            --card-bg: #1a2020;
+            --green: #00e082;
+            --green-light: #4bffb3;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Sora', sans-serif;
+            margin: 0;
+            background: var(--bg);
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* ── Gradient text ── */
+        .grad-text {
+            background: radial-gradient(ellipse at center, #00e082 0%, #13e88e 25%, #25f09b 50%, #4bffb3 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* ── CTA button (pill) ── */
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            border: 2.2px solid white;
+            border-radius: 999px;
+            padding: 14px 24px 14px 36px;
+            font-weight: 600;
+            font-size: 18px;
+            color: #fff;
+            background: radial-gradient(ellipse at center, #00e082, #13e88e, #25f09b, #4bffb3);
+            cursor: pointer;
+            transition: opacity 0.2s;
+            text-decoration: none;
+        }
+        .cta-btn:hover { opacity: 0.9; }
+        .cta-btn-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .cta-btn-sm {
+            font-size: 14px;
+            padding: 10px 18px 10px 28px;
+            gap: 10px;
+        }
+        .cta-btn-sm .cta-btn-icon {
+            width: 44px;
+            height: 44px;
+        }
+
+        /* ══════════════════ NAVBAR ══════════════════ */
+        .site-nav {
+            background: var(--bg);
+        }
+        .brand-logo {
+            display: block;
+            width: 174px;
+            height: 53px;
+            background: url("assets/antecipey-logo-transparent.png") transparent 50% / contain no-repeat;
+        }
+        .curved-nav {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: clamp(500px, 47vw, 620px);
+            height: 86px;
+            transform: translateX(-50%);
+            justify-content: center;
+            color: var(--bg);
+            overflow: hidden;
+        }
+        .curved-nav-shape {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        .curved-nav a {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ══════════════════ HERO ══════════════════ */
+        .hero-visual {
+            position: relative;
+            overflow: hidden;
+            background:
+                linear-gradient(180deg,
+                    #1a1919 0%,
+                    #1a1919 30%,
+                    rgba(26,25,25,0.50) 48%,
+                    rgba(42,154,107,0.50) 100%);
+        }
+        .hero-background {
+            position: relative;
+            z-index: 1;
+            min-height: auto;
+            overflow: visible;
+            padding-bottom: 220px;
+        }
+        .hero-background::before {
+            display: none;
+        }
+        .hero-background > * { position: relative; z-index: 1; }
+
+        .changing-word {
+            display: inline-block;
+            color: #10C98A;
+            opacity: 1;
+            transition: opacity 0.35s ease, transform 0.35s ease;
+        }
+        .changing-word.is-changing {
+            opacity: 0.25;
+            transform: translateY(6px);
+        }
+
+        .hero-cards-section {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            min-height: clamp(300px, 65vw, 820px);
+            margin-top: -170px;
+            margin-bottom: -28%;
+            overflow: hidden;
+            background: transparent;
+        }
+        .hero-cards-section::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 4;
+            height: clamp(42px, 7vw, 82px);
+            pointer-events: none;
+            background: linear-gradient(
+                180deg,
+                rgba(26,25,25,0) 0%,
+                rgba(27,70,51,0.18) 58%,
+                rgba(26,25,25,0.88) 100%
+            );
+        }
+
+        .hero-card-wrapper {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            z-index: 2;
+            width: 100vw;
+            height: 100%;
+            min-height: inherit;
+        }
+        .hero-card {
+            position: absolute;
+            width: clamp(300px, 72vw, 920px);
+            aspect-ratio: 115 / 84;
+            object-fit: contain;
+            will-change: transform;
+        }
+        @media (min-width: 769px) {
+            .hero-cards-section {
+                min-height: clamp(420px, 58vw, 760px);
+                margin-bottom: -18%;
+                overflow: visible;
+            }
+            .hero-card-wrapper {
+                transform: translateY(-230px);
+            }
+            .hero-card {
+                width: clamp(520px, 82vw, 1080px);
+            }
+        }
+        .hero-card-1 {
+            z-index: 3;
+            transform: rotate(-12.3deg) translate(-25%, 5%);
+            animation: cardFloat1 4s ease-in-out infinite;
+            filter: drop-shadow(0 28px 50px rgba(0,0,0,0.7)) drop-shadow(0 0 30px rgba(16,201,138,0.2));
+        }
+        .hero-card-2 {
+            z-index: 2;
+            transform: rotate(-3.9deg) translate(0%, 6%);
+            animation: cardFloat2 4s ease-in-out infinite;
+            animation-delay: 0.6s;
+            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.6));
+        }
+        .hero-card-3 {
+            z-index: 1;
+            transform: rotate(6.341deg) translate(24%, 4%);
+            animation: cardFloat3 4s ease-in-out infinite;
+            animation-delay: 1.1s;
+            filter: drop-shadow(0 16px 32px rgba(0,0,0,0.5));
+        }
+        @keyframes cardFloat1 {
+            0%,100% { transform: rotate(-12.3deg) translate(-25%, 5%); }
+            50%      { transform: rotate(-12.3deg) translate(-25%, calc(5% - 18px)); }
+        }
+        @keyframes cardFloat2 {
+            0%,100% { transform: rotate(-3.9deg) translate(0%, 6%); }
+            50%      { transform: rotate(-3.9deg) translate(0%, calc(6% - 14px)); }
+        }
+        @keyframes cardFloat3 {
+            0%,100% { transform: rotate(6.341deg) translate(24%, 4%); }
+            50%      { transform: rotate(6.341deg) translate(24%, calc(4% - 12px)); }
+        }
+
+        /* ══════════════════ FEATURES ══════════════════ */
+        .features-section {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(180deg, rgba(26,25,25,0.50) 14.24%, rgba(42,154,107,0.50) 100%);
+        }
+
+        .services-reveal {
+            opacity: 0;
+            transform: translateY(44px);
+            filter: blur(10px);
+            transition:
+                opacity 0.85s ease,
+                transform 0.85s cubic-bezier(.22,1,.36,1),
+                filter 0.85s ease;
+            will-change: opacity, transform, filter;
+        }
+
+        .services-reveal > * {
+            opacity: 0;
+            transform: translateY(28px);
+            transition:
+                opacity 0.7s ease,
+                transform 0.7s cubic-bezier(.22,1,.36,1);
+        }
+
+        .services-reveal.is-visible,
+        .services-reveal.is-visible > * {
+            opacity: 1;
+            transform: translateY(0);
+            filter: none;
+        }
+
+        .services-reveal.is-visible > *:nth-child(2) {
+            transition-delay: 0.12s;
+        }
+
+        .services-reveal.is-visible > *:nth-child(3) {
+            transition-delay: 0.2s;
+        }
+
+        .services-reveal.is-visible > *:nth-child(4) {
+            transition-delay: 0.28s;
+        }
+
+        .features-mobile-cards {
+            display: none;
+        }
+
+        .features-mobile-cards img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 14px;
+        }
+
+        .feature-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            border: 1px solid var(--green);
+            background: var(--card-bg);
+        }
+
+        /* ── Person + floating card ── */
+        .person-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            border: 1px solid var(--green);
+            background: var(--card-bg);
+        }
+        .floating-card {
+            position: absolute;
+            top: 20px;
+            right: 16px;
+            width: 46%;
+            background: #fff;
+            border-radius: 14px 14px 14px 0;
+            padding: 16px 18px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+            z-index: 3;
+        }
+        .floating-card-logo {
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ══════════════════ CREDITO SECTION ══════════════════ */
+        .credito-section {
+            position: relative;
+            overflow: visible;
+        }
+        .credito-section::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(26,25,25,0) 0%, rgba(26,25,25,0.8) 100%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ══════════════════ SOLUTIONS SECTION ══════════════════ */
+        .solutions-section {
+            --solutions-bg: #0d1510;
+            --solutions-green: #2ecc71;
+            --solutions-card-bg: linear-gradient(145deg, #c8cac7 0%, #9ea09c 100%);
+            --solutions-card-shadow: 0 12px 50px rgba(0,0,0,0.6);
+            --solutions-text-muted: #b0b4ae;
+            overflow: hidden;
+            background: var(--solutions-bg);
+        }
+        .solutions-particles {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        .solutions-section::before,
+        .solutions-section::after {
+            content: "";
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .solutions-section::before {
+            top: -160px;
+            left: -160px;
+            background: radial-gradient(circle, rgba(46,204,113,0.22) 0%, transparent 70%);
+            animation: solutionsPulseTL 6s ease-in-out infinite;
+        }
+        .solutions-section::after {
+            right: -160px;
+            bottom: -160px;
+            background: radial-gradient(circle, rgba(46,204,113,0.14) 0%, transparent 70%);
+            animation: solutionsPulseBR 7s ease-in-out infinite;
+        }
+        @keyframes solutionsPulseTL {
+            0%,100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.15); }
+        }
+        @keyframes solutionsPulseBR {
+            0%,100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+        .solutions-inner {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .solutions-heading {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 64px;
+            letter-spacing: -0.02em;
+            opacity: 0;
+            transform: translateY(-28px);
+            animation: solutionsFadeDown 0.8s cubic-bezier(.22,1,.36,1) 0.1s forwards;
+        }
+        .solutions-heading .accent {
+            color: var(--solutions-green);
+        }
+        @keyframes solutionsFadeDown {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .solutions-carousel {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 0;
+            position: relative;
+        }
+        .solutions-slide {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            position: relative;
+            padding: 0 10px;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.6s ease, transform 0.6s cubic-bezier(.22,1,.36,1), filter 0.5s;
+        }
+        .solutions-slide.entered {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .solutions-slide.side {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .solutions-slide.side.entered {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .solutions-slide.side-left { animation-delay: 0.5s; }
+        .solutions-slide.side-right { animation-delay: 0.7s; }
+        .solutions-slide-info {
+            max-width: 280px;
+            padding: 0 0 18px 12px;
+            text-align: left;
+        }
+        .solutions-slide.side .solutions-slide-info { visibility: hidden; }
+        .solutions-ghost-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+            padding: 0 16px 18px;
+            visibility: hidden;
+        }
+        .solutions-ghost-icon-placeholder {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: rgba(46,204,113,0.35);
+        }
+        .solutions-ghost-line {
+            height: 10px;
+            border-radius: 4px;
+            background: rgba(255,255,255,0.12);
+        }
+        .solutions-slide-icon {
+            width: 40px;
+            height: 40px;
+            margin-bottom: 14px;
+            border-radius: 10px;
+            background: var(--solutions-green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 18px rgba(46,204,113,0.5);
+            animation: solutionsIconPulse 3s ease-in-out infinite;
+        }
+        @keyframes solutionsIconPulse {
+            0%,100% { box-shadow: 0 0 18px rgba(46,204,113,0.45); }
+            50% { box-shadow: 0 0 32px rgba(46,204,113,0.8); }
+        }
+        .solutions-slide-icon svg {
+            width: 22px;
+            height: 22px;
+            fill: #fff;
+        }
+        .solutions-slide-title {
+            margin-bottom: 8px;
+            color: #fff;
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+        .solutions-slide-desc {
+            color: var(--solutions-text-muted);
+            font-size: 0.78rem;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+        .solutions-card {
+            position: relative;
+            width: 280px;
+            height: 280px;
+            overflow: hidden;
+            border-radius: 8px;
+            background: var(--solutions-card-bg);
+            box-shadow: var(--solutions-card-shadow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.38s cubic-bezier(.22,1,.36,1), box-shadow 0.38s ease;
+        }
+        .solutions-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.28) 0%, transparent 55%);
+            pointer-events: none;
+            transition: opacity 0.35s;
+        }
+        .solutions-card::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -120%;
+            width: 60%;
+            height: 100%;
+            background: linear-gradient(105deg, transparent 25%, rgba(255,255,255,0.38) 50%, transparent 75%);
+            pointer-events: none;
+            transition: left 0s;
+        }
+        .solutions-card:hover {
+            transform: translateY(-12px) scale(1.04);
+            box-shadow: 0 28px 64px rgba(0,0,0,0.7), 0 0 36px rgba(46,204,113,0.28);
+        }
+        .solutions-card:hover::after {
+            left: 160%;
+            transition: left 0.55s ease;
+        }
+        .solutions-slide.side .solutions-card {
+            width: 220px;
+            height: 220px;
+            margin-top: 0;
+            background: linear-gradient(145deg, #555 0%, #333 100%);
+            opacity: 0.35;
+            filter: blur(3px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+        }
+        .solutions-slide.side .solutions-card::before {
+            background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 55%);
+        }
+        .solutions-slide.side .solutions-card-label {
+            color: rgba(200,200,200,0.35);
+            font-size: 1.5rem;
+        }
+        .solutions-card-label {
+            position: relative;
+            z-index: 1;
+            color: rgba(30,34,30,0.55);
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+        }
+        .solutions-flip-wrapper {
+            width: 280px;
+            height: 280px;
+            perspective: 900px;
+            cursor: pointer;
+        }
+        .solutions-flip-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.65s cubic-bezier(.4,0,.2,1);
+        }
+        .solutions-flip-wrapper:hover .solutions-flip-inner {
+            transform: rotateY(180deg);
+        }
+        .solutions-flip-front,
+        .solutions-flip-back {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            border-radius: 8px;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+        .solutions-flip-front {
+            background: var(--solutions-card-bg);
+            box-shadow: var(--solutions-card-shadow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .solutions-flip-front::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.28) 0%, transparent 55%);
+            pointer-events: none;
+        }
+        .solutions-flip-front::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -120%;
+            width: 55%;
+            height: 100%;
+            background: linear-gradient(105deg, transparent 25%, rgba(255,255,255,0.4) 50%, transparent 75%);
+            pointer-events: none;
+        }
+        .solutions-flip-wrapper:hover .solutions-flip-front::after {
+            left: 160%;
+            transition: left 0.5s ease 0.05s;
+        }
+        .solutions-flip-back {
+            padding: 28px 26px;
+            transform: rotateY(180deg);
+            border: 1px solid rgba(46,204,113,0.35);
+            background: linear-gradient(145deg, #0f2018 0%, #0a1a10 100%);
+            box-shadow: 0 12px 50px rgba(0,0,0,0.7), inset 0 0 40px rgba(46,204,113,0.06);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 14px;
+            text-align: left;
+        }
+        .solutions-flip-back::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(135deg, rgba(46,204,113,0.18) 0%, transparent 40%),
+                linear-gradient(315deg, rgba(46,204,113,0.10) 0%, transparent 40%);
+            pointer-events: none;
+        }
+        .solutions-back-icon,
+        .solutions-back-title,
+        .solutions-back-divider,
+        .solutions-back-text,
+        .solutions-back-tag {
+            position: relative;
+            z-index: 1;
+        }
+        .solutions-back-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 9px;
+            border: 1px solid rgba(46,204,113,0.45);
+            background: rgba(46,204,113,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .solutions-back-icon svg {
+            width: 18px;
+            height: 18px;
+            fill: var(--solutions-green);
+        }
+        .solutions-back-title {
+            color: #fff;
+            font-size: 0.9rem;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+        .solutions-back-divider {
+            width: 40px;
+            height: 2px;
+            border-radius: 2px;
+            background: var(--solutions-green);
+            opacity: 0.7;
+        }
+        .solutions-back-text {
+            color: var(--solutions-text-muted);
+            font-size: 0.76rem;
+            line-height: 1.7;
+        }
+        .solutions-back-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 4px;
+            border: 1px solid rgba(46,204,113,0.3);
+            border-radius: 20px;
+            background: rgba(46,204,113,0.12);
+            padding: 4px 12px;
+            color: var(--solutions-green);
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        .solutions-back-tag::before {
+            content: "";
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--solutions-green);
+            box-shadow: 0 0 6px var(--solutions-green);
+        }
+        .solutions-hex-deco {
+            position: absolute;
+            bottom: -24px;
+            left: 50%;
+            width: 230px;
+            height: 250px;
+            transform: translateX(-50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .solutions-hex-deco svg {
+            width: 100%;
+            height: 100%;
+        }
+        .solutions-hex-deco polygon {
+            stroke-dasharray: 620;
+            stroke-dashoffset: 620;
+            animation: solutionsHexDraw 1.4s ease forwards;
+        }
+        .solutions-active-pair .solutions-slide:first-child .solutions-hex-deco polygon { animation-delay: 0.9s; }
+        .solutions-active-pair .solutions-slide:last-child .solutions-hex-deco polygon { animation-delay: 1.1s; }
+        @keyframes solutionsHexDraw {
+            to { stroke-dashoffset: 0; }
+        }
+        .solutions-active-pair {
+            position: relative;
+            display: flex;
+            align-items: flex-start;
+            gap: 0;
+        }
+        .solutions-chevron-between {
+            position: absolute;
+            top: 56px;
+            left: 50%;
+            z-index: 3;
+            transform: translateX(-50%);
+            pointer-events: none;
+        }
+        .solutions-chevron-between svg {
+            width: 40px;
+            height: 280px;
+        }
+        .solutions-chevron-between path {
+            stroke-dasharray: 300;
+            stroke-dashoffset: 300;
+            animation: solutionsChevronDraw 0.9s ease 1.3s forwards;
+        }
+        @keyframes solutionsChevronDraw {
+            to { stroke-dashoffset: 0; }
+        }
+        .solutions-hint {
+            margin-top: 32px;
+            color: rgba(255,255,255,0.3);
+            font-size: 0.72rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: solutionsFadeDown 0.6s ease 1.6s forwards;
+        }
+        .solutions-hint span {
+            color: rgba(46,204,113,0.6);
+        }
+        @media (max-width: 768px) {
+            .solutions-carousel {
+                justify-content: flex-start;
+                overflow-x: auto;
+                padding-bottom: 20px;
+                scrollbar-width: none;
+            }
+            .solutions-carousel::-webkit-scrollbar { display: none; }
+            .solutions-slide.side { display: none; }
+            .solutions-active-pair { gap: 14px; }
+            .solutions-card,
+            .solutions-flip-wrapper { width: 240px; height: 240px; }
+            .solutions-chevron-between { display: none; }
+        }
+
+        /* ── Solutions variant: hover overlay cards ── */
+        .solutions-section {
+            background:
+                radial-gradient(ellipse 55% 55% at 0% 0%, rgba(20,80,40,0.55) 0%, transparent 65%),
+                radial-gradient(ellipse 55% 55% at 100% 100%, rgba(20,80,40,0.38) 0%, transparent 65%),
+                #111a13;
+            padding: 70px 0 90px;
+        }
+        .solutions-section::before,
+        .solutions-section::after {
+            display: none;
+        }
+        .solutions-particles {
+            z-index: 1;
+        }
+        .solutions-inner {
+            z-index: 2;
+            max-width: none;
+            overflow: hidden;
+        }
+        .solutions-heading {
+            font-size: clamp(1.9rem, 3.6vw, 2.85rem);
+            line-height: 1.18;
+            margin-bottom: 60px;
+            letter-spacing: -0.01em;
+            transform: translateY(-20px);
+        }
+        .solutions-cards-row {
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-start;
+            gap: 0;
+            width: min(100%, 980px);
+            margin: 0 auto;
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 0 24px 18px;
+            scroll-padding-inline: 24px;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            cursor: grab;
+            overscroll-behavior-x: contain;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .solutions-cards-row.is-dragging {
+            cursor: grabbing;
+            scroll-snap-type: none;
+            user-select: none;
+        }
+        .solutions-cards-row::-webkit-scrollbar {
+            display: none;
+        }
+        .solutions-carousel-shell {
+            position: relative;
+            width: min(100%, 1080px);
+            margin: 0 auto;
+        }
+        .solutions-scroll-btn {
+            position: absolute;
+            top: 52%;
+            z-index: 8;
+            width: 46px;
+            height: 46px;
+            border: 1px solid rgba(46,204,113,0.55);
+            border-radius: 999px;
+            background: rgba(4,18,12,0.88);
+            color: var(--solutions-green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 24px rgba(46,204,113,0.22);
+            cursor: pointer;
+            transform: translateY(-50%);
+            transition: opacity 0.2s ease, transform 0.2s ease, background 0.2s ease;
+        }
+        .solutions-scroll-btn:hover {
+            background: rgba(9,35,22,0.95);
+            transform: translateY(-50%) scale(1.06);
+        }
+        .solutions-scroll-btn:disabled {
+            opacity: 0.28;
+            cursor: default;
+            transform: translateY(-50%);
+        }
+        .solutions-scroll-btn.prev { left: 2px; }
+        .solutions-scroll-btn.next { right: 2px; }
+        .solutions-scroll-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+        .solutions-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 14px;
+        }
+        .solutions-dot {
+            width: 8px;
+            height: 8px;
+            border: 0;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.22);
+            cursor: pointer;
+            transition: width 0.2s ease, background 0.2s ease;
+        }
+        .solutions-dot.active {
+            width: 24px;
+            background: var(--solutions-green);
+        }
+        .solutions-ghost-col {
+            display: flex;
+            flex-direction: column;
+            width: 220px;
+            flex: 0 0 220px;
+            opacity: 0;
+            scroll-snap-align: center;
+        }
+        .solutions-ghost-col.left {
+            align-items: flex-end;
+            animation: solutionsFadeIn 0.6s ease 0.5s forwards;
+        }
+        .solutions-ghost-col.right {
+            align-items: flex-start;
+            animation: solutionsFadeIn 0.6s ease 0.7s forwards;
+        }
+        @keyframes solutionsFadeIn {
+            to { opacity: 1; }
+        }
+        .solutions-ghost-info-lines {
+            width: 160px;
+            padding-bottom: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            filter: blur(2px);
+            opacity: 0.5;
+        }
+        .solutions-ghost-col.left .solutions-ghost-info-lines {
+            align-self: flex-end;
+            padding-right: 8px;
+        }
+        .solutions-ghost-col.right .solutions-ghost-info-lines {
+            align-self: flex-start;
+            padding-left: 8px;
+        }
+        .solutions-g-dot {
+            width: 26px;
+            height: 26px;
+            border-radius: 6px;
+            background: rgba(46,204,113,0.55);
+        }
+        .solutions-g-line {
+            height: 9px;
+            border-radius: 4px;
+            background: rgba(255,255,255,0.25);
+        }
+        .solutions-g-line.wide { width: 130px; }
+        .solutions-g-line.mid { width: 100px; }
+        .solutions-g-line.short { width: 75px; }
+        .solutions-ghost-card {
+            position: relative;
+            width: 210px;
+            height: 210px;
+            overflow: hidden;
+            border-radius: 6px;
+            background: linear-gradient(145deg, #5a5c59 0%, #363836 100%);
+            box-shadow: 0 6px 30px rgba(0,0,0,0.55);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            filter: blur(3.5px);
+            opacity: 0.38;
+        }
+        .solutions-ghost-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.14) 0%, transparent 50%);
+        }
+        .solutions-ghost-card-label {
+            color: rgba(180,180,180,0.4);
+            font-size: 1.55rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+        }
+        .solutions-active-pair.overlay-version {
+            position: relative;
+            display: contents;
+        }
+        .solutions-slide.overlay-slide {
+            width: 320px;
+            flex: 0 0 320px;
+            padding: 0;
+            transform: translateY(36px);
+            scroll-snap-align: center;
+        }
+        .solutions-slide.overlay-slide.left {
+            animation: solutionsSlideUp 0.7s cubic-bezier(.22,1,.36,1) 0.5s forwards;
+        }
+        .solutions-slide.overlay-slide.right {
+            animation: solutionsSlideUp 0.7s cubic-bezier(.22,1,.36,1) 0.7s forwards;
+        }
+        @keyframes solutionsSlideUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .solutions-slide.overlay-slide.entered {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .solutions-slide-info.overlay-info {
+            width: 100%;
+            max-width: none;
+            padding: 0 16px 18px;
+        }
+        .solutions-slide-title {
+            font-size: 0.9rem;
+        }
+        .solutions-slide-desc {
+            color: rgba(180,185,178,0.9);
+            font-size: 0.76rem;
+            line-height: 1.7;
+        }
+        .solutions-overlay-chevron {
+            display: none;
+            position: absolute;
+            top: 48px;
+            z-index: 4;
+            pointer-events: none;
+        }
+        .solutions-overlay-chevron.left {
+            left: -18px;
+        }
+        .solutions-overlay-chevron.right {
+            right: -18px;
+        }
+        .solutions-overlay-chevron path {
+            stroke-dasharray: 340;
+            stroke-dashoffset: 340;
+            animation: solutionsChevronDraw 1s ease 1.2s forwards;
+        }
+        .solutions-card-wrap {
+            position: relative;
+            width: 288px;
+            height: 288px;
+            margin: 0 16px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .solutions-card-face {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            border-radius: 6px;
+            background: linear-gradient(145deg, #d2d4d1 0%, #b8bab7 30%, #9ea09d 65%, #8a8c89 100%);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: box-shadow 0.4s ease;
+        }
+        .solutions-card-face::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 65%;
+            height: 65%;
+            background: radial-gradient(ellipse at 20% 20%, rgba(255,255,255,0.30) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .solutions-card-face::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -130%;
+            width: 60%;
+            height: 100%;
+            background: linear-gradient(105deg, transparent 20%, rgba(255,255,255,0.42) 50%, transparent 80%);
+            pointer-events: none;
+        }
+        .solutions-card-wrap:hover .solutions-card-face {
+            box-shadow: 0 18px 55px rgba(0,0,0,0.65), 0 0 30px rgba(46,204,113,0.2), inset 0 1px 0 rgba(255,255,255,0.3);
+        }
+        .solutions-card-wrap:hover .solutions-card-face::after {
+            left: 160%;
+            transition: left 0.55s ease;
+        }
+        .solutions-card-wrap:hover .solutions-card-label {
+            opacity: 0;
+        }
+        .solutions-card-face .solutions-card-label {
+            font-size: 2.1rem;
+            font-weight: 600;
+            color: rgba(40,44,40,0.45);
+            transition: opacity 0.25s ease;
+        }
+        .solutions-card-face .solutions-hex-deco {
+            bottom: -28px;
+            width: 240px;
+            height: 260px;
+        }
+        .solutions-card-face .solutions-hex-deco polygon {
+            stroke-dasharray: 650;
+            stroke-dashoffset: 650;
+        }
+        .solutions-card-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            overflow: hidden;
+            border: 1px solid rgba(46,204,113,0.38);
+            border-radius: 6px;
+            background: linear-gradient(155deg, #0c1f12 0%, #081410 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 10px;
+            padding: 24px 22px;
+            opacity: 0;
+            transform: translateY(8px);
+            transition: opacity 0.32s ease, transform 0.32s ease;
+            pointer-events: none;
+            text-align: left;
+        }
+        .solutions-card-overlay::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(46,204,113,0.12) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        .solutions-card-wrap:hover .solutions-card-overlay {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .solutions-ov-icon,
+        .solutions-ov-title,
+        .solutions-ov-line,
+        .solutions-ov-text,
+        .solutions-ov-tag {
+            position: relative;
+            z-index: 1;
+        }
+        .solutions-ov-icon {
+            width: 34px;
+            height: 34px;
+            border: 1px solid rgba(46,204,113,0.4);
+            border-radius: 8px;
+            background: rgba(46,204,113,0.12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .solutions-ov-icon svg {
+            width: 16px;
+            height: 16px;
+            fill: var(--solutions-green);
+        }
+        .solutions-ov-title {
+            color: #fff;
+            font-size: 0.86rem;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+        .solutions-ov-line {
+            width: 32px;
+            height: 2px;
+            border-radius: 2px;
+            background: var(--solutions-green);
+            opacity: 0.75;
+        }
+        .solutions-ov-text {
+            color: rgba(175,180,173,0.95);
+            font-size: 0.73rem;
+            line-height: 1.72;
+        }
+        .solutions-ov-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid rgba(46,204,113,0.3);
+            border-radius: 20px;
+            background: rgba(46,204,113,0.1);
+            padding: 3px 11px;
+            color: var(--solutions-green);
+            font-size: 0.67rem;
+            font-weight: 600;
+        }
+        .solutions-ov-tag::before {
+            content: "";
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--solutions-green);
+            box-shadow: 0 0 5px var(--solutions-green);
+        }
+        .solutions-hint em {
+            color: rgba(46,204,113,0.5);
+            font-style: normal;
+        }
+
+        /* ══════════════════ TESTIMONIALS ══════════════════ */
+        .testimonial-card {
+            flex-shrink: 0;
+            width: 360px;
+            border-radius: 20px;
+            padding: 32px;
+            background: #434e4a;
+            border: 1px solid #434e4a;
+        }
+        .testimonial-card.active {
+            background: radial-gradient(ellipse at center, #00e082 0%, #13e88e 25%, #25f09b 50%, #4bffb3 100%);
+            border-color: var(--green);
+        }
+        .testimonial-card.active p { color: #0d2018; }
+        .testimonial-card.active .t-name { color: #0d2018; }
+        .testimonial-card.active .t-role { color: #1a3a28; }
+
+        .t-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .nav-arrow {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.3);
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s;
+            color: white;
+        }
+        .nav-arrow:hover { background: rgba(255,255,255,0.1); }
+
+        /* ══════════════════ CTA FINAL ══════════════════ */
+        .cta-final-card {
+            border-radius: 14px;
+            border: 1px solid var(--green);
+            background: linear-gradient(180deg, #293232 0%, #090b0b 100%);
+        }
+
+        .comparison-section {
+            position: relative;
+            overflow: hidden;
+            padding: 110px 24px 90px;
+            background:
+                radial-gradient(ellipse at left bottom, rgba(0,224,130,0.16), transparent 42%),
+                linear-gradient(180deg, #151717 0%, #161919 100%);
+        }
+        .section-line-art {
+            position: absolute;
+            left: -110px;
+            top: 70px;
+            width: 390px;
+            height: 560px;
+            opacity: 0.42;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .comparison-inner {
+            position: relative;
+            z-index: 1;
+            max-width: 1180px;
+            margin: 0 auto;
+        }
+        .comparison-header {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 46px;
+            padding-left: 90px;
+        }
+        .comparison-title {
+            max-width: 480px;
+            font-size: clamp(38px, 4vw, 56px);
+            font-weight: 800;
+            line-height: 1.08;
+            letter-spacing: -0.03em;
+            color: #fff;
+        }
+        .comparison-arrows {
+            display: flex;
+            gap: 14px;
+            margin-right: 185px;
+        }
+        .comparison-arrow {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 1px solid rgba(0,224,130,0.7);
+            background: rgba(0,224,130,0.06);
+            color: #9affd0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            line-height: 1;
+        }
+        .comparison-track {
+            display: flex;
+            gap: 26px;
+            padding-left: 90px;
+            overflow: hidden;
+        }
+        .comparison-card {
+            flex: 0 0 330px;
+            height: 290px;
+            border-radius: 16px;
+            padding: 34px;
+            background: #3f4a45;
+            opacity: 0.42;
+            filter: blur(3px);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .comparison-card.active {
+            opacity: 1;
+            filter: none;
+            background: radial-gradient(ellipse at center, #00e082 0%, #13e88e 42%, #4bffb3 100%);
+            box-shadow: 0 18px 44px rgba(0,224,130,0.32);
+        }
+        .comparison-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.78);
+            flex-shrink: 0;
+        }
+        .comparison-name {
+            font-size: 15px;
+            font-weight: 700;
+            color: #0d2018;
+        }
+        .comparison-role {
+            margin-top: 2px;
+            font-size: 12px;
+            color: rgba(13,32,24,0.65);
+        }
+        .comparison-text {
+            margin-top: 30px;
+            color: #0d2018;
+            font-size: 14px;
+            font-weight: 300;
+            line-height: 1.6;
+        }
+        .final-cta-section {
+            position: relative;
+            overflow: hidden;
+            padding: 96px 24px 126px;
+            background: linear-gradient(180deg, #161919 0%, rgba(42,154,107,0.55) 100%);
+        }
+        .final-cta-card {
+            position: relative;
+            z-index: 1;
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 86px 70px;
+            text-align: center;
+            border: 1px solid rgba(0,224,130,0.55);
+            border-radius: 14px;
+            background: linear-gradient(180deg, rgba(41,50,50,0.94) 0%, rgba(9,11,11,0.94) 100%);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+        }
+        .final-cta-card h2 {
+            color: #fff;
+            font-size: clamp(42px, 4.5vw, 64px);
+            font-weight: 700;
+            line-height: 1.08;
+            letter-spacing: -0.03em;
+            margin-bottom: 26px;
+        }
+        .final-cta-card p {
+            max-width: 760px;
+            margin: 0 auto 46px;
+            color: rgba(255,255,255,0.62);
+            font-size: 21px;
+            font-weight: 300;
+            line-height: 1.55;
+        }
+        .final-cta-card .cta-btn {
+            font-size: 16px;
+            padding: 12px 18px 12px 32px;
+            gap: 12px;
+            box-shadow: 0 0 24px rgba(0,224,130,0.36);
+        }
+        .final-cta-card .cta-btn-icon {
+            width: 46px;
+            height: 46px;
+        }
+
+        /* ══════════════════ DECORATIVE TRIANGLES ══════════════════ */
+        .decor-triangle {
+            position: absolute;
+            pointer-events: none;
+            opacity: 0.18;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .services-reveal,
+            .services-reveal > * {
+                opacity: 1;
+                transform: none;
+                filter: none;
+                transition: none;
+            }
+        }
+
+        /* ══════════════════ MOBILE ══════════════════ */
+        @media (max-width: 768px) {
+
+            /* ── CTA button ── */
+            .cta-btn { font-size: 14px; padding: 10px 16px 10px 24px; gap: 8px; }
+            .cta-btn .cta-btn-icon { width: 40px; height: 40px; }
+            .cta-btn-icon svg { width: 13px !important; height: 13px !important; }
+
+            /* ── Navbar ── */
+            .brand-logo { width: 130px; height: 40px; }
+            .curved-nav { display: none !important; }
+
+            /* ── Hero ── */
+            .hero-background {
+                min-height: auto !important;
+                display: flex !important;
+                flex-direction: column !important;
+                padding-bottom: 28px !important;
+                overflow: visible !important;
+            }
+            .hero-cards-section {
+                min-height: 0 !important;
+                height: clamp(210px, 58vw, 280px) !important;
+                margin-top: 0 !important;
+                margin-bottom: 0 !important;
+                overflow: hidden !important;
+                background: transparent !important;
+            }
+            .hero-cards-section::after {
+                height: 42px !important;
+                background: linear-gradient(
+                    180deg,
+                    rgba(26,25,25,0) 0%,
+                    rgba(28,86,60,0.16) 58%,
+                    rgba(26,25,25,0.9) 100%
+                ) !important;
+            }
+            .hero-card {
+                bottom: -72px;
+                left: 50%;
+                width: clamp(340px, 92vw, 560px);
+                position: absolute;
+                transform-origin: center bottom;
+            }
+            .hero-card-1 {
+                transform: translateX(-67%) rotate(-10deg) !important;
+                animation: none !important;
+            }
+            .hero-card-2 {
+                transform: translateX(-50%) rotate(-2deg) !important;
+                animation: none !important;
+            }
+            .hero-card-3 {
+                transform: translateX(-33%) rotate(7deg) !important;
+                animation: none !important;
+            }
+            .hero-card-wrapper {
+                position: absolute !important;
+                left: 0 !important;
+                right: 0 !important;
+                bottom: 0 !important;
+                width: 100% !important;
+                height: 100% !important;
+                min-height: 0 !important;
+                margin: 0 !important;
+                overflow: hidden !important;
+                pointer-events: none !important;
+            }
+
+            /* ── Features grid ── */
+            .features-section {
+                overflow: hidden !important;
+            }
+            .features-cards-img {
+                display: none !important;
+            }
+            .features-mobile-cards {
+                display: flex !important;
+                flex-direction: column;
+                gap: 12px;
+            }
+            .features-grid-row { flex-direction: column !important; }
+            .features-grid-row > * { flex: 1 1 100% !important; }
+
+            /* ── Credito section ── */
+            .credito-cols { flex-direction: column !important; gap: 32px !important; }
+            .credito-section > svg[aria-hidden] { display: none; }
+
+            /* ── Solutions ── */
+            .solutions-inner { padding: 0 16px 32px; }
+            .solutions-heading { font-size: clamp(24px, 7vw, 32px) !important; margin-bottom: 32px !important; }
+            .solutions-scroll-btn {
+                width: 40px !important;
+                height: 40px !important;
+                top: 58% !important;
+            }
+            .solutions-scroll-btn.prev { left: 4px !important; }
+            .solutions-scroll-btn.next { right: 4px !important; }
+            .solutions-cards-row {
+                flex-direction: row !important;
+                align-items: flex-end !important;
+                gap: 0 !important;
+                width: 100% !important;
+                padding: 0 16px 18px !important;
+                scroll-padding-inline: 16px !important;
+            }
+            .solutions-ghost-col {
+                display: flex !important;
+                flex: 0 0 190px !important;
+                width: 190px !important;
+            }
+            .solutions-ghost-card { width: 180px !important; height: 180px !important; }
+            .solutions-active-pair {
+                flex-direction: row !important;
+                align-items: flex-start !important;
+                gap: 0 !important;
+                width: auto !important;
+                flex: 0 0 auto !important;
+                display: contents !important;
+            }
+            .solutions-overlay-chevron { display: none !important; }
+            .solutions-slide { width: 280px !important; max-width: none !important; flex: 0 0 280px !important; }
+            .solutions-card-wrap { width: 248px !important; max-width: none !important; height: 248px !important; }
+            .solutions-slide-info { max-width: 280px !important; }
+
+            /* ── Depoimentos ── */
+            #depoimentos .flex.items-center.justify-between {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 20px !important;
+            }
+            #depoimentos h2 { font-size: clamp(28px, 8vw, 40px) !important; }
+            #testimonials-track > div { flex: 0 0 280px !important; width: 280px !important; height: auto !important; min-height: 260px; }
+
+            /* ── CTA Final ── */
+            .final-cta-section { padding: 56px 16px 72px; }
+            .final-cta-card { padding: 48px 24px; }
+            .final-cta-card h2 { font-size: clamp(28px, 7vw, 40px); }
+            .final-cta-card p { font-size: 16px; }
+
+            /* ── FAQ ── */
+            .faq-q span { font-size: 15px; }
+
+            /* ── Footer ── */
+            footer > div > div {
+                flex-direction: column !important;
+                gap: 36px !important;
+                padding: 0 !important;
+            }
+            footer > div {
+                flex-direction: column !important;
+                gap: 36px !important;
+            }
+            footer .border-left-divider { display: none !important; }
+        }
+
+        @media (max-width: 480px) {
+            /* ── Hero texto ── */
+            .hero-background h1 { font-size: 26px !important; line-height: 1.1 !important; }
+            .hero-background p { font-size: 13px !important; }
+            .hero-background {
+                min-height: auto !important;
+                padding-bottom: 24px !important;
+            }
+            .hero-card { width: clamp(320px, 102vw, 410px) !important; bottom: -82px; }
+            .hero-cards-section { height: clamp(190px, 58vw, 240px) !important; }
+            .hero-card-wrapper { height: 100% !important; }
+
+            /* ── Credito ── */
+            .credito-section h2 { font-size: 28px !important; }
+
+            /* ── CTA Final card ── */
+            .final-cta-card { padding: 36px 18px; border-radius: 10px; }
+            .final-cta-card h2 { font-size: 26px; }
+
+            /* ── FAQ ── */
+            .faq-q { padding: 18px 20px; }
+            .faq-q span { font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     NAVBAR
+══════════════════════════════════════ -->
+<nav class="site-nav relative z-10 mx-auto flex max-w-7xl items-center justify-between px-6 py-7 md:px-10">
+    <a href="#" class="relative z-10 flex items-center" aria-label="Antecipey">
+        <span class="brand-logo" role="img" aria-label="Antecipey"></span>
+    </a>
+
+    <div class="curved-nav hidden md:flex items-center gap-12 text-xs font-semibold text-zinc-900">
+        <svg class="curved-nav-shape" xmlns="http://www.w3.org/2000/svg" viewBox="0 -43 846 162" fill="none" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M4.84943 -11.7525C-4.07247 -23.0078 3.4476 -43 17.8101 -43H827.84C842.203 -43 849.723 -23.0078 840.801 -11.7525C833.684 -2.77354 827.173 7.49267 823.577 18.1471C815.514 42.0437 818.274 79.2894 820.961 101.204C822.102 110.506 814.935 119 805.563 119H40.0875C30.7152 119 23.5488 110.506 24.6896 101.204C27.377 79.2894 30.1366 42.0437 22.0731 18.1471C18.4779 7.49267 11.9669 -2.77353 4.84943 -11.7525Z" fill="#21EE98"/>
+            <path d="M4.84943 -11.7525C-4.07247 -23.0078 3.4476 -43 17.8101 -43H827.84C842.203 -43 849.723 -23.0078 840.801 -11.7525C833.684 -2.77354 827.173 7.49267 823.577 18.1471C815.514 42.0437 818.274 79.2894 820.961 101.204C822.102 110.506 814.935 119 805.563 119H40.0875C30.7152 119 23.5488 110.506 24.6896 101.204C27.377 79.2894 30.1366 42.0437 22.0731 18.1471C18.4779 7.49267 11.9669 -2.77353 4.84943 -11.7525Z" fill="url(#navGlow)" fill-opacity="0.6"/>
+            <path d="M4.84943 -11.7525C-4.07247 -23.0078 3.4476 -43 17.8101 -43H827.84C842.203 -43 849.723 -23.0078 840.801 -11.7525C833.684 -2.77354 827.173 7.49267 823.577 18.1471C815.514 42.0437 818.274 79.2894 820.961 101.204C822.102 110.506 814.935 119 805.563 119H40.0875C30.7152 119 23.5488 110.506 24.6896 101.204C27.377 79.2894 30.1366 42.0437 22.0731 18.1471C18.4779 7.49267 11.9669 -2.77353 4.84943 -11.7525Z" stroke="url(#navStroke)" stroke-width="2"/>
+            <defs>
+                <linearGradient id="navGlow" x1="422.825" y1="71.5" x2="423.325" y2="128.5" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="white" stop-opacity="0"/>
+                    <stop offset="1" stop-color="white"/>
+                </linearGradient>
+                <linearGradient id="navStroke" x1="422.825" y1="119" x2="423.325" y2="1" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="white"/>
+                    <stop offset="0.527256" stop-color="white" stop-opacity="0"/>
+                    <stop offset="1" stop-color="white" stop-opacity="0"/>
+                </linearGradient>
+            </defs>
+        </svg>
+        <a href="servicos.html" class="transition hover:underline">Serviços</a>
+        <a href="#solucoes" class="transition hover:underline">Soluções</a>
+        <a href="#depoimentos" class="transition hover:underline">Testemunhos</a>
+        <a href="#preco" class="transition hover:underline">Preço</a>
+    </div>
+
+    <a href="#" class="cta-btn cta-btn-sm hidden md:inline-flex">
+        Contratar Serviços
+        <span class="cta-btn-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" style="width:14px;height:14px;color:#00e082" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+            </svg>
+        </span>
+    </a>
+
+    <button id="menu-btn" class="md:hidden text-white p-2">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/>
+        </svg>
+    </button>
+</nav>
+
+<div id="mobile-menu" class="hidden md:hidden flex flex-col items-center gap-6 py-8 bg-[#1a1919] text-white">
+    <a href="servicos.html" class="hover:text-emerald-400">Serviços</a>
+    <a href="#solucoes" class="hover:text-emerald-400">Soluções</a>
+    <a href="#depoimentos" class="hover:text-emerald-400">Testemunhos</a>
+    <a href="#preco" class="hover:text-emerald-400">Preço</a>
+    <a href="#" class="cta-btn cta-btn-sm">Contratar Serviços<span class="cta-btn-icon"><svg xmlns="http://www.w3.org/2000/svg" style="width:12px;height:12px;color:#00e082" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg></span></a>
+</div>
+
+
+<!-- ══════════════════════════════════════
+     HERO
+══════════════════════════════════════ -->
+<div class="hero-visual">
+<main class="hero-background flex flex-col items-center px-4 pt-8 md:px-6 md:pt-12">
+    <button class="flex max-w-full items-center gap-2.5 rounded-xl border border-emerald-500/70 bg-[#042222] px-4 py-2.5 text-emerald-100 shadow-[0_0_15px_rgba(16,185,129,0.18)] transition-all duration-300 hover:bg-[#063030] md:px-5">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="5" width="20" height="14" rx="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <line x1="2" y1="10" x2="22" y2="10" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="text-left text-xs font-medium md:text-sm">Crédito rápido, seguro e sem burocracia</span>
+    </button>
+
+    <h1 class="mt-8 max-w-5xl text-center text-[38px] font-bold leading-[0.95] tracking-[-0.04em] text-white md:text-[52px]">
+        O dinheiro que você precisa, com <br class="hidden md:block">
+        <span id="changing-word" class="changing-word">transparência</span> que você merece.
+    </h1>
+
+    <p class="mt-5 max-w-2xl text-center text-[16px] font-extralight leading-snug text-gray-300 md:text-[25px]">
+        Soluções financeiras inteligentes para Servidores Públicos e Trabalhadores. Simule seu crédito em minutos, sem letras miúdas, e receba direto na conta.
+    </p>
+
+    <a href="#" class="cta-btn mt-8">
+        Contratar Serviços
+        <span class="cta-btn-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" style="width:16px;height:16px;color:#00e082" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+            </svg>
+        </span>
+    </a>
+
+</main>
+
+<section class="hero-cards-section" aria-label="Cartões Antecipey">
+    <div class="hero-card-wrapper">
+        <img src="assets/card-3.png" alt="Cartão Antecipey 3" class="hero-card hero-card-3">
+        <img src="assets/card-2.png" alt="Cartão Antecipey 2" class="hero-card hero-card-2">
+        <img src="assets/card-1.png" alt="Cartão Antecipey 1" class="hero-card hero-card-1">
+    </div>
+</section>
+</div>
+
+
+<!-- ══════════════════════════════════════
+     POR QUE ESCOLHER A ANTECIPEY?
+══════════════════════════════════════ -->
+<section id="servicos" class="features-section px-4 pt-24 pb-16 md:px-10 md:pt-32">
+    <!-- Decorative background triangles -->
+    <img src="https://www.figma.com/api/mcp/asset/6d154f30-9356-4885-80c7-8a500e385c35"
+         alt="" aria-hidden="true"
+         style="box-sizing:border-box;position:absolute;left:-9.9%;right:63.68%;top:11.74%;bottom:66.19%;opacity:0.6;pointer-events:none;">
+
+    <div class="services-reveal mx-auto max-w-6xl relative z-10">
+        <!-- Title -->
+        <div class="text-center mb-12">
+            <h2 class="text-[34px] font-semibold leading-tight tracking-[-0.02em] text-white md:text-[56px]">
+                Por que escolher a <span class="grad-text">Antecipey?</span>
+            </h2>
+            <p class="mx-auto mt-4 max-w-2xl text-[16px] font-light leading-relaxed text-gray-200 md:text-[24px]">
+                Descomplicamos o crédito para você focar nos seus planos.
+            </p>
+        </div>
+
+        <!-- Grid dos 4 cards — PNG ultra HD direto do Figma (1087×630 nativo) -->
+        <img class="features-cards-img" src="assets/features-cards.png"
+             alt="Por que escolher a Antecipey — Zero Letras Miúdas, Dinheiro Rápido no Pix, Atendimento Humanizado"
+             width="1087" height="630"
+             style="width:100%;height:auto;display:block;border-radius:16px;">
+
+        <div class="features-mobile-cards" aria-label="Por que escolher a Antecipey">
+            <img src="assets/mobile-feature-card-humanized.png" alt="Atendimento Humanizado: comece no site e termine no WhatsApp com especialistas reais.">
+            <img src="assets/mobile-feature-card-pix.png" alt="Dinheiro Rápido no Pix: após a aprovação, o dinheiro cai na sua conta em tempo recorde.">
+            <img src="assets/mobile-feature-card-zero-person.png" alt="Zero Letras Miúdas: sem surpresas.">
+            <img src="assets/mobile-feature-card-zero-search.png" alt="Zero Letras Miúdas: você sabe exatamente quanto vai pagar desde o primeiro clique no simulador.">
+        </div>
+
+        <!-- CTA Button -->
+        <div class="flex justify-center mt-14">
+            <a href="#" class="cta-btn">
+                Contratar Serviços
+                <span class="cta-btn-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" style="width:18px;height:18px;color:#00e082" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                    </svg>
+                </span>
+            </a>
+        </div>
+    </div>
+</section>
+
+
+<!-- ══════════════════════════════════════
+     MAIS QUE CRÉDITO
+══════════════════════════════════════ -->
+<section class="credito-section relative px-4 py-24 md:px-10 md:py-32">
+    <!-- Decorative vector -->
+    <svg width="887" height="989" viewBox="0 0 698 989" fill="none" xmlns="http://www.w3.org/2000/svg"
+         aria-hidden="true"
+         style="position:absolute;left:-190px;top:-520px;width:887px;height:auto;pointer-events:none;z-index:0;">
+        <path d="M252.956 2.5625C253.592 3.37995 254.351 4.50654 255.201 5.87207C256.898 8.59782 258.885 12.1629 260.858 15.8545C262.829 19.5411 264.773 23.3314 266.385 26.498C267.988 29.6487 269.277 32.2141 269.914 33.4072L269.916 33.4102L302.365 93.8301L302.367 93.832L370.447 220.091L603.012 651.387H603.013L668.602 773.005C671.45 778.305 676.71 788.837 682.116 799.128C684.806 804.247 687.519 809.281 689.952 813.505C692.03 817.111 693.944 820.198 695.486 822.242C692.767 826.222 688.503 833.965 684.352 841.77C679.793 850.338 675.356 859.003 672.98 863.409L672.979 863.41L624.599 953.287L624.596 953.293C618.946 963.898 613.141 975.547 607.108 985.698C607.094 985.706 607.079 985.717 607.059 985.728C606.9 985.807 606.635 985.907 606.24 986.011C605.454 986.218 604.349 986.395 602.979 986.538C600.253 986.823 596.693 986.954 593.021 986.998C585.631 987.087 578.139 986.83 576.085 986.826H576.084L521.625 986.765H521.621L464.51 986.84C462.864 986.84 454.364 986.974 446.075 986.912C441.939 986.881 437.899 986.801 434.851 986.632C433.321 986.547 432.076 986.442 431.205 986.315C430.886 986.269 430.644 986.223 430.47 986.182C387.504 905.77 342.716 825.983 300.291 745.291C290.192 725.79 279.816 706.463 269.169 687.304L267.036 683.474C264.979 679.708 263.242 675.814 261.227 671.814C259.241 667.873 257.042 663.955 254.188 660.477L252.893 658.897L253.389 658.889L252.588 656.875C251.427 653.958 248.898 649.084 246.318 644.297C245.02 641.888 243.696 639.479 242.506 637.317C241.314 635.152 240.26 633.242 239.492 631.819L239.489 631.814L211.495 580.4L125.297 419.394L125.295 419.392L91.3916 356.356L91.3906 356.354C86.7022 347.665 83.1457 341.867 80.8779 337.809C78.5474 333.638 77.6062 331.34 77.6025 329.203C77.599 327.073 78.5262 324.861 80.7842 320.853C82.9922 316.933 86.3881 311.423 90.8223 303.036L185.427 127.045C207.657 86.0923 229.672 42.5224 252.816 2.38672C252.862 2.44318 252.909 2.50158 252.956 2.5625ZM251.767 660.617C240.957 677.443 229.81 701.014 220.133 718.594L220.13 718.601L199.13 757.214L199.129 757.215C197.911 759.458 195.486 763.714 193.314 767.752C191.194 771.694 189.116 775.787 188.33 778.241C174.789 800.333 162.552 825.959 150.175 848.805C148.093 852.648 145.874 856.473 143.633 860.339C141.395 864.198 139.136 868.096 136.993 872.052L136.989 872.059L104.224 933.318C95.1707 950.233 85.3736 970.086 75.3613 986.18L-99.9277 986.775C-100.359 986.234 -100.975 985.348 -101.762 984.109C-102.793 982.486 -104.047 980.376 -105.454 977.921C-108.268 973.013 -111.668 966.773 -115.086 960.378C-121.936 947.561 -128.787 934.261 -131.177 929.755L-131.182 929.745L-165.35 866.418H-165.351C-168.617 860.315 -173.191 852.475 -177.538 844.679C-181.8 837.035 -185.859 829.406 -188.411 823.259C-187.779 821.21 -186.507 818.285 -184.823 814.83C-183.015 811.119 -180.775 806.889 -178.457 802.641C-173.858 794.213 -168.873 785.591 -166.52 781.16L-133.342 719.778L-133.338 719.77C-122.61 699.623 -112.438 677.909 -99.6846 659.564C-99.5193 659.522 -99.2765 659.471 -98.9434 659.422C-98.1446 659.305 -97.0134 659.21 -95.623 659.137C-92.8522 658.99 -89.1951 658.935 -85.4248 658.928C-77.7996 658.913 -70.0975 659.09 -68.0176 659.094H-68.0166L-7.8291 659.148H-7.82812L156.829 659.128C187.979 659.128 220.079 659.524 251.223 658.93L252.87 658.898L251.767 660.617Z" stroke="url(#paint0_radial_28_289)" stroke-opacity="0.25" stroke-width="3"/>
+        <defs>
+            <radialGradient id="paint0_radial_28_289" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(253.679 494.258) scale(608.524 677.896)">
+                <stop stop-color="#00E082"/>
+                <stop offset="1" stop-color="#4BFFB3"/>
+            </radialGradient>
+        </defs>
+    </svg>
+
+    <div class="mx-auto max-w-6xl relative z-10">
+        <div class="credito-cols flex items-center gap-12 md:gap-20">
+
+            <!-- Text side -->
+            <div style="flex:1;min-width:0;">
+                <h2 class="text-[38px] font-semibold leading-tight text-white md:text-[52px]" style="line-height:1.1;">
+                    Mais que crédito, respeito pelo seu
+                    <span class="grad-text"> trabalho.</span>
+                </h2>
+                <p class="mt-8 text-[16px] font-light leading-relaxed md:text-[18px]" style="color:#9b9b9b;max-width:480px;">
+                    A Antecipey nasceu para ser a ponte entre você e os seus objetivos. Acreditamos que o acesso financeiro deve ser justo, acessível e totalmente seguro. Nossa operação é guiada pela inovação tecnológica combinada com um profundo respeito pelo servidor público e pelo trabalhador.
+                </p>
+            </div>
+
+            <!-- Image side -->
+            <div style="flex:1;min-width:0;position:relative;display:flex;justify-content:center;">
+                <img src="assets/idosa-celular.png?v=2"
+                     alt="Idosa sorrindo com celular"
+                     style="width:100%;max-width:528px;height:auto;object-fit:contain;display:block;">
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ══════════════════════════════════════
+     SOLUÇÕES FEITAS SOB MEDIDA
+══════════════════════════════════════ -->
+<section id="solucoes" class="solutions-section relative px-4 py-24 md:py-32">
+    <div class="solutions-inner">
+        <h2 class="solutions-heading">
+            Soluções feitas <span class="accent">sob medida</span> para o<br>seu momento
+        </h2>
+
+        <div class="solutions-carousel-shell">
+            <button class="solutions-scroll-btn prev" type="button" aria-label="Ver soluções anteriores">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M15 18l-6-6 6-6"/>
+                </svg>
+            </button>
+            <button class="solutions-scroll-btn next" type="button" aria-label="Ver próximas soluções">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M9 6l6 6-6 6"/>
+                </svg>
+            </button>
+
+            <div class="solutions-cards-row">
+            <!-- Ghost LEFT -->
+            <div class="solutions-ghost-col left">
+                <div class="solutions-ghost-info-lines">
+                    <div class="solutions-g-dot"></div>
+                    <div class="solutions-g-line wide"></div>
+                    <div class="solutions-g-line mid"></div>
+                    <div class="solutions-g-line short"></div>
+                    <div class="solutions-g-line mid"></div>
+                </div>
+                <div class="solutions-ghost-card">
+                    <span class="solutions-ghost-card-label">CRM</span>
+                </div>
+            </div>
+
+            <!-- Active Pair -->
+            <div class="solutions-active-pair overlay-version">
+                <div class="solutions-overlay-chevron left">
+                    <svg width="36" height="300" viewBox="0 0 36 300" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M34 0 L2 150 L34 300" stroke="rgba(46,204,113,0.55)" stroke-width="1.2"/>
+                    </svg>
+                </div>
+
+                <!-- Slide 1 -->
+                <div class="solutions-slide overlay-slide left">
+                    <div class="solutions-slide-info overlay-info">
+                        <div class="solutions-slide-icon">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <path d="M12 2l1.8 5.4L19.2 9l-5.4 1.8L12 16.2l-1.8-5.4L4.8 9l5.4-1.8L12 2z"/>
+                                <path d="M19 14l.9 2.7 2.7.9-2.7.9-.9 2.7-.9-2.7-2.7-.9 2.7-.9L19 14z" opacity=".7"/>
+                            </svg>
+                        </div>
+                        <div class="solutions-slide-title">Crédito do Trabalhador</div>
+                        <div class="solutions-slide-desc">
+                            Antecipe seu Saque-Aniversário do FGTS<br>
+                            de forma 100% digital, sem comprometer<br>
+                            a sua renda mensal.
+                        </div>
+                    </div>
+
+                    <div class="solutions-card-wrap">
+                        <div class="solutions-card-face">
+                            <span class="solutions-card-label">CRM</span>
+                            <div class="solutions-hex-deco">
+                                <svg viewBox="0 0 240 260" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <polygon points="120,10 228,65 228,195 120,250 12,195 12,65" stroke="rgba(46,204,113,0.58)" stroke-width="1.3" fill="none"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="solutions-card-overlay">
+                            <div class="solutions-ov-icon">
+                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <path d="M12 2l1.8 5.4L19.2 9l-5.4 1.8L12 16.2l-1.8-5.4L4.8 9l5.4-1.8L12 2z"/>
+                                    <path d="M19 14l.9 2.7 2.7.9-2.7.9-.9 2.7-.9-2.7-2.7-.9 2.7-.9L19 14z" opacity=".7"/>
+                                </svg>
+                            </div>
+                            <div class="solutions-ov-title">Crédito do Trabalhador</div>
+                            <div class="solutions-ov-line"></div>
+                            <div class="solutions-ov-text">Antecipe seu Saque-Aniversário do FGTS de forma 100% digital. Sem burocracia e sem comprometer sua renda mensal.</div>
+                            <div class="solutions-ov-tag">100% Digital</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 2 -->
+                <div class="solutions-slide overlay-slide right">
+                    <div class="solutions-slide-info overlay-info">
+                        <div class="solutions-slide-icon">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <path d="M12 2l1.8 5.4L19.2 9l-5.4 1.8L12 16.2l-1.8-5.4L4.8 9l5.4-1.8L12 2z"/>
+                                <path d="M19 14l.9 2.7 2.7.9-2.7.9-.9 2.7-.9-2.7-2.7-.9 2.7-.9L19 14z" opacity=".7"/>
+                            </svg>
+                        </div>
+                        <div class="solutions-slide-title">Cartão Benefício</div>
+                        <div class="solutions-slide-desc">
+                            Um cartão recheado de vantagens<br>
+                            exclusivas, crédito facilitado e aceito em<br>
+                            milhares de estabelecimentos.
+                        </div>
+                    </div>
+
+                    <div class="solutions-card-wrap">
+                        <div class="solutions-card-face">
+                            <span class="solutions-card-label">CRM</span>
+                            <div class="solutions-hex-deco">
+                                <svg viewBox="0 0 240 260" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <polygon points="120,10 228,65 228,195 120,250 12,195 12,65" stroke="rgba(46,204,113,0.58)" stroke-width="1.3" fill="none"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="solutions-card-overlay">
+                            <div class="solutions-ov-icon">
+                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <path d="M12 2l1.8 5.4L19.2 9l-5.4 1.8L12 16.2l-1.8-5.4L4.8 9l5.4-1.8L12 2z"/>
+                                    <path d="M19 14l.9 2.7 2.7.9-2.7.9-.9 2.7-.9-2.7-2.7-.9 2.7-.9L19 14z" opacity=".7"/>
+                                </svg>
+                            </div>
+                            <div class="solutions-ov-title">Cartão Benefício</div>
+                            <div class="solutions-ov-line"></div>
+                            <div class="solutions-ov-text">Um cartão recheado de vantagens exclusivas com crédito facilitado. Aceito em milhares de estabelecimentos em todo o Brasil.</div>
+                            <div class="solutions-ov-tag">Aceito em todo Brasil</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 3 -->
+                <div class="solutions-slide overlay-slide">
+                    <div class="solutions-slide-info overlay-info">
+                        <div class="solutions-slide-icon">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <path d="M12 2l1.8 5.4L19.2 9l-5.4 1.8L12 16.2l-1.8-5.4L4.8 9l5.4-1.8L12 2z"/>
+                                <path d="M19 14l.9 2.7 2.7.9-2.7.9-.9 2.7-.9-2.7-2.7-.9 2.7-.9L19 14z" opacity=".7"/>
+                            </svg>
+                        </div>
+                        <div class="solutions-slide-title">Empréstimo Consignado</div>
+                        <div class="solutions-slide-desc">
+                            Crédito com parcelas fixas, taxas<br>
+                            competitivas e desconto direto na folha,<br>
+                            com contratação simples e segura.
+                        </div>
+                    </div>
+
+                    <div class="solutions-card-wrap">
+                        <div class="solutions-card-face">
+                            <span class="solutions-card-label">CRM</span>
+                            <div class="solutions-hex-deco">
+                                <svg viewBox="0 0 240 260" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <polygon points="120,10 228,65 228,195 120,250 12,195 12,65" stroke="rgba(46,204,113,0.58)" stroke-width="1.3" fill="none"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="solutions-card-overlay">
+                            <div class="solutions-ov-icon">
+                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <path d="M12 2l1.8 5.4L19.2 9l-5.4 1.8L12 16.2l-1.8-5.4L4.8 9l5.4-1.8L12 2z"/>
+                                    <path d="M19 14l.9 2.7 2.7.9-2.7.9-.9 2.7-.9-2.7-2.7-.9 2.7-.9L19 14z" opacity=".7"/>
+                                </svg>
+                            </div>
+                            <div class="solutions-ov-title">Empréstimo Consignado</div>
+                            <div class="solutions-ov-line"></div>
+                            <div class="solutions-ov-text">Crédito com parcelas fixas e contratação segura, pensado para servidores, aposentados e trabalhadores.</div>
+                            <div class="solutions-ov-tag">Parcelas fixas</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 4 -->
+                <div class="solutions-slide overlay-slide">
+                    <div class="solutions-slide-info overlay-info">
+                        <div class="solutions-slide-icon">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <path d="M12 2l1.8 5.4L19.2 9l-5.4 1.8L12 16.2l-1.8-5.4L4.8 9l5.4-1.8L12 2z"/>
+                                <path d="M19 14l.9 2.7 2.7.9-2.7.9-.9 2.7-.9-2.7-2.7-.9 2.7-.9L19 14z" opacity=".7"/>
+                            </svg>
+                        </div>
+                        <div class="solutions-slide-title">Portabilidade de Crédito</div>
+                        <div class="solutions-slide-desc">
+                            Traga seu contrato para condições<br>
+                            melhores, com análise rápida e suporte<br>
+                            em todas as etapas.
+                        </div>
+                    </div>
+
+                    <div class="solutions-card-wrap">
+                        <div class="solutions-card-face">
+                            <span class="solutions-card-label">CRM</span>
+                            <div class="solutions-hex-deco">
+                                <svg viewBox="0 0 240 260" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <polygon points="120,10 228,65 228,195 120,250 12,195 12,65" stroke="rgba(46,204,113,0.58)" stroke-width="1.3" fill="none"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="solutions-card-overlay">
+                            <div class="solutions-ov-icon">
+                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <path d="M12 2l1.8 5.4L19.2 9l-5.4 1.8L12 16.2l-1.8-5.4L4.8 9l5.4-1.8L12 2z"/>
+                                    <path d="M19 14l.9 2.7 2.7.9-2.7.9-.9 2.7-.9-2.7-2.7-.9 2.7-.9L19 14z" opacity=".7"/>
+                                </svg>
+                            </div>
+                            <div class="solutions-ov-title">Portabilidade de Crédito</div>
+                            <div class="solutions-ov-line"></div>
+                            <div class="solutions-ov-text">Compare condições e leve seu contrato para uma alternativa mais vantajosa, com acompanhamento especializado.</div>
+                            <div class="solutions-ov-tag">Condições melhores</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="solutions-overlay-chevron right">
+                    <svg width="36" height="300" viewBox="0 0 36 300" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M2 0 L34 150 L2 300" stroke="rgba(46,204,113,0.55)" stroke-width="1.2"/>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Ghost RIGHT -->
+            <div class="solutions-ghost-col right">
+                <div class="solutions-ghost-info-lines">
+                    <div class="solutions-g-dot"></div>
+                    <div class="solutions-g-line wide"></div>
+                    <div class="solutions-g-line short"></div>
+                    <div class="solutions-g-line mid"></div>
+                    <div class="solutions-g-line short"></div>
+                </div>
+                <div class="solutions-ghost-card">
+                    <span class="solutions-ghost-card-label">CRM</span>
+                </div>
+            </div>
+            </div>
+            <div class="solutions-dots" aria-label="Navegação das soluções"></div>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- ══════════════════════════════════════
+     QUEM COMPARA, ESCOLHE A ANTECIPEY
+══════════════════════════════════════ -->
+<section id="depoimentos" class="relative overflow-hidden bg-[#0d0d0d] px-8 py-16 md:px-16">
+    <svg class="section-line-art" viewBox="0 0 698 989" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M252.956 2.5625C253.592 3.37995 254.351 4.50654 255.201 5.87207C256.898 8.59782 258.885 12.1629 260.858 15.8545C262.829 19.5411 264.773 23.3314 266.385 26.498C267.988 29.6487 269.277 32.2141 269.914 33.4072L269.916 33.4102L302.365 93.8301L302.367 93.832L370.447 220.091L603.012 651.387H603.013L668.602 773.005C671.45 778.305 676.71 788.837 682.116 799.128C684.806 804.247 687.519 809.281 689.952 813.505C692.03 817.111 693.944 820.198 695.486 822.242C692.767 826.222 688.503 833.965 684.352 841.77C679.793 850.338 675.356 859.003 672.98 863.409L672.979 863.41L624.599 953.287L624.596 953.293C618.946 963.898 613.141 975.547 607.108 985.698C607.094 985.706 607.079 985.717 607.059 985.728C606.9 985.807 606.635 985.907 606.24 986.011C605.454 986.218 604.349 986.395 602.979 986.538C600.253 986.823 596.693 986.954 593.021 986.998C585.631 987.087 578.139 986.83 576.085 986.826H576.084L521.625 986.765H521.621L464.51 986.84C462.864 986.84 454.364 986.974 446.075 986.912C441.939 986.881 437.899 986.801 434.851 986.632C433.321 986.547 432.076 986.442 431.205 986.315C430.886 986.269 430.644 986.223 430.47 986.182C387.504 905.77 342.716 825.983 300.291 745.291C290.192 725.79 279.816 706.463 269.169 687.304L267.036 683.474C264.979 679.708 263.242 675.814 261.227 671.814C259.241 667.873 257.042 663.955 254.188 660.477L252.893 658.897L253.389 658.889L252.588 656.875C251.427 653.958 248.898 649.084 246.318 644.297C245.02 641.888 243.696 639.479 242.506 637.317C241.314 635.152 240.26 633.242 239.492 631.819L239.489 631.814L211.495 580.4L125.297 419.394L125.295 419.392L91.3916 356.356L91.3906 356.354C86.7022 347.665 83.1457 341.867 80.8779 337.809C78.5474 333.638 77.6062 331.34 77.6025 329.203C77.599 327.073 78.5262 324.861 80.7842 320.853C82.9922 316.933 86.3881 311.423 90.8223 303.036L185.427 127.045C207.657 86.0923 229.672 42.5224 252.816 2.38672C252.862 2.44318 252.909 2.50158 252.956 2.5625ZM251.767 660.617C240.957 677.443 229.81 701.014 220.133 718.594L220.13 718.601L199.13 757.214L199.129 757.215C197.911 759.458 195.486 763.714 193.314 767.752C191.194 771.694 189.116 775.787 188.33 778.241C174.789 800.333 162.552 825.959 150.175 848.805C148.093 852.648 145.874 856.473 143.633 860.339C141.395 864.198 139.136 868.096 136.993 872.052L136.989 872.059L104.224 933.318C95.1707 950.233 85.3736 970.086 75.3613 986.18L-99.9277 986.775C-100.359 986.234 -100.975 985.348 -101.762 984.109C-102.793 982.486 -104.047 980.376 -105.454 977.921C-108.268 973.013 -111.668 966.773 -115.086 960.378C-121.936 947.561 -128.787 934.261 -131.177 929.755L-131.182 929.745L-165.35 866.418H-165.351C-168.617 860.315 -173.191 852.475 -177.538 844.679C-181.8 837.035 -185.859 829.406 -188.411 823.259C-187.779 821.21 -186.507 818.285 -184.823 814.83C-183.015 811.119 -180.775 806.889 -178.457 802.641C-173.858 794.213 -168.873 785.591 -166.52 781.16L-133.342 719.778L-133.338 719.77C-122.61 699.623 -112.438 677.909 -99.6846 659.564C-99.5193 659.522 -99.2765 659.471 -98.9434 659.422C-98.1446 659.305 -97.0134 659.21 -95.623 659.137C-92.8522 658.99 -89.1951 658.935 -85.4248 658.928C-77.7996 658.913 -70.0975 659.09 -68.0176 659.094H-68.0166L-7.8291 659.148H-7.82812L156.829 659.128C187.979 659.128 220.079 659.524 251.223 658.93L252.87 658.898L251.767 660.617Z" stroke="url(#depoimentosLine)" stroke-opacity="0.25" stroke-width="3"/>
+        <defs>
+            <radialGradient id="depoimentosLine" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(253.679 494.258) scale(608.524 677.896)">
+                <stop stop-color="#00E082"/>
+                <stop offset="1" stop-color="#4BFFB3"/>
+            </radialGradient>
+        </defs>
+    </svg>
+    <div class="relative z-10 mx-auto max-w-7xl py-20 px-4">
+        <!-- Header: título esquerda, setas direita -->
+        <div class="mb-10 flex items-center justify-between flex-wrap gap-6">
+            <h2 class="text-5xl font-bold leading-tight md:text-6xl">
+                Quem compara,<br>
+                escolhe a <span class="text-emerald-500">Antecipey.</span>
+            </h2>
+            <div class="flex gap-3">
+                <button id="t-prev" aria-label="Anterior" class="t-arrow-btn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+                </button>
+                <button id="t-next" aria-label="Próximo" class="t-arrow-btn active">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 19l7-7-7-7"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Cards em fila larga -->
+        <div class="flex gap-5 overflow-x-auto pb-4" id="testimonials-track" style="-ms-overflow-style:none;scrollbar-width:none;">
+            <!-- Card ativo verde -->
+            <div style="flex:0 0 300px;width:300px;height:280px;" class="flex-shrink-0 rounded-2xl bg-emerald-500 p-7 text-black shadow-[0_0_32px_rgba(16,185,129,0.55)] flex flex-col justify-between">
+                <div>
+                    <div class="mb-5 flex items-center gap-3">
+                        <div class="h-11 w-11 rounded-full bg-emerald-700/20 flex-shrink-0 flex items-center justify-center text-sm font-bold text-emerald-950">MR</div>
+                        <div>
+                            <h3 class="font-bold text-sm">Mariana Rocha</h3>
+                            <p class="text-xs opacity-60">Servidora pública</p>
+                        </div>
+                    </div>
+                    <p class="text-sm leading-relaxed">Consegui simular e contratar sem sair de casa. O atendimento foi claro, as parcelas couberam no meu orçamento e o dinheiro caiu rápido na conta.</p>
+                </div>
+            </div>
+
+            <!-- Cards desfocados -->
+            <div style="flex:0 0 300px;width:300px;height:280px;" class="flex-shrink-0 rounded-2xl border border-white/10 bg-white/5 p-7 opacity-40 blur-[2px] flex flex-col">
+                <div class="mb-5 flex items-center gap-3">
+                    <div class="h-11 w-11 rounded-full bg-white/10 flex-shrink-0 flex items-center justify-center text-sm font-bold text-white/70">AS</div>
+                    <div>
+                        <h3 class="font-bold text-sm">Antônio Silva</h3>
+                        <p class="text-xs opacity-60">Aposentado</p>
+                    </div>
+                </div>
+                <p class="text-sm leading-relaxed">Eu precisava reorganizar as contas e encontrei uma opção segura. A equipe explicou tudo com paciência e não tive surpresa no contrato.</p>
+            </div>
+
+            <div style="flex:0 0 300px;width:300px;height:280px;" class="flex-shrink-0 rounded-2xl border border-white/10 bg-white/5 p-7 opacity-40 blur-[2px] flex flex-col">
+                <div class="mb-5 flex items-center gap-3">
+                    <div class="h-11 w-11 rounded-full bg-white/10 flex-shrink-0 flex items-center justify-center text-sm font-bold text-white/70">CP</div>
+                    <div>
+                        <h3 class="font-bold text-sm">Carla Pereira</h3>
+                        <p class="text-xs opacity-60">Trabalhadora CLT</p>
+                    </div>
+                </div>
+                <p class="text-sm leading-relaxed">A simulação foi simples e o retorno veio muito rápido. Gostei da transparência nas condições e do acompanhamento até a liberação.</p>
+            </div>
+
+            <div style="flex:0 0 300px;width:300px;height:280px;" class="flex-shrink-0 rounded-2xl border border-white/10 bg-white/5 p-7 opacity-40 blur-[2px] flex flex-col">
+                <div class="mb-5 flex items-center gap-3">
+                    <div class="h-11 w-11 rounded-full bg-white/10 flex-shrink-0 flex items-center justify-center text-sm font-bold text-white/70">JS</div>
+                    <div>
+                        <h3 class="font-bold text-sm">João Santos</h3>
+                        <p class="text-xs opacity-60">Servidor municipal</p>
+                    </div>
+                </div>
+                <p class="text-sm leading-relaxed">Usei o crédito para quitar dívidas mais caras. O processo foi digital, rápido e me senti seguro em todas as etapas.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="comparison-section" style="display:none;">
+    <svg class="section-line-art" viewBox="0 0 698 989" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M252.956 2.5625C253.592 3.37995 254.351 4.50654 255.201 5.87207C256.898 8.59782 258.885 12.1629 260.858 15.8545C262.829 19.5411 264.773 23.3314 266.385 26.498C267.988 29.6487 269.277 32.2141 269.914 33.4072L269.916 33.4102L302.365 93.8301L302.367 93.832L370.447 220.091L603.012 651.387H603.013L668.602 773.005C671.45 778.305 676.71 788.837 682.116 799.128C684.806 804.247 687.519 809.281 689.952 813.505C692.03 817.111 693.944 820.198 695.486 822.242C692.767 826.222 688.503 833.965 684.352 841.77C679.793 850.338 675.356 859.003 672.98 863.409L672.979 863.41L624.599 953.287L624.596 953.293C618.946 963.898 613.141 975.547 607.108 985.698C607.094 985.706 607.079 985.717 607.059 985.728C606.9 985.807 606.635 985.907 606.24 986.011C605.454 986.218 604.349 986.395 602.979 986.538C600.253 986.823 596.693 986.954 593.021 986.998C585.631 987.087 578.139 986.83 576.085 986.826H576.084L521.625 986.765H521.621L464.51 986.84C462.864 986.84 454.364 986.974 446.075 986.912C441.939 986.881 437.899 986.801 434.851 986.632C433.321 986.547 432.076 986.442 431.205 986.315C430.886 986.269 430.644 986.223 430.47 986.182C387.504 905.77 342.716 825.983 300.291 745.291C290.192 725.79 279.816 706.463 269.169 687.304L267.036 683.474C264.979 679.708 263.242 675.814 261.227 671.814C259.241 667.873 257.042 663.955 254.188 660.477L252.893 658.897L253.389 658.889L252.588 656.875C251.427 653.958 248.898 649.084 246.318 644.297C245.02 641.888 243.696 639.479 242.506 637.317C241.314 635.152 240.26 633.242 239.492 631.819L239.489 631.814L211.495 580.4L125.297 419.394L125.295 419.392L91.3916 356.356L91.3906 356.354C86.7022 347.665 83.1457 341.867 80.8779 337.809C78.5474 333.638 77.6062 331.34 77.6025 329.203C77.599 327.073 78.5262 324.861 80.7842 320.853C82.9922 316.933 86.3881 311.423 90.8223 303.036L185.427 127.045C207.657 86.0923 229.672 42.5224 252.816 2.38672C252.862 2.44318 252.909 2.50158 252.956 2.5625ZM251.767 660.617C240.957 677.443 229.81 701.014 220.133 718.594L220.13 718.601L199.13 757.214L199.129 757.215C197.911 759.458 195.486 763.714 193.314 767.752C191.194 771.694 189.116 775.787 188.33 778.241C174.789 800.333 162.552 825.959 150.175 848.805C148.093 852.648 145.874 856.473 143.633 860.339C141.395 864.198 139.136 868.096 136.993 872.052L136.989 872.059L104.224 933.318C95.1707 950.233 85.3736 970.086 75.3613 986.18L-99.9277 986.775C-100.359 986.234 -100.975 985.348 -101.762 984.109C-102.793 982.486 -104.047 980.376 -105.454 977.921C-108.268 973.013 -111.668 966.773 -115.086 960.378C-121.936 947.561 -128.787 934.261 -131.177 929.755L-131.182 929.745L-165.35 866.418H-165.351C-168.617 860.315 -173.191 852.475 -177.538 844.679C-181.8 837.035 -185.859 829.406 -188.411 823.259C-187.779 821.21 -186.507 818.285 -184.823 814.83C-183.015 811.119 -180.775 806.889 -178.457 802.641C-173.858 794.213 -168.873 785.591 -166.52 781.16L-133.342 719.778L-133.338 719.77C-122.61 699.623 -112.438 677.909 -99.6846 659.564C-99.5193 659.522 -99.2765 659.471 -98.9434 659.422C-98.1446 659.305 -97.0134 659.21 -95.623 659.137C-92.8522 658.99 -89.1951 658.935 -85.4248 658.928C-77.7996 658.913 -70.0975 659.09 -68.0176 659.094H-68.0166L-7.8291 659.148H-7.82812L156.829 659.128C187.979 659.128 220.079 659.524 251.223 658.93L252.87 658.898L251.767 660.617Z" stroke="url(#comparisonLine)" stroke-opacity="0.35" stroke-width="3"/>
+        <defs>
+            <radialGradient id="comparisonLine" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(253.679 494.258) scale(608.524 677.896)">
+                <stop stop-color="#00E082"/>
+                <stop offset="1" stop-color="#4BFFB3"/>
+            </radialGradient>
+        </defs>
+    </svg>
+
+    <div class="comparison-inner">
+        <div class="comparison-header">
+            <h2 class="comparison-title">
+                Quem compara,<br>escolhe a <span class="grad-text">Antecipey.</span>
+            </h2>
+            <div class="comparison-arrows">
+                <button class="comparison-arrow" id="t-prev" aria-label="Anterior">←</button>
+                <button class="comparison-arrow" id="t-next" aria-label="Próximo">→</button>
+            </div>
+        </div>
+
+        <div class="comparison-track" id="testimonials-track">
+            <div class="comparison-card active">
+                <div style="display:flex;align-items:center;gap:12px;">
+                    <div class="comparison-avatar"></div>
+                    <div>
+                        <p class="comparison-name">Mariana Rocha</p>
+                        <p class="comparison-role">Servidora pública</p>
+                    </div>
+                </div>
+                <p class="comparison-text">Consegui simular e contratar sem sair de casa. O atendimento foi claro, as parcelas couberam no meu orçamento e o dinheiro caiu rápido na conta.</p>
+            </div>
+            <div class="comparison-card"></div>
+            <div class="comparison-card"></div>
+            <div class="comparison-card"></div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ══════════════════════════════════════
+     CTA FINAL — NÃO DEIXE SEUS PLANOS
+══════════════════════════════════════ -->
+<section class="final-cta-section">
+    <svg class="section-line-art" viewBox="0 0 698 989" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="top:-260px;">
+        <path d="M252.956 2.5625C253.592 3.37995 254.351 4.50654 255.201 5.87207C256.898 8.59782 258.885 12.1629 260.858 15.8545C262.829 19.5411 264.773 23.3314 266.385 26.498C267.988 29.6487 269.277 32.2141 269.914 33.4072L269.916 33.4102L302.365 93.8301L302.367 93.832L370.447 220.091L603.012 651.387H603.013L668.602 773.005C671.45 778.305 676.71 788.837 682.116 799.128C684.806 804.247 687.519 809.281 689.952 813.505C692.03 817.111 693.944 820.198 695.486 822.242C692.767 826.222 688.503 833.965 684.352 841.77C679.793 850.338 675.356 859.003 672.98 863.409L672.979 863.41L624.599 953.287L624.596 953.293C618.946 963.898 613.141 975.547 607.108 985.698C607.094 985.706 607.079 985.717 607.059 985.728C606.9 985.807 606.635 985.907 606.24 986.011C605.454 986.218 604.349 986.395 602.979 986.538C600.253 986.823 596.693 986.954 593.021 986.998C585.631 987.087 578.139 986.83 576.085 986.826H576.084L521.625 986.765H521.621L464.51 986.84C462.864 986.84 454.364 986.974 446.075 986.912C441.939 986.881 437.899 986.801 434.851 986.632C433.321 986.547 432.076 986.442 431.205 986.315C430.886 986.269 430.644 986.223 430.47 986.182C387.504 905.77 342.716 825.983 300.291 745.291C290.192 725.79 279.816 706.463 269.169 687.304L267.036 683.474C264.979 679.708 263.242 675.814 261.227 671.814C259.241 667.873 257.042 663.955 254.188 660.477L252.893 658.897L253.389 658.889L252.588 656.875C251.427 653.958 248.898 649.084 246.318 644.297C245.02 641.888 243.696 639.479 242.506 637.317C241.314 635.152 240.26 633.242 239.492 631.819L239.489 631.814L211.495 580.4L125.297 419.394L125.295 419.392L91.3916 356.356L91.3906 356.354C86.7022 347.665 83.1457 341.867 80.8779 337.809C78.5474 333.638 77.6062 331.34 77.6025 329.203C77.599 327.073 78.5262 324.861 80.7842 320.853C82.9922 316.933 86.3881 311.423 90.8223 303.036L185.427 127.045C207.657 86.0923 229.672 42.5224 252.816 2.38672C252.862 2.44318 252.909 2.50158 252.956 2.5625ZM251.767 660.617C240.957 677.443 229.81 701.014 220.133 718.594L220.13 718.601L199.13 757.214L199.129 757.215C197.911 759.458 195.486 763.714 193.314 767.752C191.194 771.694 189.116 775.787 188.33 778.241C174.789 800.333 162.552 825.959 150.175 848.805C148.093 852.648 145.874 856.473 143.633 860.339C141.395 864.198 139.136 868.096 136.993 872.052L136.989 872.059L104.224 933.318C95.1707 950.233 85.3736 970.086 75.3613 986.18L-99.9277 986.775C-100.359 986.234 -100.975 985.348 -101.762 984.109C-102.793 982.486 -104.047 980.376 -105.454 977.921C-108.268 973.013 -111.668 966.773 -115.086 960.378C-121.936 947.561 -128.787 934.261 -131.177 929.755L-131.182 929.745L-165.35 866.418H-165.351C-168.617 860.315 -173.191 852.475 -177.538 844.679C-181.8 837.035 -185.859 829.406 -188.411 823.259C-187.779 821.21 -186.507 818.285 -184.823 814.83C-183.015 811.119 -180.775 806.889 -178.457 802.641C-173.858 794.213 -168.873 785.591 -166.52 781.16L-133.342 719.778L-133.338 719.77C-122.61 699.623 -112.438 677.909 -99.6846 659.564C-99.5193 659.522 -99.2765 659.471 -98.9434 659.422C-98.1446 659.305 -97.0134 659.21 -95.623 659.137C-92.8522 658.99 -89.1951 658.935 -85.4248 658.928C-77.7996 658.913 -70.0975 659.09 -68.0176 659.094H-68.0166L-7.8291 659.148H-7.82812L156.829 659.128C187.979 659.128 220.079 659.524 251.223 658.93L252.87 658.898L251.767 660.617Z" stroke="url(#finalLine)" stroke-opacity="0.22" stroke-width="3"/>
+        <defs>
+            <radialGradient id="finalLine" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(253.679 494.258) scale(608.524 677.896)">
+                <stop stop-color="#00E082"/>
+                <stop offset="1" stop-color="#4BFFB3"/>
+            </radialGradient>
+        </defs>
+    </svg>
+    <div class="final-cta-card">
+        <h2>Não deixe seus <span class="grad-text">planos</span> para amanhã.</h2>
+        <p>Fale com um de nossos especialistas agora mesmo e descubra o limite disponível para você em poucos minutos.</p>
+        <a href="servicos.html" class="cta-btn" style="display:inline-flex;">
+            Ver serviços
+            <span class="cta-btn-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" style="width:14px;height:14px;color:#00e082" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                </svg>
+            </span>
+        </a>
+    </div>
+</section>
+
+
+<!-- ══════════════════════════════════════
+     FAQ — FICOU COM ALGUMA DÚVIDA?
+══════════════════════════════════════ -->
+<section id="faq" style="background:#00FF9D;padding:80px 24px;">
+    <div style="max-width:760px;margin:0 auto;text-align:center;">
+        <h2 style="font-size:clamp(28px,4vw,40px);font-weight:800;color:#000;margin-bottom:10px;letter-spacing:-0.02em;">Ficou com alguma dúvida?</h2>
+        <p style="font-size:clamp(18px,2.5vw,22px);font-weight:600;color:#fff;margin-bottom:48px;">Nós respondemos.</p>
+        <div style="display:flex;flex-direction:column;gap:16px;" id="faq-list">
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-q">
+                    <span>É seguro pedir empréstimo pela Antecipey?</span>
+                    <svg class="faq-icon" width="22" height="22" fill="none" stroke="white" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                </div>
+                <div class="faq-a">Sim! A Antecipey opera como correspondente bancário seguindo todas as diretrizes do Banco Central do Brasil, garantindo segurança e transparência em cada operação.</div>
+            </div>
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-q">
+                    <span>Quanto tempo demora para o dinheiro cair na conta?</span>
+                    <svg class="faq-icon" width="22" height="22" fill="none" stroke="white" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                </div>
+                <div class="faq-a">O processo é 100% digital e o crédito é liberado em poucos minutos após a aprovação, direto na sua conta bancária.</div>
+            </div>
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-q">
+                    <span>Preciso pagar algum valor antecipado para liberar o crédito?</span>
+                    <svg class="faq-icon" width="22" height="22" fill="none" stroke="white" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                </div>
+                <div class="faq-a">Não. Nunca cobramos nenhum valor antecipado. Qualquer solicitação de pagamento antes da liberação do crédito é fraude.</div>
+            </div>
+            <div class="faq-item" onclick="toggleFaq(this)">
+                <div class="faq-q">
+                    <span>Quem pode solicitar as soluções de crédito?</span>
+                    <svg class="faq-icon" width="22" height="22" fill="none" stroke="white" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                </div>
+                <div class="faq-a">Trabalhadores com saldo no FGTS, aposentados e pensionistas do INSS, e servidores públicos podem solicitar nossas soluções de crédito.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* ── Testimonial arrow buttons ── */
+    .t-arrow-btn {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        border: 1.5px solid rgba(0, 224, 130, 0.25);
+        background: rgba(0, 224, 130, 0.05);
+        color: rgba(255,255,255,0.45);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.25s ease;
+        backdrop-filter: blur(4px);
+        flex-shrink: 0;
+    }
+    .t-arrow-btn:hover,
+    .t-arrow-btn.active {
+        background: rgba(0, 224, 130, 0.15);
+        border-color: rgba(0, 224, 130, 0.65);
+        color: #00e082;
+        box-shadow: 0 0 16px rgba(0, 224, 130, 0.2);
+    }
+    .t-arrow-btn:active {
+        transform: scale(0.92);
+    }
+
+    .faq-item {
+        background: #000;
+        color: #fff;
+        border-radius: 18px;
+        overflow: hidden;
+        cursor: pointer;
+        transition: opacity 0.2s;
+    }
+    .faq-item:hover { opacity: 0.88; }
+    .faq-q {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 22px 28px;
+        gap: 16px;
+    }
+    .faq-q span {
+        font-size: 17px;
+        font-weight: 600;
+        text-align: left;
+        line-height: 1.4;
+    }
+    .faq-icon {
+        flex-shrink: 0;
+        transition: transform 0.3s ease;
+    }
+    .faq-item.open .faq-icon {
+        transform: rotate(180deg);
+    }
+    .faq-a {
+        max-height: 0;
+        overflow: hidden;
+        padding: 0 28px;
+        font-size: 15px;
+        color: rgba(255,255,255,0.7);
+        line-height: 1.6;
+        transition: max-height 0.35s ease, padding 0.35s ease;
+    }
+    .faq-item.open .faq-a {
+        max-height: 200px;
+        padding: 0 28px 22px;
+    }
+</style>
+
+<!-- ══════════════════════════════════════
+     RODAPÉ
+══════════════════════════════════════ -->
+<footer style="background:#fff;padding:48px 32px;border-top:1px solid #ebebeb;">
+    <div style="max-width:1160px;margin:0 auto;display:flex;flex-wrap:wrap;gap:36px;align-items:flex-start;">
+
+        <!-- Logo + slogan -->
+        <div style="display:flex;flex-direction:column;gap:18px;min-width:240px;">
+            <img src="assets/antecipey-logo-green-transparent.png" alt="Antecipey" style="width:180px;height:auto;object-fit:contain;display:block;">
+            <p style="font-size:15px;font-weight:500;color:#111;max-width:220px;line-height:1.45;margin:0;">Seu crédito inteligente, ágil e seguro.</p>
+        </div>
+
+        <!-- Links navegação -->
+        <div style="display:flex;flex-direction:column;gap:12px;">
+            <a href="#" style="color:#222;font-size:14px;text-decoration:none;" onmouseover="this.style.color='#00cc80'" onmouseout="this.style.color='#222'">Início</a>
+            <a href="servicos.html" style="color:#222;font-size:14px;text-decoration:none;" onmouseover="this.style.color='#00cc80'" onmouseout="this.style.color='#222'">Serviços</a>
+            <a href="#" style="color:#222;font-size:14px;text-decoration:none;" onmouseover="this.style.color='#00cc80'" onmouseout="this.style.color='#222'">Perguntas Frequentes</a>
+            <a href="#" style="color:#222;font-size:14px;text-decoration:none;" onmouseover="this.style.color='#00cc80'" onmouseout="this.style.color='#222'">Contato</a>
+        </div>
+
+        <!-- Divisor vertical -->
+        <div class="border-left-divider" style="width:1px;background:#e0e0e0;align-self:stretch;"></div>
+
+        <!-- Links legais -->
+        <div style="display:flex;flex-direction:column;gap:12px;">
+            <a href="#" style="color:#222;font-size:14px;text-decoration:none;" onmouseover="this.style.color='#00cc80'" onmouseout="this.style.color='#222'">Termos de Uso</a>
+            <a href="#" style="color:#222;font-size:14px;text-decoration:none;" onmouseover="this.style.color='#00cc80'" onmouseout="this.style.color='#222'">Política de Privacidade</a>
+        </div>
+
+        <!-- Aviso legal -->
+        <div style="flex:1;min-width:200px;max-width:300px;font-size:12px;color:#999;line-height:1.65;">
+            Antecipey não é uma Instituição financeira, mas atua como correspondente bancário seguindo as diretrizes do Banco Central do Brasil... CNPJ: 51.249.150/0001-96. Endereço Completo.
+        </div>
+
+    </div>
+</footer>
+
+
+<script>
+    // ── FAQ accordion ──
+    function toggleFaq(el) {
+        const isOpen = el.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+        if (!isOpen) el.classList.add('open');
+    }
+
+    // ── Mobile menu ──
+    const menuBtn = document.getElementById('menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+
+    // ── Changing word animation ──
+    const changingWord = document.getElementById('changing-word');
+    const words = ['transparência', 'valores', 'segurança', 'confiança'];
+    let wordIndex = 0;
+    setInterval(() => {
+        changingWord.classList.add('is-changing');
+        setTimeout(() => {
+            wordIndex = (wordIndex + 1) % words.length;
+            changingWord.textContent = words[wordIndex];
+            changingWord.classList.remove('is-changing');
+        }, 350);
+    }, 2200);
+
+    // ── Testimonials carousel: always rotates, even with few cards ──
+    const tTrack = document.getElementById('testimonials-track');
+    const TESTIMONIAL_ACTIVE_CLASSES = ['bg-emerald-500', 'text-black', 'shadow-[0_0_32px_rgba(16,185,129,0.55)]'];
+    const TESTIMONIAL_INACTIVE_CLASSES = ['border', 'border-white/10', 'bg-white/5', 'opacity-40', 'blur-[2px]'];
+
+    function applyTestimonialsState() {
+        if (!tTrack) return;
+        [...tTrack.children].forEach((card, index) => {
+            card.classList.remove(...TESTIMONIAL_ACTIVE_CLASSES, ...TESTIMONIAL_INACTIVE_CLASSES);
+            card.classList.add(...(index === 0 ? TESTIMONIAL_ACTIVE_CLASSES : TESTIMONIAL_INACTIVE_CLASSES));
+
+            const avatar = card.querySelector('.h-11.w-11.rounded-full');
+            if (avatar) {
+                avatar.classList.remove('bg-emerald-700/20', 'bg-white/10');
+                avatar.classList.add(index === 0 ? 'bg-emerald-700/20' : 'bg-white/10');
+            }
+        });
+    }
+
+    function ensureTestimonialsCarouselItems() {
+        if (!tTrack) return;
+        const originals = [...tTrack.children].filter(card => !card.dataset.clone);
+        if (!originals.length) return;
+
+        let cloneIndex = 0;
+        while (tTrack.children.length < 4) {
+            const clone = originals[cloneIndex % originals.length].cloneNode(true);
+            clone.dataset.clone = 'true';
+            tTrack.appendChild(clone);
+            cloneIndex++;
+        }
+        applyTestimonialsState();
+    }
+
+    const getTestimonialsStep = () => {
+        const firstCard = tTrack?.querySelector(':scope > div');
+        if (!firstCard) return 380;
+        const styles = getComputedStyle(tTrack);
+        const gap = parseFloat(styles.columnGap || styles.gap || '0') || 0;
+        return firstCard.getBoundingClientRect().width + gap;
+    };
+    let testimonialsAnimating = false;
+    function scrollTestimonials(direction) {
+        if (!tTrack || testimonialsAnimating) return;
+        ensureTestimonialsCarouselItems();
+        if (tTrack.children.length <= 1) return;
+
+        const step = getTestimonialsStep();
+        testimonialsAnimating = true;
+
+        if (direction > 0) {
+            tTrack.style.transition = 'transform 320ms ease';
+            tTrack.style.transform = `translateX(-${step}px)`;
+            window.setTimeout(() => {
+                tTrack.appendChild(tTrack.firstElementChild);
+                tTrack.style.transition = 'none';
+                tTrack.style.transform = 'translateX(0)';
+                tTrack.scrollLeft = 0;
+                applyTestimonialsState();
+                testimonialsAnimating = false;
+            }, 340);
+            return;
+        }
+
+        tTrack.style.transition = 'none';
+        tTrack.insertBefore(tTrack.lastElementChild, tTrack.firstElementChild);
+        tTrack.style.transform = `translateX(-${step}px)`;
+        tTrack.offsetHeight;
+        tTrack.style.transition = 'transform 320ms ease';
+        tTrack.style.transform = 'translateX(0)';
+        window.setTimeout(() => {
+            tTrack.style.transition = 'none';
+            applyTestimonialsState();
+            testimonialsAnimating = false;
+        }, 340);
+    }
+    document.getElementById('t-prev').addEventListener('click', () => scrollTestimonials(-1));
+    document.getElementById('t-next').addEventListener('click', () => scrollTestimonials(1));
+    ensureTestimonialsCarouselItems();
+
+    // ── Services section reveal on scroll ──
+    (() => {
+        const servicesReveal = document.querySelector('#servicos .services-reveal');
+        if (!servicesReveal) return;
+
+        if (!('IntersectionObserver' in window)) {
+            servicesReveal.classList.add('is-visible');
+            return;
+        }
+
+        const observer = new IntersectionObserver(([entry]) => {
+            if (!entry.isIntersecting) return;
+            servicesReveal.classList.add('is-visible');
+            observer.unobserve(servicesReveal);
+        }, {
+            threshold: 0.18,
+            rootMargin: '0px 0px -10% 0px',
+        });
+
+        observer.observe(servicesReveal);
+    })();
+
+    // ── Solutions section entrance ──
+    (() => {
+        const section = document.getElementById('solucoes');
+        if (!section) return;
+        const cardsRow = section.querySelector('.solutions-cards-row');
+
+        section.querySelectorAll('.solutions-slide').forEach((slide, index) => {
+            setTimeout(() => slide.classList.add('entered'), 300 + index * 120);
+        });
+
+        if (!cardsRow) return;
+
+        const solutionSlides = [...section.querySelectorAll('.solutions-slide.overlay-slide')];
+        const prevBtn = section.querySelector('.solutions-scroll-btn.prev');
+        const nextBtn = section.querySelector('.solutions-scroll-btn.next');
+        const dotsWrap = section.querySelector('.solutions-dots');
+
+        const getActiveSolutionIndex = () => {
+            const rowCenter = cardsRow.scrollLeft + cardsRow.clientWidth / 2;
+            return solutionSlides.reduce((closestIndex, slide, index) => {
+                const slideCenter = slide.offsetLeft + slide.offsetWidth / 2;
+                const closestCenter = solutionSlides[closestIndex].offsetLeft + solutionSlides[closestIndex].offsetWidth / 2;
+                return Math.abs(slideCenter - rowCenter) < Math.abs(closestCenter - rowCenter) ? index : closestIndex;
+            }, 0);
+        };
+
+        const scrollToSolution = (index) => {
+            const slide = solutionSlides[index];
+            if (!slide) return;
+
+            cardsRow.scrollTo({
+                left: slide.offsetLeft - (cardsRow.clientWidth - slide.offsetWidth) / 2,
+                behavior: 'smooth',
+            });
+        };
+
+        const updateSolutionsNav = () => {
+            if (!solutionSlides.length) return;
+
+            const activeIndex = getActiveSolutionIndex();
+            dotsWrap?.querySelectorAll('.solutions-dot').forEach((dot, index) => {
+                dot.classList.toggle('active', index === activeIndex);
+                dot.setAttribute('aria-current', index === activeIndex ? 'true' : 'false');
+            });
+
+            if (prevBtn) prevBtn.disabled = activeIndex === 0;
+            if (nextBtn) nextBtn.disabled = activeIndex === solutionSlides.length - 1;
+        };
+
+        if (dotsWrap && !dotsWrap.children.length) {
+            solutionSlides.forEach((_, index) => {
+                const dot = document.createElement('button');
+                dot.type = 'button';
+                dot.className = 'solutions-dot';
+                dot.setAttribute('aria-label', `Ver solução ${index + 1}`);
+                dot.addEventListener('click', () => scrollToSolution(index));
+                dotsWrap.appendChild(dot);
+            });
+        }
+
+        prevBtn?.addEventListener('click', () => scrollToSolution(Math.max(0, getActiveSolutionIndex() - 1)));
+        nextBtn?.addEventListener('click', () => scrollToSolution(Math.min(solutionSlides.length - 1, getActiveSolutionIndex() + 1)));
+        cardsRow.addEventListener('scroll', () => window.requestAnimationFrame(updateSolutionsNav), { passive: true });
+        window.addEventListener('resize', updateSolutionsNav);
+        updateSolutionsNav();
+
+        cardsRow.addEventListener('wheel', (event) => {
+            if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
+            event.preventDefault();
+            cardsRow.scrollLeft += event.deltaY;
+        }, { passive: false });
+
+        let isDraggingSolutions = false;
+        let startX = 0;
+        let startScrollLeft = 0;
+
+        cardsRow.addEventListener('pointerdown', (event) => {
+            isDraggingSolutions = true;
+            startX = event.clientX;
+            startScrollLeft = cardsRow.scrollLeft;
+            cardsRow.classList.add('is-dragging');
+            cardsRow.setPointerCapture(event.pointerId);
+        });
+
+        cardsRow.addEventListener('pointermove', (event) => {
+            if (!isDraggingSolutions) return;
+            cardsRow.scrollLeft = startScrollLeft - (event.clientX - startX);
+        });
+
+        const stopDraggingSolutions = () => {
+            isDraggingSolutions = false;
+            cardsRow.classList.remove('is-dragging');
+        };
+
+        cardsRow.addEventListener('pointerup', stopDraggingSolutions);
+        cardsRow.addEventListener('pointercancel', stopDraggingSolutions);
+        cardsRow.addEventListener('pointerleave', stopDraggingSolutions);
+    })();
+
+    // ── Carregar conteúdo via API segura (backend) ──
+    (async () => {
+        try {
+            // Conteúdo do site
+            const c = await fetch('/api/content').then(r => r.ok ? r.json() : {});
+
+            if (c.hero_title) {
+                const h1 = document.querySelector('.hero-background h1');
+                if (h1) h1.innerHTML = c.hero_title.replace('transparência', '<span id="changing-word" class="changing-word">transparência</span>');
+            }
+            if (c.hero_subtitle) {
+                const p = document.querySelector('.hero-background p');
+                if (p) p.textContent = c.hero_subtitle;
+            }
+            if (c.hero_btn) document.querySelectorAll('.hero-background .cta-btn').forEach(b => { b.childNodes[0].textContent = c.hero_btn + ' '; });
+            if (c.credito_title) {
+                const h = document.querySelector('.credito-section h2');
+                if (h) h.innerHTML = c.credito_title.replace('trabalho.', '<span class="grad-text"> trabalho.</span>');
+            }
+            if (c.credito_text) { const p = document.querySelector('.credito-section p'); if (p) p.textContent = c.credito_text; }
+            const sTitles = document.querySelectorAll('.solutions-slide-title');
+            const sDescs  = document.querySelectorAll('.solutions-slide-desc');
+            if (sTitles[0] && c.solucao_1_title) sTitles[0].textContent = c.solucao_1_title;
+            if (sDescs[0]  && c.solucao_1_desc)  sDescs[0].textContent  = c.solucao_1_desc;
+            if (sTitles[1] && c.solucao_2_title) sTitles[1].textContent = c.solucao_2_title;
+            if (sDescs[1]  && c.solucao_2_desc)  sDescs[1].textContent  = c.solucao_2_desc;
+            if (c.cta_title) { const h = document.querySelector('.final-cta-card h2'); if (h) h.innerHTML = c.cta_title.replace('planos', '<span class="grad-text">planos</span>'); }
+            if (c.cta_subtitle) { const p = document.querySelector('.final-cta-card p'); if (p) p.textContent = c.cta_subtitle; }
+            if (c.cta_btn) { const b = document.querySelector('.final-cta-card .cta-btn'); if (b) b.childNodes[0].textContent = c.cta_btn + ' '; }
+            if (c.footer_slogan) { const p = document.querySelector('footer p'); if (p) p.textContent = c.footer_slogan; }
+            if (c.footer_legal) { const d = document.querySelector('footer > div > div:last-child'); if (d) d.textContent = c.footer_legal; }
+
+            // Depoimentos
+            const testimonials = await fetch('/api/testimonials').then(r => r.ok ? r.json() : []);
+            if (testimonials.length) {
+                const track = document.getElementById('testimonials-track');
+                if (track) {
+                    track.innerHTML = testimonials.map((t, i) => `
+                        <div style="flex:0 0 300px;width:300px;height:280px;"
+                             class="flex-shrink-0 rounded-2xl ${i === 0
+                                 ? 'bg-emerald-500 text-black shadow-[0_0_32px_rgba(16,185,129,0.55)]'
+                                 : 'border border-white/10 bg-white/5 opacity-40 blur-[2px]'
+                             } p-7 flex flex-col">
+                            <div class="mb-5 flex items-center gap-3">
+                                <div class="h-11 w-11 rounded-full flex-shrink-0 overflow-hidden ${i === 0 ? 'bg-emerald-700/20' : 'bg-white/10'}">
+                                    ${t.avatar_url ? `<img src="${t.avatar_url}" class="w-full h-full object-cover">` : ''}
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-sm">${t.name}</h3>
+                                    <p class="text-xs opacity-60">${t.role}</p>
+                                </div>
+                            </div>
+                            <p class="text-sm leading-relaxed">${t.text}</p>
+                        </div>`).join('');
+                    ensureTestimonialsCarouselItems();
+                }
+            }
+
+            // FAQ
+            const faqs = await fetch('/api/faq').then(r => r.ok ? r.json() : []);
+            if (faqs.length) {
+                const list = document.getElementById('faq-list');
+                if (list) {
+                    list.innerHTML = faqs.map(f => `
+                        <div class="faq-item" onclick="toggleFaq(this)">
+                            <div class="faq-q">
+                                <span>${f.question}</span>
+                                <svg class="faq-icon" width="22" height="22" fill="none" stroke="white" stroke-width="2.2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            </div>
+                            <div class="faq-a">${f.answer}</div>
+                        </div>`).join('');
+                }
+            }
+        } catch { /* silencioso em caso de erro de rede */ }
+    })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Antecipey — Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#07090a;--sidebar:#0d1010;--card:#111615;--border:rgba(255,255,255,0.07);
+  --green:#00e082;--green2:#00c46e;--text:#e8f0ec;--muted:rgba(255,255,255,0.42);
+  --red:#f87171;--yellow:#fbbf24;--radius:14px;
+}
+body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex}
+
+/* ── Sidebar ── */
+.sidebar{width:230px;min-height:100vh;background:var(--sidebar);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;padding:28px 0;position:fixed;top:0;left:0;bottom:0;z-index:10}
+.sidebar-logo{padding:0 24px 28px;border-bottom:1px solid var(--border)}
+.sidebar-logo img{height:28px;object-fit:contain}
+.sidebar-logo span{font-size:18px;font-weight:700;color:var(--green)}
+nav{flex:1;padding:20px 12px;display:flex;flex-direction:column;gap:4px}
+.nav-item{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:10px;
+  cursor:pointer;font-size:14px;font-weight:500;color:var(--muted);transition:.15s;border:none;background:none;width:100%;text-align:left}
+.nav-item svg{flex-shrink:0;opacity:.6}
+.nav-item:hover{background:rgba(255,255,255,0.05);color:var(--text)}
+.nav-item.active{background:rgba(0,224,130,0.1);color:var(--green)}
+.nav-item.active svg{opacity:1}
+.sidebar-footer{padding:20px 12px;border-top:1px solid var(--border)}
+.btn-logout{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;
+  cursor:pointer;font-size:13px;color:var(--muted);background:none;border:none;width:100%;font-family:'Sora',sans-serif;transition:.15s}
+.btn-logout:hover{color:var(--red);background:rgba(248,113,113,0.08)}
+
+/* ── Main ── */
+.main{margin-left:230px;flex:1;padding:36px 40px;min-height:100vh}
+.page{display:none}
+.page.active{display:block}
+.page-title{font-size:22px;font-weight:700;margin-bottom:6px}
+.page-sub{font-size:14px;color:var(--muted);margin-bottom:32px}
+
+/* ── Stats ── */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px}
+.stat-label{font-size:12px;color:var(--muted);font-weight:500;margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em}
+.stat-value{font-size:32px;font-weight:700;color:var(--text)}
+.stat-value.green{color:var(--green)}
+
+/* ── GA card ── */
+.ga-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;margin-bottom:24px}
+.ga-title{font-size:15px;font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+.ga-desc{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:18px}
+.ga-link{display:inline-flex;align-items:center;gap:8px;background:rgba(0,224,130,0.1);color:var(--green);
+  border:1px solid rgba(0,224,130,0.25);border-radius:8px;padding:9px 16px;font-size:13px;font-weight:600;text-decoration:none;transition:.15s}
+.ga-link:hover{background:rgba(0,224,130,0.18)}
+
+/* ── Account card ── */
+.account-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:32px;max-width:500px}
+.account-avatar{width:64px;height:64px;background:rgba(0,224,130,0.15);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:20px}
+.account-name{font-size:20px;font-weight:700;margin-bottom:4px}
+.account-role{font-size:13px;color:var(--green);font-weight:500;margin-bottom:20px}
+.account-info-row{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted);padding:10px 0;border-bottom:1px solid var(--border)}
+.account-info-row:last-child{border:none}
+.account-info-row strong{color:var(--text);min-width:100px}
+.change-pass-btn{margin-top:24px;background:rgba(255,255,255,0.05);border:1px solid var(--border);
+  color:var(--text);border-radius:8px;padding:10px 18px;font-size:13px;font-family:'Sora',sans-serif;cursor:pointer;transition:.15s}
+.change-pass-btn:hover{background:rgba(255,255,255,0.09)}
+
+/* ── Services catalog ── */
+.services-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+.services-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.service-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:.2s}
+.service-card:hover{border-color:rgba(255,255,255,0.14)}
+.service-card.highlighted{border-color:rgba(0,224,130,0.4);box-shadow:0 0 20px rgba(0,224,130,0.08)}
+.service-cover{width:100%;height:160px;object-fit:cover;background:#1a1f1e;display:block}
+.service-cover-placeholder{width:100%;height:160px;background:linear-gradient(135deg,#111615,#1a2220);
+  display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px}
+.service-body{padding:16px}
+.service-tags{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.tag{font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;background:rgba(0,224,130,0.1);color:var(--green);border:1px solid rgba(0,224,130,0.2)}
+.tag.highlighted-tag{background:rgba(251,191,36,0.1);color:var(--yellow);border-color:rgba(251,191,36,0.2)}
+.tag.inactive-tag{background:rgba(255,255,255,0.05);color:var(--muted);border-color:var(--border)}
+.service-name{font-size:15px;font-weight:700;margin-bottom:4px}
+.service-sub{font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.5}
+.service-actions{display:flex;gap:6px;border-top:1px solid var(--border);padding-top:12px;margin-top:4px}
+.action-btn{flex:1;background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--muted);
+  border-radius:7px;padding:7px 4px;font-size:11px;font-weight:600;cursor:pointer;transition:.15s;font-family:'Sora',sans-serif;
+  display:flex;align-items:center;justify-content:center;gap:4px}
+.action-btn:hover{background:rgba(255,255,255,0.08);color:var(--text)}
+.action-btn.highlight-btn.on{background:rgba(251,191,36,0.1);color:var(--yellow);border-color:rgba(251,191,36,0.25)}
+.action-btn.delete-btn:hover{background:rgba(248,113,113,0.1);color:var(--red);border-color:rgba(248,113,113,0.25)}
+.empty-state{grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--muted)}
+.empty-state svg{margin:0 auto 16px;display:block;opacity:.3}
+.empty-state p{font-size:15px;margin-bottom:6px;color:var(--text)}
+.empty-state span{font-size:13px}
+
+/* ── Buttons ── */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:9px;
+  font-size:13px;font-weight:600;cursor:pointer;transition:.15s;border:none;font-family:'Sora',sans-serif}
+.btn-green{background:var(--green);color:#000}
+.btn-green:hover{background:var(--green2)}
+.btn-outline{background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--text)}
+.btn-outline:hover{background:rgba(255,255,255,0.09)}
+
+/* ── Modal ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:100;display:none;
+  align-items:flex-start;justify-content:center;padding:32px 16px;overflow-y:auto;backdrop-filter:blur(4px)}
+.modal{background:#111615;border:1px solid var(--border);border-radius:18px;width:100%;max-width:600px;
+  padding:32px;position:relative;margin:auto}
+.modal-title{font-size:18px;font-weight:700;margin-bottom:24px;display:flex;align-items:center;gap:10px}
+.modal-close{position:absolute;top:20px;right:20px;background:rgba(255,255,255,0.06);border:none;
+  color:var(--muted);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:.15s}
+.modal-close:hover{background:rgba(255,255,255,0.12);color:var(--text)}
+.form-grid{display:grid;gap:18px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.field label{font-size:12px;color:var(--muted);font-weight:500;display:block;margin-bottom:7px}
+.field input,.field textarea,.field select{
+  width:100%;background:#0d1010;border:1px solid var(--border);border-radius:9px;
+  padding:11px 14px;color:var(--text);font-family:'Sora',sans-serif;font-size:14px;outline:none;transition:.2s}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--green)}
+.field textarea{resize:vertical;min-height:90px}
+.field select option{background:#111615}
+.cover-preview{width:100%;height:140px;border-radius:9px;object-fit:cover;margin-top:8px;display:none}
+.cover-placeholder{width:100%;height:80px;background:rgba(255,255,255,0.03);border-radius:9px;
+  margin-top:8px;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--muted)}
+
+/* Features list */
+.features-list{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.feature-item{display:flex;gap:8px;align-items:center}
+.feature-item input{flex:1}
+.feature-remove{background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.2);color:var(--red);
+  border-radius:7px;padding:8px 12px;cursor:pointer;font-size:12px;flex-shrink:0;transition:.15s}
+.feature-remove:hover{background:rgba(248,113,113,0.2)}
+.add-feature-btn{background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--muted);
+  border-radius:8px;padding:9px 14px;font-size:12px;cursor:pointer;font-family:'Sora',sans-serif;
+  display:flex;align-items:center;gap:6px;transition:.15s;width:100%;margin-top:6px}
+.add-feature-btn:hover{background:rgba(255,255,255,0.08);color:var(--text)}
+
+/* Toggle */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0}
+.toggle-label{font-size:13px;font-weight:500}
+.toggle{position:relative;display:inline-block;cursor:pointer}
+.toggle input{opacity:0;width:0;height:0;position:absolute}
+.toggle-track{width:40px;height:22px;background:rgba(255,255,255,0.1);border-radius:11px;transition:.2s}
+.toggle input:checked~.toggle-track{background:var(--green)}
+.toggle-thumb{position:absolute;top:3px;left:3px;width:16px;height:16px;background:#fff;border-radius:50%;transition:.2s;pointer-events:none}
+.toggle input:checked~.toggle-thumb{transform:translateX(18px)}
+
+/* Modal footer */
+.modal-footer{display:flex;justify-content:flex-end;gap:10px;margin-top:24px;padding-top:20px;border-top:1px solid var(--border)}
+
+/* Login */
+#login-screen{position:fixed;inset:0;background:#07090a;display:flex;align-items:center;justify-content:center;z-index:999}
+.login-box{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:40px;width:100%;max-width:380px}
+.login-logo{font-size:22px;font-weight:700;color:var(--green);margin-bottom:6px}
+.login-sub{font-size:13px;color:var(--muted);margin-bottom:28px}
+.login-box input{width:100%;background:#0d1010;border:1px solid var(--border);border-radius:9px;
+  padding:13px 16px;color:var(--text);font-family:'Sora',sans-serif;font-size:14px;outline:none;margin-bottom:12px;transition:.2s}
+.login-box input:focus{border-color:var(--green)}
+.login-box button{width:100%;background:var(--green);color:#000;border:none;border-radius:9px;
+  padding:13px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Sora',sans-serif;transition:.15s}
+.login-box button:hover{background:var(--green2)}
+.login-error{color:var(--red);font-size:12px;margin-bottom:10px;display:none}
+
+/* Toast */
+.toast{position:fixed;bottom:28px;right:28px;background:#1e2823;border:1px solid rgba(0,224,130,0.3);
+  color:var(--text);padding:13px 20px;border-radius:10px;font-size:13px;font-weight:500;z-index:9999;
+  animation:fadeUp .2s ease;box-shadow:0 8px 24px rgba(0,0,0,0.4)}
+.toast.error{border-color:rgba(248,113,113,0.3);background:#1e1818}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* Badge */
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px}
+.badge-green{background:rgba(0,224,130,0.12);color:var(--green)}
+.badge-red{background:rgba(248,113,113,0.12);color:var(--red)}
+
+@media (max-width: 1024px) {
+  html,body{width:100%;overflow-x:hidden}
+  body{display:block;background:var(--bg)}
+  #app-screen{width:100%!important;min-height:100vh;padding-bottom:calc(86px + env(safe-area-inset-bottom))}
+
+  .sidebar{
+    position:fixed!important;left:0!important;right:0!important;top:auto!important;bottom:0!important;
+    width:100%!important;min-height:0!important;height:auto!important;display:grid!important;
+    grid-template-columns:minmax(0,1fr) 56px;gap:8px;align-items:center;padding:8px 10px calc(8px + env(safe-area-inset-bottom))!important;
+    background:rgba(7,9,10,.98);border-right:none!important;border-top:1px solid var(--border);
+    box-shadow:0 -14px 38px rgba(0,0,0,.42);backdrop-filter:blur(16px);z-index:1000
+  }
+  .sidebar-logo{display:none}
+  .sidebar nav{
+    padding:0!important;display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:6px;overflow:visible
+  }
+  .nav-item{
+    width:100%!important;min-height:58px;flex-direction:column;justify-content:center;gap:5px;
+    padding:8px 4px!important;border-radius:14px;font-size:10.5px;line-height:1.1;text-align:center;white-space:normal
+  }
+  .nav-item svg{width:18px;height:18px}
+  .sidebar-footer{padding:0!important;border-top:none!important}
+  .btn-logout{
+    width:56px!important;height:58px;justify-content:center;padding:0!important;border-radius:14px;
+    background:rgba(255,255,255,.04);font-size:0
+  }
+  .btn-logout svg{width:18px;height:18px}
+
+  .main{margin-left:0!important;width:100%;max-width:100%;padding:20px 14px calc(112px + env(safe-area-inset-bottom))!important;min-height:auto}
+  .main::before{content:"Painel Antecipey";display:block;margin-bottom:18px;color:var(--green);font-size:19px;font-weight:800;letter-spacing:-.04em}
+  .page-title{font-size:21px}
+  .page-sub{font-size:13px;margin-bottom:22px;line-height:1.45}
+  .stats-row{grid-template-columns:1fr;gap:12px;margin-bottom:20px}
+  .stat-card,.ga-card,.account-card{padding:20px;border-radius:15px}
+  .stat-value{font-size:30px}
+  .ga-title{align-items:flex-start;line-height:1.35}
+  .ga-desc{font-size:12.5px}
+  .ga-link,.btn{width:100%;justify-content:center;min-height:44px}
+
+  .services-header{align-items:stretch;flex-direction:column;gap:16px}
+  .services-grid{grid-template-columns:minmax(0,1fr);gap:14px}
+  .service-card{border-radius:16px}
+  .service-cover,.service-cover-placeholder{height:150px}
+  .service-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .action-btn{min-width:0;padding:10px 6px;font-size:11px}
+
+  .account-card{max-width:none}
+  .account-info-row{align-items:flex-start;flex-direction:column;gap:6px;line-height:1.45}
+  .account-info-row strong{min-width:0}
+  #ga-id-input{width:100%;margin-left:0!important;flex:none!important}
+  .change-pass-btn{width:100%;text-align:center}
+
+  .modal-overlay{padding:12px;align-items:flex-start}
+  .modal{padding:24px 16px 18px;border-radius:18px;margin:0;max-width:none}
+  .modal-title{font-size:16px;margin-bottom:20px;padding-right:42px;line-height:1.35}
+  .modal-close{top:14px;right:14px}
+  .form-row{grid-template-columns:1fr;gap:18px}
+  .field input,.field textarea,.field select{font-size:16px}
+  .feature-item{align-items:stretch;flex-direction:column}
+  .feature-remove{width:100%}
+  .toggle-row{gap:16px}
+  .modal-footer{flex-direction:column-reverse}
+  .modal-footer .btn{width:100%}
+
+  #login-screen{padding:16px}
+  .login-box{max-width:none;padding:30px 22px;border-radius:20px}
+  .toast{left:16px;right:16px;bottom:calc(92px + env(safe-area-inset-bottom));text-align:center}
+}
+
+@media (max-width: 420px) {
+  .main{padding-left:12px!important;padding-right:12px!important}
+  .sidebar{grid-template-columns:minmax(0,1fr) 50px;padding-left:8px!important;padding-right:8px!important}
+  .nav-item{min-height:54px;font-size:10px}
+  .btn-logout{width:50px!important;height:54px}
+  .service-actions{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ── Login ── -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">Antecipey</div>
+    <div class="login-sub">Painel de Administração</div>
+    <p class="login-error" id="login-error"></p>
+    <input type="password" id="login-password" placeholder="Senha de acesso">
+    <button onclick="doLogin()">Entrar</button>
+  </div>
+</div>
+
+<!-- ── App ── -->
+<div id="app-screen" style="display:none;width:100%">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <span>Antecipey</span>
+    </div>
+    <nav>
+      <button class="nav-item active" onclick="showPage('dashboard',this)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Dashboard
+      </button>
+      <button class="nav-item" onclick="showPage('services',this)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+        Serviços
+      </button>
+      <button class="nav-item" onclick="showPage('account',this)">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        Minha Conta
+      </button>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="btn-logout" onclick="doLogout()">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Sair
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+
+    <!-- ─── Dashboard ─── -->
+    <div class="page active" id="page-dashboard">
+      <div class="page-title">Dashboard</div>
+      <div class="page-sub">Visão geral da sua conta</div>
+
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-label">Serviços publicados</div>
+          <div class="stat-value green" id="stat-services">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Serviços em destaque</div>
+          <div class="stat-value" id="stat-highlighted">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Total cadastrado</div>
+          <div class="stat-value" id="stat-total">—</div>
+        </div>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+          Visitas no site — Google Analytics
+        </div>
+        <div class="ga-desc">
+          Acompanhe as visitas do seu site diretamente no Google Analytics. Clique no botão abaixo para abrir o painel de relatórios em tempo real.<br><br>
+          <strong style="color:var(--text)">Como conectar:</strong> Acesse seu painel do Google Analytics → Relatórios → Tempo real. Para adicionar GA ao site, insira sua tag <code style="background:#1a2220;padding:2px 6px;border-radius:4px;font-size:12px">G-XXXXXXXX</code> em <strong>Minha Conta → Analytics</strong>.
+        </div>
+        <a href="https://analytics.google.com" target="_blank" class="ga-link">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Abrir Google Analytics
+        </a>
+      </div>
+    </div>
+
+    <!-- ─── Serviços ─── -->
+    <div class="page" id="page-services">
+      <div class="services-header">
+        <div>
+          <div class="page-title">Serviços</div>
+          <div class="page-sub" style="margin:0">Gerencie os serviços exibidos no site</div>
+        </div>
+        <button class="btn btn-green" onclick="openServiceModal()">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Novo Serviço
+        </button>
+      </div>
+      <div class="services-grid" id="services-grid">
+        <div class="empty-state">
+          <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+          <p>Carregando serviços…</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── Conta ─── -->
+    <div class="page" id="page-account">
+      <div class="page-title">Minha Conta</div>
+      <div class="page-sub">Informações e configurações da conta</div>
+      <div class="account-card">
+        <div class="account-avatar">👤</div>
+        <div class="account-name">Administrador</div>
+        <div class="account-role">Acesso total ao painel</div>
+        <div class="account-info-row"><strong>Empresa</strong> Antecipey</div>
+        <div class="account-info-row"><strong>Plano</strong> <span class="badge badge-green">Ativo</span></div>
+        <div class="account-info-row"><strong>Supabase</strong> zqelilgxxptcptvwwwpt</div>
+        <div class="account-info-row">
+          <strong>Analytics ID</strong>
+          <input id="ga-id-input" type="text" placeholder="G-XXXXXXXXXX"
+            style="background:#0d1010;border:1px solid var(--border);border-radius:7px;padding:6px 10px;color:var(--text);font-family:'Sora',sans-serif;font-size:13px;outline:none;flex:1;margin-left:8px"
+            onfocus="this.style.borderColor='var(--green)'" onblur="this.style.borderColor='var(--border)'">
+        </div>
+        <button class="change-pass-btn" onclick="saveGaId()">Salvar Analytics ID</button>
+        <button class="change-pass-btn" style="margin-top:10px;color:var(--muted)" onclick="showChangePassword()">Alterar senha do painel</button>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ── Modal: Serviço ── -->
+<div class="modal-overlay" id="modal-service">
+  <div class="modal">
+    <button class="modal-close" onclick="closeServiceModal()">✕</button>
+    <div class="modal-title">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+      <span id="service-modal-title">Novo Serviço</span>
+    </div>
+    <input type="hidden" id="s-id">
+    <div class="form-grid">
+      <div class="form-row">
+        <div class="field">
+          <label>Nome *</label>
+          <input type="text" id="s-name" placeholder="Ex: Crédito Consignado">
+        </div>
+        <div class="field">
+          <label>Categoria / Tag</label>
+          <input type="text" id="s-category" placeholder="Ex: Crédito, FGTS…">
+        </div>
+      </div>
+      <div class="field">
+        <label>Sub Título</label>
+        <input type="text" id="s-subtitle" placeholder="Frase curta de apoio ao nome">
+      </div>
+      <div class="field">
+        <label>Parágrafo</label>
+        <textarea id="s-paragraph" placeholder="Descrição detalhada do serviço…"></textarea>
+      </div>
+      <div class="field">
+        <label>URL da Capa</label>
+        <input type="url" id="s-cover" placeholder="https://…" oninput="previewCover(this.value)">
+        <img id="cover-preview" class="cover-preview" alt="preview">
+        <div id="cover-placeholder" class="cover-placeholder">Insira uma URL para ver o preview</div>
+      </div>
+      <div class="field">
+        <label>O que esse serviço oferece</label>
+        <div class="features-list" id="features-list"></div>
+        <button class="add-feature-btn" onclick="addFeature()">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Adicionar item
+        </button>
+      </div>
+      <div style="border-top:1px solid var(--border);padding-top:14px">
+        <div class="toggle-row">
+          <span class="toggle-label">Serviço ativo (visível no site)</span>
+          <label class="toggle">
+            <input type="checkbox" id="s-active" checked>
+            <div class="toggle-track"></div>
+            <div class="toggle-thumb"></div>
+          </label>
+        </div>
+        <div class="toggle-row">
+          <span class="toggle-label">⭐ Destacar serviço</span>
+          <label class="toggle">
+            <input type="checkbox" id="s-highlighted">
+            <div class="toggle-track"></div>
+            <div class="toggle-thumb"></div>
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeServiceModal()">Cancelar</button>
+      <button class="btn btn-green" onclick="saveService()">Salvar Serviço</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Modal: Alterar senha ── -->
+<div class="modal-overlay" id="modal-password">
+  <div class="modal" style="max-width:400px">
+    <button class="modal-close" onclick="document.getElementById('modal-password').style.display='none'">✕</button>
+    <div class="modal-title">Alterar Senha</div>
+    <div class="form-grid">
+      <div class="field"><label>Nova senha</label><input type="password" id="new-pass" placeholder="••••••••"></div>
+      <div class="field"><label>Confirmar</label><input type="password" id="confirm-pass" placeholder="••••••••"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="document.getElementById('modal-password').style.display='none'">Cancelar</button>
+      <button class="btn btn-green" onclick="savePassword()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── API ──
+let adminToken = '';
+async function api(method, path, body) {
+    const res = await fetch(path, {
+        method,
+        headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
+        body: body ? JSON.stringify(body) : undefined
+    });
+    if (!res.ok) throw new Error((await res.json()).error || res.statusText);
+    return res.json();
+}
+
+// ── Auth ──
+window.addEventListener('load', () => {
+    const saved = sessionStorage.getItem('admin_token');
+    if (saved) { adminToken = saved; showApp(); }
+    document.getElementById('login-password').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+});
+
+async function doLogin() {
+    const pw  = document.getElementById('login-password').value;
+    const err = document.getElementById('login-error');
+    err.style.display = 'none';
+    try {
+        const { token } = await api('POST', '/api/admin/login', { password: pw });
+        adminToken = token;
+        sessionStorage.setItem('admin_token', token);
+        showApp();
+    } catch { err.textContent = 'Senha incorreta.'; err.style.display = 'block'; }
+}
+
+function doLogout() {
+    sessionStorage.removeItem('admin_token');
+    location.reload();
+}
+
+function showApp() {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app-screen').style.display = 'flex';
+    loadDashboard();
+    loadServices();
+    const gaId = localStorage.getItem('ga_id');
+    if (gaId) document.getElementById('ga-id-input').value = gaId;
+}
+
+// ── Navigation ──
+function showPage(name, btn) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    if (btn) btn.classList.add('active');
+}
+
+// ── Dashboard ──
+async function loadDashboard() {
+    try {
+        const data = await api('GET', '/api/admin/services');
+        document.getElementById('stat-services').textContent = data.filter(s => s.active).length;
+        document.getElementById('stat-highlighted').textContent = data.filter(s => s.highlighted).length;
+        document.getElementById('stat-total').textContent = data.length;
+    } catch {}
+}
+
+// ── Services ──
+async function loadServices() {
+    const grid = document.getElementById('services-grid');
+    try {
+        const data = await api('GET', '/api/admin/services');
+        if (!data.length) {
+            grid.innerHTML = `
+                <div class="empty-state">
+                    <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+                    <p>Nenhum serviço cadastrado</p>
+                    <span>Clique em "Novo Serviço" para começar</span>
+                </div>`;
+            return;
+        }
+        grid.innerHTML = data.map(s => `
+            <div class="service-card ${s.highlighted ? 'highlighted' : ''}">
+                ${s.cover_url
+                    ? `<img class="service-cover" src="${s.cover_url}" onerror="this.style.display='none'" alt="">`
+                    : `<div class="service-cover-placeholder"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>`
+                }
+                <div class="service-body">
+                    <div class="service-tags">
+                        ${s.category ? `<span class="tag">${s.category}</span>` : ''}
+                        ${s.highlighted ? `<span class="tag highlighted-tag">⭐ Destaque</span>` : ''}
+                        ${!s.active ? `<span class="tag inactive-tag">Inativo</span>` : ''}
+                    </div>
+                    <div class="service-name">${s.name}</div>
+                    <div class="service-sub">${s.subtitle || ''}</div>
+                    <div class="service-actions">
+                        <a class="action-btn" href="servico.html?id=${s.id}" target="_blank" rel="noopener" style="text-decoration:none;display:inline-flex;align-items:center;gap:4px;">
+                            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                            Ver página
+                        </a>
+                        <button class="action-btn" onclick='editService(${JSON.stringify(s).replace(/'/g,"&#39;")})'>
+                            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                            Editar
+                        </button>
+                        <button class="action-btn" onclick="duplicateService('${s.id}')">
+                            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                            Duplicar
+                        </button>
+                        <button class="action-btn highlight-btn ${s.highlighted ? 'on' : ''}" onclick="toggleHighlight('${s.id}',${!s.highlighted},this)">
+                            ⭐
+                        </button>
+                        <button class="action-btn delete-btn" onclick="deleteService('${s.id}')">
+                            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>`).join('');
+    } catch(e) {
+        grid.innerHTML = `<div class="empty-state"><p style="color:var(--red)">${e.message}</p></div>`;
+    }
+}
+
+// ── Service modal ──
+function openServiceModal(s) {
+    document.getElementById('service-modal-title').textContent = s ? 'Editar Serviço' : 'Novo Serviço';
+    document.getElementById('s-id').value = s?.id || '';
+    document.getElementById('s-name').value = s?.name || '';
+    document.getElementById('s-subtitle').value = s?.subtitle || '';
+    document.getElementById('s-paragraph').value = s?.paragraph || '';
+    document.getElementById('s-cover').value = s?.cover_url || '';
+    document.getElementById('s-category').value = s?.category || '';
+    document.getElementById('s-active').checked = s ? s.active : true;
+    document.getElementById('s-highlighted').checked = s?.highlighted || false;
+    previewCover(s?.cover_url || '');
+
+    const list = document.getElementById('features-list');
+    list.innerHTML = '';
+    const features = s?.features || [];
+    features.forEach(f => addFeatureItem(f));
+
+    document.getElementById('modal-service').style.display = 'flex';
+}
+
+function closeServiceModal() {
+    document.getElementById('modal-service').style.display = 'none';
+}
+
+function editService(s) { openServiceModal(s); }
+
+function previewCover(url) {
+    const img = document.getElementById('cover-preview');
+    const placeholder = document.getElementById('cover-placeholder');
+    if (url && url.startsWith('http')) {
+        img.src = url;
+        img.style.display = 'block';
+        placeholder.style.display = 'none';
+    } else {
+        img.style.display = 'none';
+        placeholder.style.display = 'flex';
+    }
+}
+
+function addFeatureItem(value = '') {
+    const list = document.getElementById('features-list');
+    const div = document.createElement('div');
+    div.className = 'feature-item';
+    div.innerHTML = `
+        <input type="text" placeholder="Ex: Aprovação em minutos" value="${value.replace(/"/g,'&quot;')}">
+        <button class="feature-remove" onclick="this.parentElement.remove()">Remover</button>`;
+    list.appendChild(div);
+}
+
+function addFeature() { addFeatureItem(); }
+
+function getFeatures() {
+    return [...document.querySelectorAll('#features-list .feature-item input')]
+        .map(i => i.value.trim()).filter(Boolean);
+}
+
+async function saveService() {
+    const id = document.getElementById('s-id').value;
+    const name = document.getElementById('s-name').value.trim();
+    if (!name) { showToast('O nome é obrigatório.', true); return; }
+    const payload = {
+        name,
+        subtitle:   document.getElementById('s-subtitle').value,
+        paragraph:  document.getElementById('s-paragraph').value,
+        cover_url:  document.getElementById('s-cover').value || null,
+        category:   document.getElementById('s-category').value || null,
+        features:   getFeatures(),
+        active:     document.getElementById('s-active').checked,
+        highlighted:document.getElementById('s-highlighted').checked,
+    };
+    try {
+        await api(id ? 'PUT' : 'POST', id ? `/api/admin/services/${id}` : '/api/admin/services', payload);
+        closeServiceModal();
+        await loadServices();
+        await loadDashboard();
+        showPage('services', document.querySelector('[onclick*="showPage(\'services\'"]'));
+        document.getElementById('services-grid').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        showToast(id ? '✓ Serviço atualizado!' : '✓ Serviço criado!');
+    } catch(e) { showToast('Erro: ' + e.message, true); }
+}
+
+async function duplicateService(id) {
+    try {
+        const all = await api('GET', '/api/admin/services');
+        const s = all.find(x => x.id === id);
+        if (!s) return;
+        const { id: _id, created_at, ...copy } = s;
+        copy.name = copy.name + ' (cópia)';
+        copy.highlighted = false;
+        await api('POST', '/api/admin/services', copy);
+        await loadServices();
+        await loadDashboard();
+        showPage('services', document.querySelector('[onclick*="showPage(\'services\'"]'));
+        document.getElementById('services-grid').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        showToast('✓ Serviço duplicado!');
+    } catch(e) { showToast('Erro: ' + e.message, true); }
+}
+
+async function toggleHighlight(id, value, btn) {
+    try {
+        await api('PUT', `/api/admin/services/${id}`, { highlighted: value });
+        btn.classList.toggle('on', value);
+        loadServices();
+        loadDashboard();
+        showToast(value ? '⭐ Serviço destacado!' : 'Destaque removido.');
+    } catch(e) { showToast('Erro: ' + e.message, true); }
+}
+
+async function deleteService(id) {
+    if (!confirm('Apagar este serviço? Essa ação não pode ser desfeita.')) return;
+    try {
+        await api('DELETE', `/api/admin/services/${id}`);
+        loadServices();
+        loadDashboard();
+        showToast('Serviço apagado.');
+    } catch(e) { showToast('Erro: ' + e.message, true); }
+}
+
+// ── Account ──
+function saveGaId() {
+    const val = document.getElementById('ga-id-input').value.trim();
+    localStorage.setItem('ga_id', val);
+    showToast('✓ Analytics ID salvo!');
+}
+
+function showChangePassword() {
+    document.getElementById('modal-password').style.display = 'flex';
+}
+
+function savePassword() {
+    const np = document.getElementById('new-pass').value;
+    const cp = document.getElementById('confirm-pass').value;
+    if (!np) { showToast('Digite a nova senha.', true); return; }
+    if (np !== cp) { showToast('As senhas não coincidem.', true); return; }
+    showToast('⚠️ Para alterar a senha, edite ADMIN_PASSWORD no .env e reinicie o servidor.');
+    document.getElementById('modal-password').style.display = 'none';
+}
+
+// ── Util ──
+function showToast(msg, isError = false) {
+    const t = document.createElement('div');
+    t.className = 'toast' + (isError ? ' error' : '');
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 3200);
+}
+
+document.querySelectorAll('.modal-overlay').forEach(o => {
+    o.addEventListener('click', e => { if(e.target === o) o.style.display = 'none'; });
+});
+</script>
+</body>
+</html>
