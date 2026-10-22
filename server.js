@@ -14,6 +14,13 @@ const db = createClient(
 );
 
 app.use(express.json());
+
+// Na Netlify a API roda como função em /.netlify/functions/api
+app.use((req, res, next) => {
+    req.url = req.url.replace(/^\/\.netlify\/functions\/api/, '/api');
+    next();
+});
+
 app.use(express.static(__dirname)); // serve os arquivos estáticos
 
 app.get('/', (req, res) => {
@@ -190,7 +197,9 @@ app.put('/api/admin/content/:key', requireAdmin, async (req, res) => {
     res.json(data);
 });
 
-app.listen(PORT, () => {
+module.exports = app;
+
+if (require.main === module) app.listen(PORT, () => {
     console.log(`✅ Antecipey rodando em http://localhost:${PORT}`);
     console.log(`   Admin:  http://localhost:${PORT}/admin.html`);
     console.log(`   Site:   http://localhost:${PORT}/index.html`);
