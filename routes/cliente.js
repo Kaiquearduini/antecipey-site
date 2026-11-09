@@ -150,13 +150,13 @@ router.post('/solicitacoes', async (req, res, next) => {
         const valor = req.body?.valor_desejado == null || req.body.valor_desejado === '' ? null : Number(req.body.valor_desejado);
         const prazo = req.body?.prazo_desejado == null || req.body.prazo_desejado === '' ? null : Number(req.body.prazo_desejado);
         if (valor !== null && (!Number.isFinite(valor) || valor < 100 || valor > 1000000)) {
-            return falha(res, 400, 'Informe um valor entre R$ 100 e R$ 1.000.000.');
+            return falha(res, 400, 'Digite um valor entre R$ 100 e R$ 1.000.000.');
         }
         if (prazo !== null && (!Number.isInteger(prazo) || prazo < 1 || prazo > 120)) {
             return falha(res, 400, 'Prazo deve ser entre 1 e 120 meses.');
         }
         const texto = observacao == null ? null : String(observacao).trim().slice(0, 1000) || null;
-        if (tipo === 'atendimento' && !texto) return falha(res, 400, 'Conte rapidamente como podemos ajudar.');
+        if (tipo === 'atendimento' && !texto) return falha(res, 400, 'Escreva sua mensagem.');
 
         let contrato = null;
         if (tipo === 'refinanciamento' || tipo === 'portabilidade' || contrato_id) {
@@ -166,14 +166,14 @@ router.post('/solicitacoes', async (req, res, next) => {
                 .select('id, numero, status').eq('id', contrato_id).eq('cliente_id', req.cliente.id).maybeSingle();
             if (error) throw error;
             if (!data) return falha(res, 404, 'Contrato não encontrado.');
-            if (data.status !== 'ativo') return falha(res, 400, 'Só é possível refinanciar contratos ativos.');
+            if (data.status !== 'ativo') return falha(res, 400, 'Só dá para refinanciar contrato ativo.');
             contrato = data;
 
             const { count, error: erroAbertas } = await db.from('solicitacoes')
                 .select('id', { count: 'exact', head: true })
                 .eq('contrato_id', contrato.id).eq('tipo', tipo).in('status', ops.STATUS_ABERTOS);
             if (erroAbertas) throw erroAbertas;
-            if (count > 0) return falha(res, 409, `Já existe uma solicitação de ${ops.TIPOS_SOLICITACAO[tipo].toLowerCase()} em andamento para este contrato.`);
+            if (count > 0) return falha(res, 409, `Você já tem um pedido de ${ops.TIPOS_SOLICITACAO[tipo].toLowerCase()} em andamento para este contrato.`);
         }
 
         let criada;
@@ -193,8 +193,8 @@ router.post('/solicitacoes', async (req, res, next) => {
         if (!criada) throw new Error('Não foi possível gerar o protocolo');
 
         const descricao = contrato
-            ? `${ops.TIPOS_SOLICITACAO[tipo]} do contrato ${contrato.numero} recebido.`
-            : `${ops.TIPOS_SOLICITACAO[tipo]} recebida.`;
+            ? `Recebemos seu pedido de ${ops.TIPOS_SOLICITACAO[tipo].toLowerCase()} do contrato ${contrato.numero}.`
+            : 'Recebemos seu pedido.';
         const { error: erroEvento } = await db.from('solicitacao_eventos')
             .insert({ solicitacao_id: criada.id, status: 'recebida', descricao });
         if (erroEvento) throw erroEvento;
@@ -215,13 +215,13 @@ router.post('/solicitacoes/:id/cancelar', async (req, res, next) => {
         if (error) throw error;
         if (!s) return falha(res, 404, 'Solicitação não encontrada.');
         if (!['recebida', 'em_analise', 'pendente'].includes(s.status)) {
-            return falha(res, 400, 'Esta solicitação não pode mais ser cancelada por aqui.');
+            return falha(res, 400, 'Este pedido não pode mais ser cancelado por aqui.');
         }
         const agora = new Date().toISOString();
         const { error: erroUpd } = await db.from('solicitacoes')
             .update({ status: 'cancelada', updated_at: agora }).eq('id', s.id);
         if (erroUpd) throw erroUpd;
-        await db.from('solicitacao_eventos').insert({ solicitacao_id: s.id, status: 'cancelada', descricao: 'Cancelada pelo cliente.' });
+        await db.from('solicitacao_eventos').insert({ solicitacao_id: s.id, status: 'cancelada', descricao: 'Você cancelou este pedido.' });
         res.json({ ok: true });
     } catch (erro) {
         next(erro);
@@ -275,7 +275,7 @@ router.post('/chat', async (req, res, next) => {
         const hoje = new Date().toISOString().slice(0, 10);
         const usadas = req.cliente.chat_dia === hoje ? req.cliente.chat_total : 0;
         if (usadas >= CHAT_POR_DIA) {
-            return falha(res, 429, 'Você chegou ao limite de mensagens de hoje. Fale com o atendimento se precisar.');
+            return falha(res, 429, 'Você chegou ao limite de perguntas de hoje. Fale com a gente pelo WhatsApp.');
         }
         await db.from('clientes').update({ chat_dia: hoje, chat_total: usadas + 1 }).eq('id', req.cliente.id);
 
@@ -288,7 +288,7 @@ router.post('/chat', async (req, res, next) => {
         if (resultado.erro) return falha(res, 400, resultado.erro);
         if (resultado.indisponivel) {
             return res.json({
-                texto: 'Nosso assistente está indisponível neste momento. Veja as dúvidas frequentes acima ou fale com a equipe na aba Atendimento.',
+                texto: 'O assistente está fora do ar agora. Fale com a gente pelo WhatsApp ou telefone.',
                 indisponivel: true,
             });
         }

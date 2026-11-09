@@ -333,9 +333,9 @@ a.contact:hover{border-color:rgba(0,224,130,.4);background:rgba(0,224,130,.05)}
     <img src="assets/antecipey-logo-transparent.png" alt="Antecipey" class="logo" style="height:34px;position:relative;z-index:1">
     <h2>Sua vida financeira, <span class="grad">acompanhada de perto.</span></h2>
     <div class="login-feats">
-      <div class="login-feat"><i><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6M7 4h7l5 5v11a1 1 0 01-1 1H7a1 1 0 01-1-1V5a1 1 0 011-1z"/></svg></i>Contratos, parcelas e taxas em um só lugar</div>
-      <div class="login-feat"><i><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 2m6-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></i>Acompanhe cada proposta em tempo real</div>
-      <div class="login-feat"><i><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.4-4 8-9 8a9.9 9.9 0 01-4-.8L3 20l1.3-3.9A7.6 7.6 0 013 12c0-4.4 4-8 9-8s9 3.6 9 8z"/></svg></i>Tire dúvidas com nosso assistente 24h</div>
+      <div class="login-feat"><i><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6M7 4h7l5 5v11a1 1 0 01-1 1H7a1 1 0 01-1-1V5a1 1 0 011-1z"/></svg></i>Seus contratos em um só lugar</div>
+      <div class="login-feat"><i><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 2m6-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></i>Acompanhe seus pedidos</div>
+      <div class="login-feat"><i><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.4-4 8-9 8a9.9 9.9 0 01-4-.8L3 20l1.3-3.9A7.6 7.6 0 013 12c0-4.4 4-8 9-8s9 3.6 9 8z"/></svg></i>Tire dúvidas a qualquer hora</div>
     </div>
   </aside>
 
@@ -346,7 +346,7 @@ a.contact:hover{border-color:rgba(0,224,130,.4);background:rgba(0,224,130,.05)}
     </div>
 
     <h1>Área do Cliente</h1>
-    <p class="lead">Entre com seu CPF e a senha criada na contratação.</p>
+    <p class="lead">Entre com seu CPF e senha.</p>
 
     <form id="login-form" novalidate>
       <div id="login-error" class="form-error" role="alert" hidden></div>
@@ -367,14 +367,14 @@ a.contact:hover{border-color:rgba(0,224,130,.4);background:rgba(0,224,130,.05)}
     </form>
 
     <div class="login-help">
-      <strong>Primeiro acesso ou esqueceu a senha?</strong><br>
-      Seu acesso é criado quando você finaliza uma contratação com a Antecipey. Se esqueceu a senha, nossa equipe ajuda você a recuperar.
+      <strong>Esqueceu a senha?</strong><br>
+      Chama a gente que resolvemos na hora.
       <div class="links" id="login-canais"></div>
     </div>
 
     <div class="secure-note">
       <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 118 0v3"/></svg>
-      Conexão segura · A Antecipey nunca pede sua senha por telefone ou WhatsApp
+      Ambiente seguro · nunca pedimos sua senha
     </div>
   </div>
 </section>
@@ -500,9 +500,9 @@ const estado = { painel: null, filtro: 'todas', chat: store.get('ant_chat') || [
 const ROTAS = [
   { id: 'inicio', nome: 'Início', icone: I.home },
   { id: 'contratos', nome: 'Contratos', icone: I.doc },
-  { id: 'solicitacoes', nome: 'Acompanhar', icone: I.clock },
+  { id: 'solicitacoes', nome: 'Meus pedidos', curto: 'Pedidos', icone: I.clock },
   { id: 'ajuda', nome: 'Dúvidas', icone: I.help },
-  { id: 'atendimento', nome: 'Atendimento', curto: 'Contato', icone: I.head },
+  { id: 'atendimento', nome: 'Fale com a gente', curto: 'Contato', icone: I.head },
 ];
 
 function rotaAtual() {
@@ -517,7 +517,7 @@ function desenharMenu() {
       ${ic(r.icone)}<span>${curto && r.curto ? r.curto : r.nome}</span>
       ${r.id === 'solicitacoes' && abertas ? `<span class="dot">${abertas}</span>` : ''}
     </a>`).join('');
-  $('#sidebar').innerHTML = links(false) + `<div class="sidebar-foot">${ic(I.shield, 18)}<p style="margin-top:8px">A Antecipey nunca pede depósito antecipado para liberar crédito.</p></div>`;
+  $('#sidebar').innerHTML = links(false) + `<div class="sidebar-foot">${ic(I.shield, 18)}<p style="margin-top:8px">Nunca pedimos depósito para liberar crédito.</p></div>`;
   $('#bottom-nav').innerHTML = links(true);
 }
 
@@ -537,7 +537,7 @@ window.addEventListener('hashchange', () => { $('#modal-root').innerHTML = ''; r
 /* ════════════ Componentes ════════════ */
 const BADGE_CONTRATO = {
   ativo: ['b-green', 'Ativo'], quitado: ['b-gray', 'Quitado'],
-  em_averbacao: ['b-amber', 'Em averbação'], cancelado: ['b-red', 'Cancelado'],
+  em_averbacao: ['b-amber', 'Em liberação'], cancelado: ['b-red', 'Cancelado'],
 };
 const BADGE_SOLIC = {
   recebida: 'b-gray', em_analise: 'b-amber', pendente: 'b-amber', aprovada: 'b-green',
@@ -553,15 +553,15 @@ function cartaoContrato(c, compacto = false) {
       <span class="badge ${cls}">${nome}</span>
     </div>
     <div>
-      <div class="progress-row"><span>Parcelas descontadas</span><span><b>${c.parcelas_pagas}</b> de ${c.prazo}</span></div>
+      <div class="progress-row"><span>Parcelas pagas</span><span><b>${c.parcelas_pagas}</b> de ${c.prazo}</span></div>
       <div class="progress" role="progressbar" aria-valuenow="${c.progresso}" aria-valuemin="0" aria-valuemax="100"><div data-w="${c.progresso}" style="width:0"></div></div>
     </div>
     <div class="kv">
-      <div><span>Valor da parcela</span><b>${brl(c.valor_parcela)}</b></div>
-      <div><span>Taxa</span><b>${pct(c.taxa_mensal)} a.m.</b></div>
+      <div><span>Parcela</span><b>${brl(c.valor_parcela)}</b></div>
+      <div><span>Juros ao mês</span><b>${pct(c.taxa_mensal)}</b></div>
       ${compacto ? '' : `
-      <div><span>Saldo devedor estimado</span><b>${c.status === 'ativo' ? brl(c.saldo_estimado) : '—'}</b></div>
-      <div><span>Próximo desconto</span><b>${data(c.proximo_vencimento)}</b></div>`}
+      <div><span>Falta pagar</span><b>${c.status === 'ativo' ? brl(c.saldo_estimado) : '—'}</b></div>
+      <div><span>Próxima parcela</span><b>${data(c.proximo_vencimento)}</b></div>`}
     </div>
     <div class="contract-foot">
       <button class="btn btn-ghost btn-sm" data-acao="contrato" data-id="${esc(c.id)}">Ver detalhes</button>
@@ -571,7 +571,7 @@ function cartaoContrato(c, compacto = false) {
 }
 
 function stepper(s) {
-  const passos = [['recebida', 'Recebida'], ['em_analise', 'Em análise'], ['aprovada', 'Aprovada'], ['paga', 'Liberado']];
+  const passos = [['recebida', 'Recebido'], ['em_analise', 'Em análise'], ['aprovada', 'Aprovado'], ['paga', 'Dinheiro na conta']];
   const ordem = { recebida: 0, em_analise: 1, pendente: 1, aprovada: 2, paga: 3, reprovada: 2, cancelada: -1 };
   const atual = ordem[s.status] ?? 0;
   return `<div class="stepper" aria-label="Andamento: ${esc(s.status_nome)}">${passos.map(([, nome], i) => {
@@ -581,7 +581,7 @@ function stepper(s) {
     else if (i === atual) {
       cls = s.status === 'reprovada' ? 'fail' : s.status === 'pendente' ? 'warn now' : s.status === 'paga' ? 'done now' : 'now';
     }
-    const rotulo = i === 2 && s.status === 'reprovada' ? 'Não aprovada' : nome;
+    const rotulo = i === 2 && s.status === 'reprovada' ? 'Não aprovado' : nome;
     return `<div class="step ${cls}"><i></i>${rotulo}</div>`;
   }).join('')}</div>`;
 }
@@ -589,8 +589,7 @@ function stepper(s) {
 function cartaoSolicitacao(s) {
   const contrato = s.contrato_id ? estado.painel.contratos.find((c) => c.id === s.contrato_id) : null;
   const detalhes = [
-    s.valor_desejado ? `Valor: ${brl(s.valor_desejado)}` : null,
-    s.prazo_desejado ? `Prazo: ${s.prazo_desejado}x` : null,
+    s.valor_desejado ? `${brl(s.valor_desejado)}${s.prazo_desejado ? ` em ${s.prazo_desejado}x` : ''}` : null,
     contrato ? `Contrato ${contrato.numero}` : null,
   ].filter(Boolean).join(' · ');
   return `
@@ -600,17 +599,17 @@ function cartaoSolicitacao(s) {
       <span class="badge ${BADGE_SOLIC[s.status] || 'b-gray'}">${esc(s.status_nome)}</span>
     </div>
     ${s.tipo !== 'atendimento' && s.status !== 'cancelada' ? stepper(s) : ''}
-    ${s.mensagem ? `<div class="note${s.status === 'pendente' ? ' warn' : ''}">${ic(I.help, 18)}<div><b>Recado da equipe</b><br>${esc(s.mensagem)}</div></div>` : ''}
+    ${s.mensagem ? `<div class="note${s.status === 'pendente' ? ' warn' : ''}">${ic(I.help, 18)}<div>${esc(s.mensagem)}</div></div>` : ''}
     <details class="more">
-      <summary>Ver histórico</summary>
+      <summary>Ver detalhes</summary>
       <div class="timeline">${s.eventos.slice().reverse().map((e) => `
         <div class="tl"><b>${esc(e.status_nome)}</b><small>${dataHora(e.created_at)}</small>${e.descricao ? `<p>${esc(e.descricao)}</p>` : ''}</div>`).join('')}
       </div>
-      ${s.observacao ? `<p class="hint" style="margin-top:4px">Sua mensagem: “${esc(s.observacao)}”</p>` : ''}
+      ${s.observacao ? `<p class="hint" style="margin-top:4px">Você escreveu: “${esc(s.observacao)}”</p>` : ''}
     </details>
     <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
-      <span class="proto">Protocolo ${esc(s.protocolo)}</span>
-      ${['recebida', 'em_analise', 'pendente'].includes(s.status) ? `<button class="link" data-acao="cancelar" data-id="${esc(s.id)}" style="color:var(--muted)">Cancelar solicitação</button>` : ''}
+      <span class="proto">Nº ${esc(s.protocolo)}</span>
+      ${['recebida', 'em_analise', 'pendente'].includes(s.status) ? `<button class="link" data-acao="cancelar" data-id="${esc(s.id)}" style="color:var(--muted)">Cancelar</button>` : ''}
     </div>
   </article>`;
 }
@@ -627,32 +626,32 @@ function telaInicio() {
   const proximo = ativos.map((c) => c.proximo_vencimento).filter(Boolean).sort()[0];
 
   return `
-  <div class="page-head"><h1>${saudacao}, ${esc(cliente.primeiro_nome)} 👋</h1><p>Aqui está o resumo da sua conta Antecipey.</p></div>
+  <div class="page-head"><h1>${saudacao}, ${esc(cliente.primeiro_nome)} 👋</h1></div>
 
   <div class="hero-card">
-    <div class="hero-label">Total descontado por mês</div>
+    <div class="hero-label">Você paga por mês</div>
     <div class="hero-value">${brl(resumo.parcela_mensal)}</div>
-    <div class="hero-sub">${resumo.contratos_ativos} contrato${resumo.contratos_ativos === 1 ? '' : 's'} ativo${resumo.contratos_ativos === 1 ? '' : 's'}${proximo ? ` · próximo desconto em ${data(proximo)}` : ''}</div>
+    <div class="hero-sub">${resumo.contratos_ativos} contrato${resumo.contratos_ativos === 1 ? '' : 's'} ativo${resumo.contratos_ativos === 1 ? '' : 's'}${proximo ? ` · próxima parcela ${data(proximo)}` : ''}</div>
     <div class="hero-stats">
-      <div class="hero-stat"><span>Saldo devedor estimado</span><b>${brl(resumo.saldo_estimado)}</b></div>
-      <div class="hero-stat"><span>Solicitações em andamento</span><b>${resumo.solicitacoes_abertas}</b></div>
+      <div class="hero-stat"><span>Falta pagar</span><b>${brl(resumo.saldo_estimado)}</b></div>
+      <div class="hero-stat"><span>Pedidos em andamento</span><b>${resumo.solicitacoes_abertas}</b></div>
     </div>
   </div>
 
   <div class="actions">
-    <button class="action" data-acao="nova"><i>${ic(I.plus)}</i><div><b>Nova proposta</b><small>Peça um novo crédito</small></div></button>
-    <button class="action" data-acao="refinanciar"><i>${ic(I.refresh)}</i><div><b>Refinanciar</b><small>Use um contrato ativo</small></div></button>
-    <a class="action" href="#solicitacoes"><i>${ic(I.clock)}</i><div><b>Acompanhar</b><small>Status das propostas</small></div></a>
-    <a class="action" href="#atendimento"><i>${ic(I.head)}</i><div><b>Falar com a gente</b><small>WhatsApp e telefone</small></div></a>
+    <button class="action" data-acao="nova"><i>${ic(I.plus)}</i><div><b>Pedir crédito</b></div></button>
+    <button class="action" data-acao="refinanciar"><i>${ic(I.refresh)}</i><div><b>Refinanciar</b></div></button>
+    <a class="action" href="#solicitacoes"><i>${ic(I.clock)}</i><div><b>Meus pedidos</b></div></a>
+    <a class="action" href="#atendimento"><i>${ic(I.head)}</i><div><b>Falar com a gente</b></div></a>
   </div>
 
   <div class="section-title"><span>Em andamento</span>${abertas.length ? '<a href="#solicitacoes">Ver todas</a>' : ''}</div>
   ${abertas.length ? `<div class="grid grid-2">${abertas.slice(0, 2).map(cartaoSolicitacao).join('')}</div>`
-    : vazio(I.clock, 'Nada em andamento', 'Quando você fizer uma nova proposta, o andamento aparece aqui.')}
+    : vazio(I.clock, 'Nada em andamento', 'Seus pedidos aparecem aqui.')}
 
   <div class="section-title"><span>Seus contratos</span>${contratos.length ? '<a href="#contratos">Ver todos</a>' : ''}</div>
   ${ativos.length ? `<div class="grid grid-2">${ativos.slice(0, 2).map((c) => cartaoContrato(c, true)).join('')}</div>`
-    : vazio(I.doc, 'Nenhum contrato ativo', 'Seus contratos aparecem aqui assim que forem averbados.', `<button class="btn btn-primary btn-sm" data-acao="nova">${ic(I.plus, 16)}Fazer uma proposta</button>`)}`;
+    : vazio(I.doc, 'Nenhum contrato ativo', 'Seus contratos aparecem aqui.', `<button class="btn btn-primary btn-sm" data-acao="nova">${ic(I.plus, 16)}Pedir crédito</button>`)}`;
 }
 
 function telaContratos() {
@@ -660,57 +659,57 @@ function telaContratos() {
   const ordem = { ativo: 0, em_averbacao: 1, quitado: 2, cancelado: 3 };
   const lista = contratos.slice().sort((a, b) => (ordem[a.status] ?? 9) - (ordem[b.status] ?? 9));
   return `
-  <div class="page-head"><h1>Contratos</h1><p>Parcelas, taxas e documentos de todas as suas operações.</p></div>
+  <div class="page-head"><h1>Meus contratos</h1></div>
   ${lista.length ? `<div class="grid grid-2">${lista.map((c) => cartaoContrato(c)).join('')}</div>`
-    : vazio(I.doc, 'Você ainda não tem contratos', 'Faça uma proposta e acompanhe por aqui.', `<button class="btn btn-primary btn-sm" data-acao="nova">${ic(I.plus, 16)}Nova proposta</button>`)}`;
+    : vazio(I.doc, 'Você ainda não tem contratos', 'Peça seu crédito e acompanhe por aqui.', `<button class="btn btn-primary btn-sm" data-acao="nova">${ic(I.plus, 16)}Pedir crédito</button>`)}`;
 }
 
 function telaSolicitacoes() {
   const { solicitacoes } = estado.painel;
-  const filtros = [['todas', 'Todas'], ['abertas', 'Em andamento'], ['concluidas', 'Concluídas']];
+  const filtros = [['todas', 'Todos'], ['abertas', 'Em andamento'], ['concluidas', 'Finalizados']];
   const lista = solicitacoes.filter((s) => estado.filtro === 'todas' || (estado.filtro === 'abertas' ? s.aberta : !s.aberta));
   return `
   <div class="page-head" style="display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap">
-    <div><h1>Acompanhar solicitações</h1><p>Veja em que etapa está cada pedido.</p></div>
-    <button class="btn btn-primary btn-sm" data-acao="nova">${ic(I.plus, 16)}Nova proposta</button>
+    <div><h1>Meus pedidos</h1></div>
+    <button class="btn btn-primary btn-sm" data-acao="nova">${ic(I.plus, 16)}Pedir crédito</button>
   </div>
   <div class="tabs" role="tablist">${filtros.map(([id, nome]) => `<button class="tab${estado.filtro === id ? ' active' : ''}" role="tab" aria-selected="${estado.filtro === id}" data-filtro="${id}">${nome}</button>`).join('')}</div>
   ${lista.length ? `<div class="grid grid-2">${lista.map(cartaoSolicitacao).join('')}</div>`
-    : vazio(I.clock, 'Nenhuma solicitação aqui', 'Suas propostas e pedidos aparecem nesta lista.')}`;
+    : vazio(I.clock, 'Nenhum pedido aqui', 'Quando você pedir algo, aparece aqui.')}`;
 }
 
 const FAQ = [
-  ['Como acompanho minha proposta?', 'Na aba "Acompanhar" você vê cada etapa: recebida, em análise, aprovada e valor liberado. Quando precisarmos de algo, deixamos um recado na própria solicitação.'],
-  ['Quando a parcela é descontada?', 'No consignado, a parcela é descontada direto da folha ou do benefício, todo mês. A data do próximo desconto aparece em cada contrato.'],
-  ['O que é refinanciamento?', 'É renegociar um contrato ativo: você pode liberar um valor novo usando a margem já paga ou ajustar o prazo. Toque em "Refinanciar" no contrato para pedir uma simulação, sem compromisso.'],
-  ['Posso quitar o contrato antes do prazo?', 'Sim. Na quitação antecipada os juros futuros são descontados proporcionalmente. O saldo mostrado aqui é uma estimativa; peça o valor oficial no Atendimento.'],
-  ['Onde vejo meu contrato?', 'Em "Contratos", toque em "Ver detalhes" e depois em "Baixar contrato". O documento abre em PDF.'],
-  ['Esqueci minha senha. E agora?', 'Fale com nosso atendimento pelo WhatsApp ou telefone. Por segurança, confirmamos seus dados antes de liberar uma nova senha.'],
-  ['Como sei que é a Antecipey falando comigo?', 'Nunca pedimos depósito antecipado, senha ou código por mensagem. Na dúvida, desligue e ligue para os canais oficiais que aparecem em "Atendimento".'],
+  ['Como acompanho meu pedido?', 'Em Meus pedidos. Lá você vê cada etapa e qualquer recado da nossa equipe.'],
+  ['Quando a parcela é paga?', 'Ela sai direto do seu salário ou benefício, todo mês. A data aparece em cada contrato.'],
+  ['O que é refinanciar?', 'É usar um contrato que você já tem para pegar mais dinheiro ou deixar a parcela menor. Sem compromisso.'],
+  ['Posso quitar antes?', 'Pode, e você paga menos juros. Peça o valor exato pelo WhatsApp.'],
+  ['Onde está meu contrato?', 'Em Meus contratos, toque em Ver detalhes e depois em Baixar contrato.'],
+  ['Esqueci minha senha', 'Fale com a gente pelo WhatsApp ou telefone que liberamos uma nova.'],
+  ['Como sei que é mesmo a Antecipey?', 'Nunca pedimos depósito, senha ou código. Na dúvida, fale com a gente pelos canais desta página.'],
 ];
 
 function telaAjuda() {
   return `
-  <div class="page-head"><h1>Central de dúvidas</h1><p>Respostas rápidas e um assistente para conversar quando quiser.</p></div>
+  <div class="page-head"><h1>Dúvidas</h1></div>
   <div class="help-grid">
     <div>
       <div class="faq">${FAQ.map(([p, r]) => `<details><summary>${esc(p)}${ic(I.down, 18)}</summary><div class="ans">${esc(r)}</div></details>`).join('')}</div>
-      <p class="hint" style="margin:14px 4px 24px">Não achou o que precisava? Pergunte ao assistente ou fale com nossa equipe.</p>
+      <div style="height:20px"></div>
     </div>
     <section class="chat" aria-label="Assistente virtual">
       <div class="chat-head">
         <div class="bot-ava">${ic(I.bot, 22)}</div>
-        <div><b>Assistente Antecipey</b><small>Online agora</small></div>
+        <div><b>Assistente Antecipey</b><small>Online</small></div>
         <button class="icon-btn" id="chat-limpar" title="Nova conversa" aria-label="Nova conversa" style="margin-left:auto">${ic(I.refresh, 17)}</button>
       </div>
       <div class="chat-body" id="chat-body" aria-live="polite"></div>
       <div class="chips" id="chat-chips"></div>
       <form class="chat-form" id="chat-form">
         <label for="chat-input" class="sr-only">Sua mensagem</label>
-        <input id="chat-input" class="input" placeholder="Escreva sua dúvida…" autocomplete="off" maxlength="1200">
+        <input id="chat-input" class="input" placeholder="Digite sua pergunta…" autocomplete="off" maxlength="1200">
         <button class="send" type="submit" aria-label="Enviar">${ic(I.send, 20)}</button>
       </form>
-      <div class="chat-disclaimer">O assistente usa IA e pode errar. Não envie senhas ou códigos.</div>
+      <div class="chat-disclaimer">Não envie senhas por aqui.</div>
     </section>
   </div>`;
 }
@@ -718,27 +717,26 @@ function telaAjuda() {
 function telaAtendimento() {
   const c = estado.painel.canais;
   const itens = [
-    c.whatsapp && `<a class="contact wa" href="${esc(c.whatsapp)}" target="_blank" rel="noopener"><i>${ic(I.wa, 26)}</i><div><b>WhatsApp</b><small>${esc(c.whatsapp_exibicao)} · fale com um atendente</small></div><span class="go">${ic(I.chev, 20)}</span></a>`,
-    c.telefone && `<a class="contact ph" href="${esc(c.telefone)}"><i>${ic(I.phone, 24)}</i><div><b>Ligar para o SAC</b><small>${esc(c.telefone_exibicao)}</small></div><span class="go">${ic(I.chev, 20)}</span></a>`,
+    c.whatsapp && `<a class="contact wa" href="${esc(c.whatsapp)}" target="_blank" rel="noopener"><i>${ic(I.wa, 26)}</i><div><b>WhatsApp</b><small>${esc(c.whatsapp_exibicao)}</small></div><span class="go">${ic(I.chev, 20)}</span></a>`,
+    c.telefone && `<a class="contact ph" href="${esc(c.telefone)}"><i>${ic(I.phone, 24)}</i><div><b>Ligar</b><small>${esc(c.telefone_exibicao)}</small></div><span class="go">${ic(I.chev, 20)}</span></a>`,
     c.email && `<a class="contact ml" href="mailto:${esc(c.email)}"><i>${ic(I.mail, 24)}</i><div><b>E-mail</b><small>${esc(c.email)}</small></div><span class="go">${ic(I.chev, 20)}</span></a>`,
   ].filter(Boolean);
   return `
-  <div class="page-head"><h1>Atendimento</h1><p>${esc(c.horario)}.</p></div>
+  <div class="page-head"><h1>Fale com a gente</h1><p>${esc(c.horario)}</p></div>
   ${itens.length ? `<div class="grid grid-3">${itens.join('')}</div>` : ''}
 
-  <div class="section-title"><span>Abrir um chamado</span></div>
+  <div class="section-title"><span>Mandar mensagem</span></div>
   <form class="card" id="form-chamado">
-    <p class="hint" style="margin-bottom:16px">Prefere escrever? Conte o que precisa e nossa equipe responde por aqui, na aba Acompanhar.</p>
-    <div class="field"><label for="chamado-texto">Como podemos ajudar?</label>
-      <textarea id="chamado-texto" class="input" maxlength="1000" placeholder="Ex.: quero o valor para quitar meu contrato" required></textarea></div>
-    <button class="btn btn-primary" type="submit">Enviar chamado</button>
+    <div class="field"><label for="chamado-texto">Escreva aqui. A resposta chega em Meus pedidos.</label>
+      <textarea id="chamado-texto" class="input" maxlength="1000" placeholder="Ex.: quero quitar meu contrato" required></textarea></div>
+    <button class="btn btn-primary" type="submit">Enviar</button>
   </form>
 
-  <div class="section-title"><span>Segurança da conta</span></div>
+  <div class="section-title"><span>Minha conta</span></div>
   <div class="card" style="display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap">
     <div style="display:flex;gap:14px;align-items:center"><span class="avatar" style="background:var(--card-2);color:var(--green)">${ic(I.lock, 18)}</span>
-      <div><b style="font-size:15px">Senha de acesso</b><p class="hint">Troque sua senha quando quiser.</p></div></div>
-    <button class="btn btn-ghost btn-sm" data-acao="senha">Alterar senha</button>
+      <div><b style="font-size:15px">Senha</b></div></div>
+    <button class="btn btn-ghost btn-sm" data-acao="senha">Trocar senha</button>
   </div>`;
 }
 
@@ -768,9 +766,9 @@ function sucesso(fechar, modal, s) {
     <div class="success">
       <i>${ic(I.check, 34)}</i>
       <h2>Pedido enviado!</h2>
-      <p>Recebemos sua ${esc(s.tipo_nome.toLowerCase())}. Você acompanha cada etapa na aba Acompanhar.</p>
-      <span class="proto">Protocolo ${esc(s.protocolo)}</span>
-      <div class="sheet-actions"><button class="btn btn-primary btn-block" data-ir="solicitacoes">Acompanhar agora</button></div>
+      <p>Você acompanha tudo em Meus pedidos.</p>
+      <span class="proto">Nº ${esc(s.protocolo)}</span>
+      <div class="sheet-actions"><button class="btn btn-primary btn-block" data-ir="solicitacoes">Ver meus pedidos</button></div>
     </div>`;
   modal.querySelector('[data-ir]').addEventListener('click', () => { fechar(); location.hash = 'solicitacoes'; });
 }
@@ -805,16 +803,16 @@ function mascaraValor(input) {
 
 function modalNovaProposta() {
   abrirModal(`
-    ${cabecalho('Nova proposta', 'Diga quanto precisa. Nossa equipe simula as melhores condições e responde por aqui.')}
+    ${cabecalho('Pedir crédito', 'A gente simula e te responde aqui.')}
     <form novalidate>
       <div class="form-error" role="alert" hidden></div>
       <div class="field"><label for="np-valor">Quanto você precisa?</label>
         <input id="np-valor" class="input" inputmode="numeric" placeholder="R$ 0,00" required></div>
-      <div class="field"><label for="np-prazo">Em quantas parcelas? <span class="hint">(opcional)</span></label>
-        <select id="np-prazo" class="input"><option value="">Quero a melhor sugestão</option>${[24, 36, 48, 60, 72, 84, 96].map((n) => `<option value="${n}">${n} parcelas</option>`).join('')}</select></div>
-      <div class="field"><label for="np-obs">Algo mais que devemos saber? <span class="hint">(opcional)</span></label>
-        <textarea id="np-obs" class="input" maxlength="1000" placeholder="Ex.: sou servidor estadual, prefiro parcelas menores"></textarea></div>
-      <div class="sheet-actions"><button class="btn btn-primary btn-block" type="submit">Enviar proposta</button></div>
+      <div class="field"><label for="np-prazo">Em quantas vezes?</label>
+        <select id="np-prazo" class="input"><option value="">A melhor opção para mim</option>${[24, 36, 48, 60, 72, 84, 96].map((n) => `<option value="${n}">${n} parcelas</option>`).join('')}</select></div>
+      <div class="field"><label for="np-obs">Quer contar algo?</label>
+        <textarea id="np-obs" class="input" maxlength="1000" placeholder="Ex.: prefiro parcelas menores"></textarea></div>
+      <div class="sheet-actions"><button class="btn btn-primary btn-block" type="submit">Enviar pedido</button></div>
     </form>`, (modal, fechar) => {
     const form = modal.querySelector('form');
     mascaraValor($('#np-valor', modal));
@@ -822,7 +820,7 @@ function modalNovaProposta() {
       e.preventDefault();
       const valor = valorDigitado($('#np-valor', modal).value);
       const erro = form.querySelector('.form-error');
-      if (!valor || valor < 100) { erro.textContent = 'Informe um valor a partir de R$ 100,00.'; erro.hidden = false; return; }
+      if (!valor || valor < 100) { erro.textContent = 'Digite um valor a partir de R$ 100,00.'; erro.hidden = false; return; }
       enviarSolicitacao(form, fechar, modal, {
         tipo: 'nova_proposta', valor_desejado: valor,
         prazo_desejado: $('#np-prazo', modal).value || null, observacao: $('#np-obs', modal).value,
@@ -834,30 +832,30 @@ function modalNovaProposta() {
 function modalRefinanciar(contratoId) {
   const ativos = estado.painel.contratos.filter((c) => c.status === 'ativo');
   if (!ativos.length) {
-    abrirModal(`${cabecalho('Refinanciar')}${vazio(I.refresh, 'Nenhum contrato ativo', 'O refinanciamento é feito a partir de um contrato ativo. Que tal uma nova proposta?')}
-      <div class="sheet-actions" style="margin-top:16px"><button class="btn btn-primary btn-block" id="ir-nova">Fazer nova proposta</button></div>`,
+    abrirModal(`${cabecalho('Refinanciar')}${vazio(I.refresh, 'Nenhum contrato ativo', 'Para refinanciar, você precisa de um contrato ativo.')}
+      <div class="sheet-actions" style="margin-top:16px"><button class="btn btn-primary btn-block" id="ir-nova">Pedir crédito</button></div>`,
     (modal, fechar) => modal.querySelector('#ir-nova').addEventListener('click', () => { fechar(); modalNovaProposta(); }));
     return;
   }
   const escolhido = ativos.find((c) => c.id === contratoId) || ativos[0];
   abrirModal(`
-    ${cabecalho('Refinanciar contrato', 'Pedimos uma simulação sem compromisso. Você decide depois de ver as condições.')}
+    ${cabecalho('Refinanciar', 'Sem compromisso. Você só decide depois de ver a proposta.')}
     <form novalidate>
       <div class="form-error" role="alert" hidden></div>
-      <div class="field"><label for="rf-contrato">Contrato</label>
-        <select id="rf-contrato" class="input">${ativos.map((c) => `<option value="${esc(c.id)}"${c.id === escolhido.id ? ' selected' : ''}>${esc(c.produto)} · Nº ${esc(c.numero)} · ${brl(c.valor_parcela)}/mês</option>`).join('')}</select></div>
+      <div class="field"><label for="rf-contrato">Qual contrato?</label>
+        <select id="rf-contrato" class="input">${ativos.map((c) => `<option value="${esc(c.id)}"${c.id === escolhido.id ? ' selected' : ''}>${esc(c.produto)} · Nº ${esc(c.numero)} · ${brl(c.valor_parcela)} por mês</option>`).join('')}</select></div>
       <div class="detail-list" id="rf-resumo"></div>
-      <div class="field"><label for="rf-valor">Valor novo que gostaria de liberar <span class="hint">(opcional)</span></label>
+      <div class="field"><label for="rf-valor">Quanto quer pegar a mais?</label>
         <input id="rf-valor" class="input" inputmode="numeric" placeholder="R$ 0,00"></div>
-      <div class="field"><label for="rf-obs">Objetivo <span class="hint">(opcional)</span></label>
+      <div class="field"><label for="rf-obs">O que você quer?</label>
         <select id="rf-obs" class="input">
-          <option value="">Escolha uma opção</option>
-          <option>Liberar dinheiro novo</option>
-          <option>Diminuir o valor da parcela</option>
-          <option>Diminuir a taxa de juros</option>
-          <option>Ainda não sei, quero uma simulação</option>
+          <option value="">Escolha</option>
+          <option>Pegar mais dinheiro</option>
+          <option>Parcela menor</option>
+          <option>Juros menores</option>
+          <option>Quero ver as opções</option>
         </select></div>
-      <div class="sheet-actions"><button class="btn btn-primary btn-block" type="submit">Pedir simulação</button></div>
+      <div class="sheet-actions"><button class="btn btn-primary btn-block" type="submit">Quero uma proposta</button></div>
     </form>`, (modal, fechar) => {
     const form = modal.querySelector('form');
     mascaraValor($('#rf-valor', modal));
@@ -865,8 +863,8 @@ function modalRefinanciar(contratoId) {
       const c = ativos.find((x) => x.id === $('#rf-contrato', modal).value);
       $('#rf-resumo', modal).innerHTML = `
         <div><span>Parcelas pagas</span><b>${c.parcelas_pagas} de ${c.prazo}</b></div>
-        <div><span>Taxa atual</span><b>${pct(c.taxa_mensal)} a.m.</b></div>
-        <div><span>Saldo devedor estimado</span><b>${brl(c.saldo_estimado)}</b></div>`;
+        <div><span>Juros ao mês</span><b>${pct(c.taxa_mensal)}</b></div>
+        <div><span>Falta pagar</span><b>${brl(c.saldo_estimado)}</b></div>`;
     };
     resumo();
     $('#rf-contrato', modal).addEventListener('change', resumo);
@@ -889,24 +887,21 @@ function modalContrato(id) {
     ${cabecalho(esc(c.produto), `Nº ${esc(c.numero)}${c.banco ? ` · ${esc(c.banco)}` : ''}`)}
     <div style="margin-bottom:16px"><span class="badge ${cls}">${nome}</span></div>
     <div style="margin-bottom:18px">
-      <div class="progress-row"><span>${c.parcelas_pagas} de ${c.prazo} parcelas descontadas</span><b>${c.progresso}%</b></div>
+      <div class="progress-row"><span>${c.parcelas_pagas} de ${c.prazo} parcelas pagas</span><b>${c.progresso}%</b></div>
       <div class="progress"><div style="width:${c.progresso}%"></div></div>
     </div>
     <div class="detail-list">
-      <div><span>Valor liberado</span><b>${brl(c.valor_liberado)}</b></div>
-      <div><span>Valor da parcela</span><b>${brl(c.valor_parcela)}</b></div>
-      <div><span>Taxa de juros</span><b>${pct(c.taxa_mensal)} ao mês</b></div>
-      ${c.cet_anual != null ? `<div><span>CET</span><b>${pct(c.cet_anual)} ao ano</b></div>` : ''}
-      <div><span>Prazo</span><b>${c.prazo} meses</b></div>
-      <div><span>Parcelas restantes</span><b>${c.parcelas_restantes}</b></div>
-      ${c.status === 'ativo' ? `<div><span>Saldo devedor estimado</span><b>${brl(c.saldo_estimado)}</b></div>` : ''}
-      ${c.convenio ? `<div><span>Convênio</span><b>${esc(c.convenio)}</b></div>` : ''}
-      <div><span>Data da contratação</span><b>${data(c.data_contratacao)}</b></div>
-      ${c.proximo_vencimento ? `<div><span>Próximo desconto</span><b>${data(c.proximo_vencimento)}</b></div>` : ''}
+      <div><span>Você recebeu</span><b>${brl(c.valor_liberado)}</b></div>
+      <div><span>Parcela</span><b>${brl(c.valor_parcela)}</b></div>
+      <div><span>Juros ao mês</span><b>${pct(c.taxa_mensal)}</b></div>
+      ${c.cet_anual != null ? `<div><span>Custo total ao ano</span><b>${pct(c.cet_anual)}</b></div>` : ''}
+      <div><span>Faltam</span><b>${c.parcelas_restantes} parcela${c.parcelas_restantes === 1 ? '' : 's'}</b></div>
+      ${c.status === 'ativo' ? `<div><span>Falta pagar</span><b>${brl(c.saldo_estimado)}</b></div>` : ''}
+      ${c.proximo_vencimento ? `<div><span>Próxima parcela</span><b>${data(c.proximo_vencimento)}</b></div>` : ''}
+      <div><span>Contratado em</span><b>${data(c.data_contratacao)}</b></div>
     </div>
-    ${c.status === 'ativo' ? '<p class="hint" style="margin:-6px 0 18px">O saldo é uma estimativa. Para o valor oficial de quitação, fale com o Atendimento.</p>' : ''}
     <div class="sheet-actions two">
-      ${c.tem_documento ? `<button class="btn btn-ghost" id="baixar-doc">${ic(I.pdf, 18)}Baixar contrato</button>` : '<button class="btn btn-ghost" disabled>Contrato em preparação</button>'}
+      ${c.tem_documento ? `<button class="btn btn-ghost" id="baixar-doc">${ic(I.pdf, 18)}Baixar contrato</button>` : '<button class="btn btn-ghost" disabled>Contrato em breve</button>'}
       ${c.status === 'ativo' ? `<button class="btn btn-primary" id="ir-refin">${ic(I.refresh, 18)}Refinanciar</button>` : ''}
     </div>`, (modal, fechar) => {
     modal.querySelector('#ir-refin')?.addEventListener('click', () => { fechar(); modalRefinanciar(c.id); });
@@ -930,7 +925,7 @@ function modalContrato(id) {
 
 function modalSenha() {
   abrirModal(`
-    ${cabecalho('Alterar senha', 'Use 8 caracteres ou mais, com letras e números.')}
+    ${cabecalho('Trocar senha', 'Mínimo 8 caracteres, com letras e números.')}
     <form novalidate>
       <div class="form-error" role="alert" hidden></div>
       <div class="field"><label for="s-atual">Senha atual</label><input id="s-atual" type="password" class="input" autocomplete="current-password" required></div>
@@ -951,7 +946,7 @@ function modalSenha() {
       try {
         await api('/senha', { method: 'PUT', body: { senha_atual: $('#s-atual', modal).value, nova_senha: nova } });
         fechar();
-        toast('Senha alterada. Outros aparelhos foram desconectados.');
+        toast('Senha trocada!');
       } catch (er) {
         if (er.status === 401) return fechar();
         mostrar(er.message);
@@ -965,11 +960,11 @@ function confirmarCancelamento(id) {
   const s = estado.painel.solicitacoes.find((x) => x.id === id);
   if (!s) return;
   abrirModal(`
-    ${cabecalho('Cancelar solicitação?', `${esc(s.tipo_nome)} · protocolo ${esc(s.protocolo)}`)}
-    <p class="hint" style="margin-bottom:20px;font-size:14px">Se mudar de ideia depois, é só fazer um novo pedido.</p>
+    ${cabecalho('Cancelar este pedido?', `${esc(s.tipo_nome)} · Nº ${esc(s.protocolo)}`)}
+    <p class="hint" style="margin-bottom:20px;font-size:14px">Você pode pedir de novo quando quiser.</p>
     <div class="sheet-actions two">
       <button class="btn btn-ghost" data-fechar>Voltar</button>
-      <button class="btn btn-danger" id="confirmar">Cancelar solicitação</button>
+      <button class="btn btn-danger" id="confirmar">Sim, cancelar</button>
     </div>`, (modal, fechar) => {
     const btn = modal.querySelector('#confirmar');
     btn.addEventListener('click', async () => {
@@ -978,7 +973,7 @@ function confirmarCancelamento(id) {
         await api(`/solicitacoes/${encodeURIComponent(id)}/cancelar`, { method: 'POST' });
         fechar();
         await atualizarPainel();
-        toast('Solicitação cancelada.');
+        toast('Pedido cancelado.');
       } catch (e) {
         if (e.status !== 401) toast(e.message, true);
         fechar();
@@ -988,7 +983,7 @@ function confirmarCancelamento(id) {
 }
 
 /* ════════════ Assistente (chat) ════════════ */
-const SUGESTOES = ['Quanto falta para quitar?', 'Como está minha proposta?', 'Qual a taxa dos meus contratos?', 'Como funciona o refinanciamento?'];
+const SUGESTOES = ['Quanto falta pagar?', 'Como está meu pedido?', 'Quando é a próxima parcela?', 'O que é refinanciar?'];
 
 function bolha(m) {
   const d = document.createElement('div');
@@ -1003,7 +998,7 @@ function montarChat() {
   if (!body) return;
   body.innerHTML = '';
   if (!estado.chat.length) {
-    body.appendChild(bolha({ role: 'assistant', content: `Olá, ${estado.painel.cliente.primeiro_nome}! Sou o assistente da Antecipey. Posso explicar seus contratos, parcelas e o andamento das suas propostas. Como posso ajudar?` }));
+    body.appendChild(bolha({ role: 'assistant', content: `Oi, ${estado.painel.cliente.primeiro_nome}! Pode perguntar sobre seus contratos, parcelas ou pedidos. 😊` }));
   }
   estado.chat.forEach((m) => body.appendChild(bolha(m)));
   if (estado.enviando) body.insertAdjacentHTML('beforeend', '<div class="msg bot typing" id="digitando"><span></span><span></span><span></span></div>');
@@ -1066,7 +1061,7 @@ document.addEventListener('submit', async (e) => {
   try {
     const s = await api('/solicitacoes', { method: 'POST', body: { tipo: 'atendimento', observacao: texto } });
     await atualizarPainel();
-    toast(`Chamado aberto · protocolo ${s.protocolo}`);
+    toast('Mensagem enviada! Respondemos em Meus pedidos.');
   } catch (er) {
     if (er.status !== 401) toast(er.message, true);
     carregando(btn, false);
