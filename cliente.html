@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#121514">
+<meta name="robots" content="noindex">
+<title>Área do Cliente · Antecipey</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#121514; --bg-2:#171b1a; --card:rgba(255,255,255,.035); --card-2:rgba(255,255,255,.06);
+  --line:rgba(255,255,255,.08); --line-2:rgba(255,255,255,.14);
+  --text:#f3f6f5; --muted:#9aa5a1; --dim:#6c7773;
+  --green:#00e082; --green-2:#4bffb3; --green-ink:#03140d; --green-soft:rgba(0,224,130,.12);
+  --amber:#ffc34d; --amber-soft:rgba(255,195,77,.12);
+  --red:#ff6b6b; --red-soft:rgba(255,107,107,.12);
+  --radius:20px; --radius-sm:14px;
+  --shadow:0 24px 60px -24px rgba(0,0,0,.6);
+  --safe-b:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:'Sora',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100dvh;
+  -webkit-font-smoothing:antialiased;line-height:1.45;overflow-x:hidden}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--green);outline-offset:2px;border-radius:8px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+[hidden]{display:none!important}
+
+/* Fundo com brilho */
+.glow{position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(60% 45% at 85% -5%,rgba(0,224,130,.16),transparent 70%),
+             radial-gradient(45% 35% at -10% 105%,rgba(75,255,179,.08),transparent 70%)}
+
+/* ── Botões ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;height:50px;padding:0 22px;
+  border-radius:999px;font-weight:600;font-size:15px;transition:transform .15s,background .2s,box-shadow .2s,opacity .2s;white-space:nowrap}
+.btn:active{transform:scale(.98)}
+.btn-primary{background:linear-gradient(135deg,var(--green),var(--green-2));color:var(--green-ink);
+  box-shadow:0 10px 30px -10px rgba(0,224,130,.7)}
+.btn-primary:hover{box-shadow:0 14px 34px -10px rgba(0,224,130,.9)}
+.btn-ghost{background:var(--card-2);border:1px solid var(--line-2)}
+.btn-ghost:hover{background:rgba(255,255,255,.09)}
+.btn-danger{background:var(--red-soft);color:var(--red);border:1px solid rgba(255,107,107,.25)}
+.btn-sm{height:40px;padding:0 16px;font-size:13.5px}
+.btn-block{width:100%}
+.btn[disabled]{opacity:.55;pointer-events:none}
+.spinner{width:18px;height:18px;border-radius:50%;border:2.5px solid currentColor;border-right-color:transparent;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── Campos ── */
+.field{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.field label{font-size:13px;font-weight:500;color:var(--muted)}
+.input{width:100%;height:54px;padding:0 18px;border-radius:var(--radius-sm);background:rgba(0,0,0,.25);
+  border:1px solid var(--line-2);font-size:16px;transition:border .2s,box-shadow .2s}
+textarea.input{height:auto;min-height:96px;padding:14px 18px;resize:vertical}
+select.input{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1.5l5 5 5-5' stroke='%239aa5a1' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 18px center;padding-right:44px}
+select.input option{background:#1b1f1e}
+.input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 4px rgba(0,224,130,.15)}
+.input-wrap{position:relative}
+.input-wrap .input{padding-right:54px}
+.eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:12px;
+  display:grid;place-items:center;color:var(--muted)}
+.eye:hover{color:var(--text)}
+.hint{font-size:12.5px;color:var(--dim)}
+.form-error{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:12px;background:var(--red-soft);
+  color:#ffb4b4;font-size:13.5px;margin-bottom:16px;border:1px solid rgba(255,107,107,.2)}
+
+/* ══════════ LOGIN ══════════ */
+.login{position:relative;z-index:1;min-height:100dvh;display:grid;grid-template-columns:1fr}
+.login-side{display:none}
+.login-main{display:flex;flex-direction:column;padding:28px 20px calc(28px + var(--safe-b));max-width:460px;width:100%;margin:0 auto}
+.login-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:48px}
+.logo{height:30px;width:auto;display:block}
+.back-site{font-size:13px;color:var(--muted);display:inline-flex;gap:6px;align-items:center}
+.back-site:hover{color:var(--text)}
+.login h1{font-size:30px;line-height:1.1;letter-spacing:-.03em;font-weight:700;margin-bottom:10px}
+.login .lead{color:var(--muted);font-size:15px;margin-bottom:32px}
+.login-help{margin-top:22px;padding:16px;border-radius:var(--radius-sm);background:var(--card);border:1px solid var(--line);font-size:13.5px;color:var(--muted)}
+.login-help strong{color:var(--text);font-weight:600}
+.login-help .links{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.secure-note{display:flex;gap:8px;align-items:center;justify-content:center;margin-top:auto;padding-top:32px;font-size:12px;color:var(--dim)}
+@media (min-width:960px){
+  .login{grid-template-columns:1.05fr 1fr}
+  .login-side{display:flex;flex-direction:column;justify-content:space-between;padding:48px;margin:16px;border-radius:28px;
+    background:linear-gradient(160deg,#0b3a29 0%,#0d241c 45%,#111614 100%);border:1px solid var(--line);position:relative;overflow:hidden}
+  .login-side::after{content:"";position:absolute;width:520px;height:520px;right:-160px;bottom:-200px;border-radius:50%;
+    background:radial-gradient(circle,rgba(0,224,130,.35),transparent 65%)}
+  .login-side h2{font-size:44px;line-height:1.02;letter-spacing:-.04em;font-weight:700;max-width:480px;position:relative;z-index:1}
+  .login-side .grad{background:linear-gradient(90deg,var(--green),var(--green-2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .login-feats{display:grid;gap:14px;position:relative;z-index:1}
+  .login-feat{display:flex;gap:14px;align-items:center;font-size:14.5px;color:#cfe9de}
+  .login-feat i{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:rgba(0,224,130,.14);color:var(--green);flex:none}
+  .login-main{justify-content:center;padding:48px}
+  .login-top{position:absolute;top:40px;right:48px;margin:0}
+  .login-top .logo{display:none}
+}
+
+/* ══════════ APP ══════════ */
+.app{position:relative;z-index:1;min-height:100dvh}
+.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:14px 20px;background:rgba(18,21,20,.78);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.topbar .who{display:flex;align-items:center;gap:12px}
+.avatar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:14px;
+  background:linear-gradient(135deg,var(--green),var(--green-2));color:var(--green-ink);flex:none}
+.who-text{display:none;line-height:1.2}
+.who-text small{display:block;color:var(--dim);font-size:12px}
+.icon-btn{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;color:var(--muted);border:1px solid var(--line)}
+.icon-btn:hover{color:var(--text);background:var(--card-2)}
+
+.sidebar{display:none}
+.content{padding:22px 18px calc(110px + var(--safe-b));max-width:1120px;margin:0 auto}
+.bottom-nav{position:fixed;left:0;right:0;bottom:0;z-index:30;display:grid;grid-template-columns:repeat(5,1fr);
+  padding:8px 6px calc(8px + var(--safe-b));background:rgba(18,21,20,.92);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-top:1px solid var(--line)}
+.nav-btn{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 2px;border-radius:12px;font-size:10.5px;font-weight:500;color:var(--dim);position:relative;min-width:0}
+.bottom-nav .nav-btn span:not(.dot){max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;letter-spacing:-.01em}
+.nav-btn svg{width:22px;height:22px}
+.nav-btn.active{color:var(--green)}
+.nav-btn .dot{position:absolute;top:6px;right:calc(50% - 18px);min-width:16px;height:16px;padding:0 4px;border-radius:99px;background:var(--green);color:var(--green-ink);font-size:10px;font-weight:700;display:grid;place-items:center}
+
+@media (min-width:960px){
+  .who-text{display:block}
+  .bottom-nav{display:none}
+  .layout{display:grid;grid-template-columns:250px 1fr;max-width:1320px;margin:0 auto}
+  .sidebar{display:flex;flex-direction:column;gap:4px;position:sticky;top:71px;height:calc(100dvh - 71px);padding:28px 16px}
+  .sidebar .nav-btn{flex-direction:row;gap:12px;font-size:14px;padding:12px 14px;color:var(--muted)}
+  .sidebar .nav-btn:hover{background:var(--card);color:var(--text)}
+  .sidebar .nav-btn.active{background:var(--green-soft);color:var(--green)}
+  .sidebar .nav-btn .dot{position:static;margin-left:auto}
+  .sidebar-foot{margin-top:auto;padding:16px;border-radius:var(--radius-sm);background:var(--card);border:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+  .content{padding:36px 32px 64px;margin:0}
+}
+
+/* ── Seções ── */
+.view{animation:fade .35s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.page-head{margin-bottom:22px}
+.page-head h1{font-size:26px;letter-spacing:-.03em;line-height:1.15;font-weight:700}
+.page-head p{color:var(--muted);font-size:14.5px;margin-top:6px}
+.section-title{display:flex;align-items:center;justify-content:space-between;margin:30px 0 14px;font-size:16px;font-weight:600}
+.section-title a,.link{color:var(--green);font-size:13.5px;font-weight:500}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
+.grid{display:grid;gap:14px;grid-template-columns:minmax(0,1fr)}
+.grid>*{min-width:0}
+@media (min-width:640px){.grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (min-width:1100px){.grid-4{grid-template-columns:repeat(4,minmax(0,1fr))}}
+
+/* Cartão de destaque */
+.hero-card{position:relative;overflow:hidden;border-radius:24px;padding:24px;
+  background:linear-gradient(140deg,#0e4a33 0%,#0d2a20 55%,#141a18 100%);border:1px solid rgba(0,224,130,.25);box-shadow:var(--shadow)}
+.hero-card::after{content:"";position:absolute;width:300px;height:300px;right:-90px;top:-120px;border-radius:50%;background:radial-gradient(circle,rgba(75,255,179,.3),transparent 65%)}
+.hero-card>*{position:relative;z-index:1}
+.hero-label{font-size:13px;color:#b9e7d4}
+.hero-value{font-size:34px;font-weight:700;letter-spacing:-.03em;margin:6px 0 4px}
+.hero-sub{font-size:13px;color:#9fd2bd}
+.hero-stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px}
+.hero-stat{padding:14px;border-radius:14px;background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.06)}
+.hero-stat b{display:block;font-size:18px;font-weight:600;margin-top:2px}
+.hero-stat span{font-size:12px;color:#a9cfc0}
+
+/* Ações rápidas */
+.actions{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:16px}
+@media (min-width:640px){.actions{grid-template-columns:repeat(4,1fr)}}
+.action{display:flex;flex-direction:column;align-items:flex-start;gap:14px;padding:18px;border-radius:var(--radius);
+  background:var(--card);border:1px solid var(--line);text-align:left;transition:border .2s,background .2s,transform .15s}
+.action:hover{border-color:rgba(0,224,130,.4);background:rgba(0,224,130,.05)}
+.action:active{transform:scale(.98)}
+.action i{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:var(--green-soft);color:var(--green)}
+.action b{font-size:14.5px;font-weight:600;display:block}
+.action small{font-size:12.5px;color:var(--muted);display:block;margin-top:2px}
+
+/* Contratos */
+.contract{display:flex;flex-direction:column;gap:16px}
+.contract-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.contract-head h3{font-size:16px;font-weight:600}
+.contract-head small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.badge{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px;border-radius:99px;font-size:12px;font-weight:600;white-space:nowrap}
+.badge::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.b-green{background:var(--green-soft);color:var(--green)}
+.b-amber{background:var(--amber-soft);color:var(--amber)}
+.b-red{background:var(--red-soft);color:var(--red)}
+.b-gray{background:rgba(255,255,255,.07);color:var(--muted)}
+.kv{display:grid;grid-template-columns:1fr 1fr;gap:14px 12px}
+.kv span{display:block;font-size:12px;color:var(--dim)}
+.kv b{font-size:15px;font-weight:600}
+.progress{height:8px;border-radius:99px;background:rgba(255,255,255,.07);overflow:hidden}
+.progress>div{height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--green),var(--green-2));transition:width .8s cubic-bezier(.2,.8,.2,1)}
+.progress-row{display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted);margin-bottom:8px}
+.progress-row b{color:var(--text);font-weight:600}
+.contract-foot{display:flex;gap:10px;flex-wrap:wrap}
+
+/* Solicitações */
+.req{display:flex;flex-direction:column;gap:16px}
+.req-head,.contract-head{min-width:0}
+.req-head>div,.contract-head>div{min-width:0}
+.req-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.req-head h3{font-size:15.5px;font-weight:600}
+.req-head small{color:var(--muted);font-size:12.5px;display:block;margin-top:2px}
+.proto{font-family:ui-monospace,Consolas,monospace;font-size:12px;color:var(--dim);letter-spacing:.02em}
+.stepper{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.step{display:flex;flex-direction:column;gap:8px;font-size:11px;color:var(--dim);text-align:left}
+.step i{height:6px;border-radius:99px;background:rgba(255,255,255,.08)}
+.step.done{color:var(--muted)}.step.done i{background:var(--green)}
+.step.now{color:var(--text);font-weight:600}.step.now i{background:linear-gradient(90deg,var(--green),rgba(0,224,130,.25))}
+.step.warn i{background:var(--amber)}.step.fail i{background:var(--red)}
+.note{display:flex;gap:10px;padding:12px 14px;border-radius:12px;font-size:13.5px;background:var(--card-2);border:1px solid var(--line)}
+.note.warn{background:var(--amber-soft);border-color:rgba(255,195,77,.25);color:#ffe2a6}
+.timeline{display:grid;gap:0;border-left:2px solid var(--line);margin-left:6px;padding-left:18px}
+.tl{position:relative;padding:0 0 14px;font-size:13px}
+.tl::before{content:"";position:absolute;left:-25px;top:4px;width:12px;height:12px;border-radius:50%;background:var(--bg);border:2px solid var(--green)}
+.tl b{font-weight:600}.tl small{color:var(--dim);display:block;font-size:12px}
+.tl p{color:var(--muted);margin-top:2px}
+details.more summary{list-style:none;cursor:pointer;color:var(--green);font-size:13px;font-weight:500}
+details.more summary::-webkit-details-marker{display:none}
+details.more[open] summary{margin-bottom:12px}
+
+.tabs{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin-bottom:18px}
+.tabs::-webkit-scrollbar{display:none}
+.tab{height:38px;padding:0 16px;border-radius:99px;font-size:13.5px;font-weight:500;color:var(--muted);border:1px solid var(--line);white-space:nowrap}
+.tab.active{background:var(--text);color:#111;border-color:var(--text)}
+
+.empty{text-align:center;padding:40px 20px;color:var(--muted);font-size:14px}
+.empty i{width:56px;height:56px;border-radius:18px;display:grid;place-items:center;margin:0 auto 14px;background:var(--card-2);color:var(--muted)}
+.empty b{display:block;color:var(--text);font-size:15.5px;margin-bottom:4px}
+
+/* Ajuda */
+.faq{border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:var(--card)}
+.faq details{border-top:1px solid var(--line)}
+.faq details:first-child{border-top:0}
+.faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;gap:16px;align-items:center;padding:18px 20px;font-size:14.5px;font-weight:500}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary svg{flex:none;transition:transform .25s;color:var(--muted)}
+.faq details[open] summary svg{transform:rotate(180deg);color:var(--green)}
+.faq .ans{padding:0 20px 18px;color:var(--muted);font-size:14px}
+
+.chat{display:flex;flex-direction:column;height:min(620px,calc(100dvh - 230px));min-height:440px;border-radius:var(--radius);border:1px solid var(--line);background:var(--card);overflow:hidden}
+.chat-head{display:flex;gap:12px;align-items:center;padding:16px 18px;border-bottom:1px solid var(--line);background:rgba(0,0,0,.15)}
+.bot-ava{width:40px;height:40px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,var(--green),var(--green-2));color:var(--green-ink);flex:none}
+.chat-head b{font-size:14.5px;display:block}
+.chat-head small{font-size:12px;color:var(--green);display:flex;align-items:center;gap:6px}
+.chat-head small::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green)}
+.chat-body{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:10px;scroll-behavior:smooth}
+.msg{max-width:86%;padding:11px 15px;border-radius:18px;font-size:14px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word;animation:fade .25s ease}
+.msg.bot{background:var(--card-2);border:1px solid var(--line);border-bottom-left-radius:6px;align-self:flex-start}
+.msg.me{background:linear-gradient(135deg,var(--green),#20f09a);color:var(--green-ink);border-bottom-right-radius:6px;align-self:flex-end;font-weight:500}
+.typing{display:inline-flex;gap:4px;padding:15px 16px}
+.typing span{width:7px;height:7px;border-radius:50%;background:var(--muted);animation:blink 1.2s infinite}
+.typing span:nth-child(2){animation-delay:.2s}.typing span:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,80%,100%{opacity:.25;transform:translateY(0)}40%{opacity:1;transform:translateY(-3px)}}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:0 18px 12px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;height:34px;padding:0 14px;border-radius:99px;border:1px solid var(--line-2);font-size:12.5px;color:var(--muted)}
+.chip:hover{color:var(--text);border-color:var(--green)}
+.chat-form{display:flex;gap:10px;padding:12px;border-top:1px solid var(--line);background:rgba(0,0,0,.15)}
+.chat-form .input{height:48px;border-radius:99px}
+.send{width:48px;height:48px;border-radius:50%;flex:none;display:grid;place-items:center;background:linear-gradient(135deg,var(--green),var(--green-2));color:var(--green-ink)}
+.send[disabled]{opacity:.5}
+.chat-disclaimer{font-size:11.5px;color:var(--dim);text-align:center;padding:0 12px 10px;background:rgba(0,0,0,.15)}
+@media (min-width:1100px){.help-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:22px;align-items:start}.help-grid .chat{position:sticky;top:100px}}
+
+/* Atendimento */
+.contact{display:flex;gap:16px;align-items:center;padding:20px;border-radius:var(--radius);border:1px solid var(--line);background:var(--card);transition:border .2s,background .2s}
+a.contact:hover{border-color:rgba(0,224,130,.4);background:rgba(0,224,130,.05)}
+.contact i{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;flex:none}
+.contact b{display:block;font-size:15.5px;font-weight:600}
+.contact small{color:var(--muted);font-size:13px}
+.contact .go{margin-left:auto;color:var(--muted)}
+.wa i{background:rgba(37,211,102,.14);color:#25d366}
+.ph i{background:var(--green-soft);color:var(--green)}
+.ml i{background:rgba(120,160,255,.14);color:#8fb0ff}
+
+/* ── Modal (folha de baixo no celular) ── */
+.modal{position:fixed;inset:0;z-index:60;display:flex;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);animation:fadein .2s ease}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+.sheet{width:100%;max-height:92dvh;overflow-y:auto;background:var(--bg-2);border:1px solid var(--line-2);border-bottom:0;
+  border-radius:26px 26px 0 0;padding:10px 20px calc(24px + var(--safe-b));animation:up .3s cubic-bezier(.2,.8,.2,1);box-shadow:var(--shadow)}
+@keyframes up{from{transform:translateY(40px);opacity:.5}to{transform:none;opacity:1}}
+.grabber{width:42px;height:5px;border-radius:99px;background:var(--line-2);margin:4px auto 16px}
+.sheet-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:20px}
+.sheet-head h2{font-size:20px;letter-spacing:-.02em;font-weight:700}
+.sheet-head p{font-size:13.5px;color:var(--muted);margin-top:4px}
+@media (min-width:640px){
+  .modal{align-items:center;padding:20px}
+  .sheet{max-width:520px;border-radius:26px;border-bottom:1px solid var(--line-2);padding:24px 28px 28px}
+  .grabber{display:none}
+}
+.detail-list{display:grid;border:1px solid var(--line);border-radius:var(--radius-sm);overflow:hidden;margin-bottom:18px}
+.detail-list div{display:flex;justify-content:space-between;gap:16px;padding:13px 16px;font-size:14px;border-top:1px solid var(--line)}
+.detail-list div:first-child{border-top:0}
+.detail-list span{color:var(--muted)}
+.detail-list b{font-weight:600;text-align:right}
+.sheet-actions{display:grid;gap:10px}
+@media (min-width:640px){.sheet-actions.two{grid-template-columns:1fr 1fr}}
+.success{text-align:center;padding:10px 0 4px}
+.success i{width:72px;height:72px;border-radius:50%;margin:0 auto 18px;display:grid;place-items:center;background:var(--green-soft);color:var(--green);animation:pop .45s cubic-bezier(.2,1.4,.4,1)}
+@keyframes pop{from{transform:scale(.4);opacity:0}to{transform:none;opacity:1}}
+.success h2{font-size:21px;margin-bottom:6px}
+.success p{color:var(--muted);font-size:14px;margin-bottom:6px}
+.success .proto{display:inline-block;margin:12px 0 22px;padding:8px 14px;border-radius:10px;background:var(--card-2);color:var(--text);font-size:14px}
+
+/* Toast */
+.toast{position:fixed;left:50%;bottom:calc(96px + var(--safe-b));transform:translateX(-50%);z-index:80;display:flex;gap:10px;align-items:center;
+  max-width:calc(100% - 32px);padding:13px 18px;border-radius:14px;background:#f3f6f5;color:#111;font-size:14px;font-weight:500;box-shadow:var(--shadow);animation:toast .3s ease}
+.toast.err{background:#ffdede;color:#5a0b0b}
+@keyframes toast{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translate(-50%,0)}}
+@media (min-width:960px){.toast{bottom:32px}}
+
+/* Carregando */
+.skeleton{border-radius:var(--radius);background:linear-gradient(90deg,var(--card) 0%,var(--card-2) 50%,var(--card) 100%);background-size:200% 100%;animation:shine 1.3s infinite}
+@keyframes shine{to{background-position:-200% 0}}
+.boot{min-height:100dvh;display:grid;place-items:center;position:relative;z-index:1}
+.boot .spinner{width:34px;height:34px;color:var(--green);border-width:3px}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="glow" aria-hidden="true"></div>
+
+<!-- Carregando -->
+<div id="boot" class="boot"><div class="spinner" role="status" aria-label="Carregando"></div></div>
+
+<!-- ══════════ LOGIN ══════════ -->
+<section id="login" class="login" hidden>
+  <aside class="login-side">
+    <img src="assets/antecipey-logo-transparent.png" alt="Antecipey" class="logo" style="height:34px;position:relative;z-index:1">
+    <h2>Sua vida financeira, <span class="grad">acompanhada de perto.</span></h2>
+    <div class="login-feats">
+      <div class="login-feat"><i><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6M7 4h7l5 5v11a1 1 0 01-1 1H7a1 1 0 01-1-1V5a1 1 0 011-1z"/></svg></i>Contratos, parcelas e taxas em um só lugar</div>
+      <div class="login-feat"><i><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 2m6-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></i>Acompanhe cada proposta em tempo real</div>
+      <div class="login-feat"><i><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.4-4 8-9 8a9.9 9.9 0 01-4-.8L3 20l1.3-3.9A7.6 7.6 0 013 12c0-4.4 4-8 9-8s9 3.6 9 8z"/></svg></i>Tire dúvidas com nosso assistente 24h</div>
+    </div>
+  </aside>
+
+  <div class="login-main">
+    <div class="login-top">
+      <img src="assets/antecipey-logo-transparent.png" alt="Antecipey" class="logo">
+      <a href="/" class="back-site"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>Voltar ao site</a>
+    </div>
+
+    <h1>Área do Cliente</h1>
+    <p class="lead">Entre com seu CPF e a senha criada na contratação.</p>
+
+    <form id="login-form" novalidate>
+      <div id="login-error" class="form-error" role="alert" hidden></div>
+      <div class="field">
+        <label for="cpf">CPF</label>
+        <input id="cpf" class="input" inputmode="numeric" autocomplete="username" placeholder="000.000.000-00" maxlength="14" required>
+      </div>
+      <div class="field">
+        <label for="senha">Senha</label>
+        <div class="input-wrap">
+          <input id="senha" class="input" type="password" autocomplete="current-password" placeholder="Sua senha" required>
+          <button type="button" class="eye" data-eye="senha" aria-label="Mostrar senha">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.5 12S6 5 12 5s9.5 7 9.5 7-3.5 7-9.5 7-9.5-7-9.5-7z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-block" type="submit" id="login-btn">Entrar</button>
+    </form>
+
+    <div class="login-help">
+      <strong>Primeiro acesso ou esqueceu a senha?</strong><br>
+      Seu acesso é criado quando você finaliza uma contratação com a Antecipey. Se esqueceu a senha, nossa equipe ajuda você a recuperar.
+      <div class="links" id="login-canais"></div>
+    </div>
+
+    <div class="secure-note">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 118 0v3"/></svg>
+      Conexão segura · A Antecipey nunca pede sua senha por telefone ou WhatsApp
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ APP ══════════ -->
+<section id="app" class="app" hidden>
+  <header class="topbar">
+    <div class="who">
+      <a href="/" aria-label="Site Antecipey"><img src="assets/antecipey-logo-transparent.png" alt="Antecipey" class="logo" style="height:26px"></a>
+    </div>
+    <div class="who">
+      <div class="who-text"><b id="top-nome"></b><small id="top-cpf"></small></div>
+      <div class="avatar" id="top-avatar" aria-hidden="true"></div>
+      <button class="icon-btn" id="btn-sair" aria-label="Sair" title="Sair">
+        <svg width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17l5-5-5-5M20 12H9M12 21H6a2 2 0 01-2-2V5a2 2 0 012-2h6"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <nav class="sidebar" aria-label="Menu" id="sidebar"></nav>
+    <main class="content" id="content" tabindex="-1"></main>
+  </div>
+  <nav class="bottom-nav" aria-label="Menu" id="bottom-nav"></nav>
+</section>
+
+<div id="modal-root"></div>
+
+<script>
+(() => {
+'use strict';
+
+/* ════════════ Utilidades ════════════ */
+const $ = (s, el = document) => el.querySelector(s);
+const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const brl = (v) => Number(v || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+const pct = (v) => `${Number(v).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%`;
+const data = (iso) => iso ? new Date(iso.length === 10 ? `${iso}T12:00:00` : iso).toLocaleDateString('pt-BR') : '—';
+const dataHora = (iso) => new Date(iso).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+const mascaraCpf = (v) => v.replace(/\D/g, '').slice(0, 11)
+  .replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+
+const store = {
+  get(k) { try { return JSON.parse(sessionStorage.getItem(k)); } catch { return null; } },
+  set(k, v) { try { sessionStorage.setItem(k, JSON.stringify(v)); } catch { /* sem armazenamento */ } },
+  del(k) { try { sessionStorage.removeItem(k); } catch { /* sem armazenamento */ } },
+};
+
+class ErroApi extends Error {
+  constructor(status, mensagem) { super(mensagem); this.status = status; }
+}
+
+async function api(caminho, { method = 'GET', body } = {}) {
+  let res;
+  try {
+    res = await fetch(`/api/cliente${caminho}`, {
+      method,
+      credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json', 'X-Antecipey': '1' },
+      body: body ? JSON.stringify(body) : undefined,
+    });
+  } catch {
+    throw new ErroApi(0, 'Sem conexão. Verifique sua internet e tente de novo.');
+  }
+  const json = await res.json().catch(() => ({}));
+  if (res.status === 401 && caminho !== '/login') {
+    estado.painel = null;
+    mostrarLogin('Sua sessão expirou. Entre novamente.');
+    throw new ErroApi(401, json.error || 'Sessão expirada.');
+  }
+  if (!res.ok) throw new ErroApi(res.status, json.error || 'Algo deu errado. Tente novamente.');
+  return json;
+}
+
+function toast(msg, erro = false) {
+  document.querySelectorAll('.toast').forEach((t) => t.remove());
+  const t = document.createElement('div');
+  t.className = `toast${erro ? ' err' : ''}`;
+  t.setAttribute('role', 'status');
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 3600);
+}
+
+function carregando(btn, ativo, texto) {
+  if (ativo) {
+    btn.dataset.texto = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = `<span class="spinner"></span>${texto ? esc(texto) : ''}`;
+  } else {
+    btn.disabled = false;
+    if (btn.dataset.texto) btn.innerHTML = btn.dataset.texto;
+  }
+}
+
+/* ════════════ Ícones ════════════ */
+const ic = (d, s = 22) => `<svg width="${s}" height="${s}" fill="none" stroke="currentColor" stroke-width="1.9" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="${d}"/></svg>`;
+const I = {
+  home: 'M3 10.5L12 3l9 7.5V20a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1v-9.5z',
+  doc: 'M9 12h6m-6 4h6M7 3h7l5 5v12a1 1 0 01-1 1H7a1 1 0 01-1-1V4a1 1 0 011-1z',
+  clock: 'M12 7v5l3 2m6-2a9 9 0 11-18 0 9 9 0 0118 0z',
+  help: 'M9.1 9a3 3 0 015.8 1c0 2-3 2.5-3 4.5M12 18h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
+  head: 'M4 14v-2a8 8 0 0116 0v2M4 14a2 2 0 002 2h1v-5H6a2 2 0 00-2 2v1zm16 0a2 2 0 01-2 2h-1v-5h1a2 2 0 012 2v1zM17 16v1a3 3 0 01-3 3h-2',
+  plus: 'M12 5v14M5 12h14',
+  refresh: 'M4 4v6h6M20 20v-6h-6M5.6 15A8 8 0 0019 17M18.4 9A8 8 0 005 7',
+  chev: 'M9 6l6 6-6 6',
+  down: 'M6 9l6 6 6-6',
+  check: 'M5 13l4 4L19 7',
+  x: 'M6 6l12 12M18 6L6 18',
+  send: 'M5 12h14M13 6l6 6-6 6',
+  phone: 'M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z',
+  wa: 'M20.5 12a8.5 8.5 0 01-12.6 7.4L3.5 20.5l1.1-4.2A8.5 8.5 0 1120.5 12zM9 8.5c0 3.5 3 6.5 6.5 6.5l1-1.5-2-1-1 .8a5 5 0 01-2.3-2.3l.8-1-1-2L9 8.5z',
+  mail: 'M4 6h16v12H4V6zm0 0l8 7 8-7',
+  lock: 'M7 11V8a5 5 0 0110 0v3M5 11h14v10H5V11z',
+  bot: 'M12 4v3M8 11h.01M16 11h.01M5 8h14a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2zm4 7h6',
+  pdf: 'M12 15V3m0 12l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2',
+  shield: 'M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z',
+};
+
+/* ════════════ Estado e navegação ════════════ */
+const estado = { painel: null, filtro: 'todas', chat: store.get('ant_chat') || [], enviando: false };
+
+const ROTAS = [
+  { id: 'inicio', nome: 'Início', icone: I.home },
+  { id: 'contratos', nome: 'Contratos', icone: I.doc },
+  { id: 'solicitacoes', nome: 'Acompanhar', icone: I.clock },
+  { id: 'ajuda', nome: 'Dúvidas', icone: I.help },
+  { id: 'atendimento', nome: 'Atendimento', curto: 'Contato', icone: I.head },
+];
+
+function rotaAtual() {
+  const id = location.hash.replace('#', '');
+  return ROTAS.some((r) => r.id === id) ? id : 'inicio';
+}
+
+function desenharMenu() {
+  const abertas = estado.painel?.resumo.solicitacoes_abertas || 0;
+  const links = (curto) => ROTAS.map((r) => `
+    <a href="#${r.id}" class="nav-btn${rotaAtual() === r.id ? ' active' : ''}" ${rotaAtual() === r.id ? 'aria-current="page"' : ''}>
+      ${ic(r.icone)}<span>${curto && r.curto ? r.curto : r.nome}</span>
+      ${r.id === 'solicitacoes' && abertas ? `<span class="dot">${abertas}</span>` : ''}
+    </a>`).join('');
+  $('#sidebar').innerHTML = links(false) + `<div class="sidebar-foot">${ic(I.shield, 18)}<p style="margin-top:8px">A Antecipey nunca pede depósito antecipado para liberar crédito.</p></div>`;
+  $('#bottom-nav').innerHTML = links(true);
+}
+
+function render() {
+  if (!estado.painel) return;
+  desenharMenu();
+  const rota = rotaAtual();
+  const telas = { inicio: telaInicio, contratos: telaContratos, solicitacoes: telaSolicitacoes, ajuda: telaAjuda, atendimento: telaAtendimento };
+  const main = $('#content');
+  main.innerHTML = `<div class="view">${telas[rota]()}</div>`;
+  if (rota === 'ajuda') montarChat();
+  requestAnimationFrame(() => document.querySelectorAll('.progress>div[data-w]').forEach((b) => { b.style.width = `${b.dataset.w}%`; }));
+}
+
+window.addEventListener('hashchange', () => { $('#modal-root').innerHTML = ''; render(); window.scrollTo({ top: 0 }); $('#content').focus({ preventScroll: true }); });
+
+/* ════════════ Componentes ════════════ */
+const BADGE_CONTRATO = {
+  ativo: ['b-green', 'Ativo'], quitado: ['b-gray', 'Quitado'],
+  em_averbacao: ['b-amber', 'Em averbação'], cancelado: ['b-red', 'Cancelado'],
+};
+const BADGE_SOLIC = {
+  recebida: 'b-gray', em_analise: 'b-amber', pendente: 'b-amber', aprovada: 'b-green',
+  paga: 'b-green', reprovada: 'b-red', cancelada: 'b-gray',
+};
+
+function cartaoContrato(c, compacto = false) {
+  const [cls, nome] = BADGE_CONTRATO[c.status] || ['b-gray', c.status];
+  return `
+  <article class="card contract">
+    <div class="contract-head">
+      <div><h3>${esc(c.produto)}</h3><small>${esc([c.convenio, `Nº ${c.numero}`].filter(Boolean).join(' · '))}</small></div>
+      <span class="badge ${cls}">${nome}</span>
+    </div>
+    <div>
+      <div class="progress-row"><span>Parcelas descontadas</span><span><b>${c.parcelas_pagas}</b> de ${c.prazo}</span></div>
+      <div class="progress" role="progressbar" aria-valuenow="${c.progresso}" aria-valuemin="0" aria-valuemax="100"><div data-w="${c.progresso}" style="width:0"></div></div>
+    </div>
+    <div class="kv">
+      <div><span>Valor da parcela</span><b>${brl(c.valor_parcela)}</b></div>
+      <div><span>Taxa</span><b>${pct(c.taxa_mensal)} a.m.</b></div>
+      ${compacto ? '' : `
+      <div><span>Saldo devedor estimado</span><b>${c.status === 'ativo' ? brl(c.saldo_estimado) : '—'}</b></div>
+      <div><span>Próximo desconto</span><b>${data(c.proximo_vencimento)}</b></div>`}
+    </div>
+    <div class="contract-foot">
+      <button class="btn btn-ghost btn-sm" data-acao="contrato" data-id="${esc(c.id)}">Ver detalhes</button>
+      ${c.status === 'ativo' ? `<button class="btn btn-ghost btn-sm" data-acao="refinanciar" data-id="${esc(c.id)}">${ic(I.refresh, 16)}Refinanciar</button>` : ''}
+    </div>
+  </article>`;
+}
+
+function stepper(s) {
+  const passos = [['recebida', 'Recebida'], ['em_analise', 'Em análise'], ['aprovada', 'Aprovada'], ['paga', 'Liberado']];
+  const ordem = { recebida: 0, em_analise: 1, pendente: 1, aprovada: 2, paga: 3, reprovada: 2, cancelada: -1 };
+  const atual = ordem[s.status] ?? 0;
+  return `<div class="stepper" aria-label="Andamento: ${esc(s.status_nome)}">${passos.map(([, nome], i) => {
+    let cls = '';
+    if (s.status === 'cancelada') cls = '';
+    else if (i < atual) cls = 'done';
+    else if (i === atual) {
+      cls = s.status === 'reprovada' ? 'fail' : s.status === 'pendente' ? 'warn now' : s.status === 'paga' ? 'done now' : 'now';
+    }
+    const rotulo = i === 2 && s.status === 'reprovada' ? 'Não aprovada' : nome;
+    return `<div class="step ${cls}"><i></i>${rotulo}</div>`;
+  }).join('')}</div>`;
+}
+
+function cartaoSolicitacao(s) {
+  const contrato = s.contrato_id ? estado.painel.contratos.find((c) => c.id === s.contrato_id) : null;
+  const detalhes = [
+    s.valor_desejado ? `Valor: ${brl(s.valor_desejado)}` : null,
+    s.prazo_desejado ? `Prazo: ${s.prazo_desejado}x` : null,
+    contrato ? `Contrato ${contrato.numero}` : null,
+  ].filter(Boolean).join(' · ');
+  return `
+  <article class="card req">
+    <div class="req-head">
+      <div><h3>${esc(s.tipo_nome)}</h3><small>${esc(detalhes || `Aberta em ${data(s.created_at)}`)}</small></div>
+      <span class="badge ${BADGE_SOLIC[s.status] || 'b-gray'}">${esc(s.status_nome)}</span>
+    </div>
+    ${s.tipo !== 'atendimento' && s.status !== 'cancelada' ? stepper(s) : ''}
+    ${s.mensagem ? `<div class="note${s.status === 'pendente' ? ' warn' : ''}">${ic(I.help, 18)}<div><b>Recado da equipe</b><br>${esc(s.mensagem)}</div></div>` : ''}
+    <details class="more">
+      <summary>Ver histórico</summary>
+      <div class="timeline">${s.eventos.slice().reverse().map((e) => `
+        <div class="tl"><b>${esc(e.status_nome)}</b><small>${dataHora(e.created_at)}</small>${e.descricao ? `<p>${esc(e.descricao)}</p>` : ''}</div>`).join('')}
+      </div>
+      ${s.observacao ? `<p class="hint" style="margin-top:4px">Sua mensagem: “${esc(s.observacao)}”</p>` : ''}
+    </details>
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+      <span class="proto">Protocolo ${esc(s.protocolo)}</span>
+      ${['recebida', 'em_analise', 'pendente'].includes(s.status) ? `<button class="link" data-acao="cancelar" data-id="${esc(s.id)}" style="color:var(--muted)">Cancelar solicitação</button>` : ''}
+    </div>
+  </article>`;
+}
+
+const vazio = (icone, titulo, texto, botao = '') => `<div class="card empty"><i>${ic(icone, 26)}</i><b>${titulo}</b>${texto}${botao ? `<div style="margin-top:18px">${botao}</div>` : ''}</div>`;
+
+/* ════════════ Telas ════════════ */
+function telaInicio() {
+  const { cliente, resumo, contratos, solicitacoes } = estado.painel;
+  const hora = new Date().getHours();
+  const saudacao = hora < 12 ? 'Bom dia' : hora < 18 ? 'Boa tarde' : 'Boa noite';
+  const ativos = contratos.filter((c) => c.status === 'ativo');
+  const abertas = solicitacoes.filter((s) => s.aberta);
+  const proximo = ativos.map((c) => c.proximo_vencimento).filter(Boolean).sort()[0];
+
+  return `
+  <div class="page-head"><h1>${saudacao}, ${esc(cliente.primeiro_nome)} 👋</h1><p>Aqui está o resumo da sua conta Antecipey.</p></div>
+
+  <div class="hero-card">
+    <div class="hero-label">Total descontado por mês</div>
+    <div class="hero-value">${brl(resumo.parcela_mensal)}</div>
+    <div class="hero-sub">${resumo.contratos_ativos} contrato${resumo.contratos_ativos === 1 ? '' : 's'} ativo${resumo.contratos_ativos === 1 ? '' : 's'}${proximo ? ` · próximo desconto em ${data(proximo)}` : ''}</div>
+    <div class="hero-stats">
+      <div class="hero-stat"><span>Saldo devedor estimado</span><b>${brl(resumo.saldo_estimado)}</b></div>
+      <div class="hero-stat"><span>Solicitações em andamento</span><b>${resumo.solicitacoes_abertas}</b></div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="action" data-acao="nova"><i>${ic(I.plus)}</i><div><b>Nova proposta</b><small>Peça um novo crédito</small></div></button>
+    <button class="action" data-acao="refinanciar"><i>${ic(I.refresh)}</i><div><b>Refinanciar</b><small>Use um contrato ativo</small></div></button>
+    <a class="action" href="#solicitacoes"><i>${ic(I.clock)}</i><div><b>Acompanhar</b><small>Status das propostas</small></div></a>
+    <a class="action" href="#atendimento"><i>${ic(I.head)}</i><div><b>Falar com a gente</b><small>WhatsApp e telefone</small></div></a>
+  </div>
+
+  <div class="section-title"><span>Em andamento</span>${abertas.length ? '<a href="#solicitacoes">Ver todas</a>' : ''}</div>
+  ${abertas.length ? `<div class="grid grid-2">${abertas.slice(0, 2).map(cartaoSolicitacao).join('')}</div>`
+    : vazio(I.clock, 'Nada em andamento', 'Quando você fizer uma nova proposta, o andamento aparece aqui.')}
+
+  <div class="section-title"><span>Seus contratos</span>${contratos.length ? '<a href="#contratos">Ver todos</a>' : ''}</div>
+  ${ativos.length ? `<div class="grid grid-2">${ativos.slice(0, 2).map((c) => cartaoContrato(c, true)).join('')}</div>`
+    : vazio(I.doc, 'Nenhum contrato ativo', 'Seus contratos aparecem aqui assim que forem averbados.', `<button class="btn btn-primary btn-sm" data-acao="nova">${ic(I.plus, 16)}Fazer uma proposta</button>`)}`;
+}
+
+function telaContratos() {
+  const { contratos } = estado.painel;
+  const ordem = { ativo: 0, em_averbacao: 1, quitado: 2, cancelado: 3 };
+  const lista = contratos.slice().sort((a, b) => (ordem[a.status] ?? 9) - (ordem[b.status] ?? 9));
+  return `
+  <div class="page-head"><h1>Contratos</h1><p>Parcelas, taxas e documentos de todas as suas operações.</p></div>
+  ${lista.length ? `<div class="grid grid-2">${lista.map((c) => cartaoContrato(c)).join('')}</div>`
+    : vazio(I.doc, 'Você ainda não tem contratos', 'Faça uma proposta e acompanhe por aqui.', `<button class="btn btn-primary btn-sm" data-acao="nova">${ic(I.plus, 16)}Nova proposta</button>`)}`;
+}
+
+function telaSolicitacoes() {
+  const { solicitacoes } = estado.painel;
+  const filtros = [['todas', 'Todas'], ['abertas', 'Em andamento'], ['concluidas', 'Concluídas']];
+  const lista = solicitacoes.filter((s) => estado.filtro === 'todas' || (estado.filtro === 'abertas' ? s.aberta : !s.aberta));
+  return `
+  <div class="page-head" style="display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap">
+    <div><h1>Acompanhar solicitações</h1><p>Veja em que etapa está cada pedido.</p></div>
+    <button class="btn btn-primary btn-sm" data-acao="nova">${ic(I.plus, 16)}Nova proposta</button>
+  </div>
+  <div class="tabs" role="tablist">${filtros.map(([id, nome]) => `<button class="tab${estado.filtro === id ? ' active' : ''}" role="tab" aria-selected="${estado.filtro === id}" data-filtro="${id}">${nome}</button>`).join('')}</div>
+  ${lista.length ? `<div class="grid grid-2">${lista.map(cartaoSolicitacao).join('')}</div>`
+    : vazio(I.clock, 'Nenhuma solicitação aqui', 'Suas propostas e pedidos aparecem nesta lista.')}`;
+}
+
+const FAQ = [
+  ['Como acompanho minha proposta?', 'Na aba "Acompanhar" você vê cada etapa: recebida, em análise, aprovada e valor liberado. Quando precisarmos de algo, deixamos um recado na própria solicitação.'],
+  ['Quando a parcela é descontada?', 'No consignado, a parcela é descontada direto da folha ou do benefício, todo mês. A data do próximo desconto aparece em cada contrato.'],
+  ['O que é refinanciamento?', 'É renegociar um contrato ativo: você pode liberar um valor novo usando a margem já paga ou ajustar o prazo. Toque em "Refinanciar" no contrato para pedir uma simulação, sem compromisso.'],
+  ['Posso quitar o contrato antes do prazo?', 'Sim. Na quitação antecipada os juros futuros são descontados proporcionalmente. O saldo mostrado aqui é uma estimativa; peça o valor oficial no Atendimento.'],
+  ['Onde vejo meu contrato?', 'Em "Contratos", toque em "Ver detalhes" e depois em "Baixar contrato". O documento abre em PDF.'],
+  ['Esqueci minha senha. E agora?', 'Fale com nosso atendimento pelo WhatsApp ou telefone. Por segurança, confirmamos seus dados antes de liberar uma nova senha.'],
+  ['Como sei que é a Antecipey falando comigo?', 'Nunca pedimos depósito antecipado, senha ou código por mensagem. Na dúvida, desligue e ligue para os canais oficiais que aparecem em "Atendimento".'],
+];
+
+function telaAjuda() {
+  return `
+  <div class="page-head"><h1>Central de dúvidas</h1><p>Respostas rápidas e um assistente para conversar quando quiser.</p></div>
+  <div class="help-grid">
+    <div>
+      <div class="faq">${FAQ.map(([p, r]) => `<details><summary>${esc(p)}${ic(I.down, 18)}</summary><div class="ans">${esc(r)}</div></details>`).join('')}</div>
+      <p class="hint" style="margin:14px 4px 24px">Não achou o que precisava? Pergunte ao assistente ou fale com nossa equipe.</p>
+    </div>
+    <section class="chat" aria-label="Assistente virtual">
+      <div class="chat-head">
+        <div class="bot-ava">${ic(I.bot, 22)}</div>
+        <div><b>Assistente Antecipey</b><small>Online agora</small></div>
+        <button class="icon-btn" id="chat-limpar" title="Nova conversa" aria-label="Nova conversa" style="margin-left:auto">${ic(I.refresh, 17)}</button>
+      </div>
+      <div class="chat-body" id="chat-body" aria-live="polite"></div>
+      <div class="chips" id="chat-chips"></div>
+      <form class="chat-form" id="chat-form">
+        <label for="chat-input" class="sr-only">Sua mensagem</label>
+        <input id="chat-input" class="input" placeholder="Escreva sua dúvida…" autocomplete="off" maxlength="1200">
+        <button class="send" type="submit" aria-label="Enviar">${ic(I.send, 20)}</button>
+      </form>
+      <div class="chat-disclaimer">O assistente usa IA e pode errar. Não envie senhas ou códigos.</div>
+    </section>
+  </div>`;
+}
+
+function telaAtendimento() {
+  const c = estado.painel.canais;
+  const itens = [
+    c.whatsapp && `<a class="contact wa" href="${esc(c.whatsapp)}" target="_blank" rel="noopener"><i>${ic(I.wa, 26)}</i><div><b>WhatsApp</b><small>${esc(c.whatsapp_exibicao)} · fale com um atendente</small></div><span class="go">${ic(I.chev, 20)}</span></a>`,
+    c.telefone && `<a class="contact ph" href="${esc(c.telefone)}"><i>${ic(I.phone, 24)}</i><div><b>Ligar para o SAC</b><small>${esc(c.telefone_exibicao)}</small></div><span class="go">${ic(I.chev, 20)}</span></a>`,
+    c.email && `<a class="contact ml" href="mailto:${esc(c.email)}"><i>${ic(I.mail, 24)}</i><div><b>E-mail</b><small>${esc(c.email)}</small></div><span class="go">${ic(I.chev, 20)}</span></a>`,
+  ].filter(Boolean);
+  return `
+  <div class="page-head"><h1>Atendimento</h1><p>${esc(c.horario)}.</p></div>
+  ${itens.length ? `<div class="grid grid-3">${itens.join('')}</div>` : ''}
+
+  <div class="section-title"><span>Abrir um chamado</span></div>
+  <form class="card" id="form-chamado">
+    <p class="hint" style="margin-bottom:16px">Prefere escrever? Conte o que precisa e nossa equipe responde por aqui, na aba Acompanhar.</p>
+    <div class="field"><label for="chamado-texto">Como podemos ajudar?</label>
+      <textarea id="chamado-texto" class="input" maxlength="1000" placeholder="Ex.: quero o valor para quitar meu contrato" required></textarea></div>
+    <button class="btn btn-primary" type="submit">Enviar chamado</button>
+  </form>
+
+  <div class="section-title"><span>Segurança da conta</span></div>
+  <div class="card" style="display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap">
+    <div style="display:flex;gap:14px;align-items:center"><span class="avatar" style="background:var(--card-2);color:var(--green)">${ic(I.lock, 18)}</span>
+      <div><b style="font-size:15px">Senha de acesso</b><p class="hint">Troque sua senha quando quiser.</p></div></div>
+    <button class="btn btn-ghost btn-sm" data-acao="senha">Alterar senha</button>
+  </div>`;
+}
+
+/* ════════════ Modais ════════════ */
+function abrirModal(html, aoMontar) {
+  const root = $('#modal-root');
+  const anterior = document.activeElement;
+  root.innerHTML = `<div class="modal" role="dialog" aria-modal="true"><div class="sheet"><div class="grabber"></div>${html}</div></div>`;
+  const modal = root.firstElementChild;
+  const fechar = () => { root.innerHTML = ''; document.removeEventListener('keydown', aoTeclar); anterior?.focus?.(); };
+  const aoTeclar = (e) => { if (e.key === 'Escape') fechar(); };
+  modal.addEventListener('click', (e) => { if (e.target === modal || e.target.closest('[data-fechar]')) fechar(); });
+  document.addEventListener('keydown', aoTeclar);
+  document.body.style.overflow = 'hidden';
+  const observer = new MutationObserver(() => { if (!root.firstElementChild) { document.body.style.overflow = ''; observer.disconnect(); } });
+  observer.observe(root, { childList: true });
+  aoMontar?.(modal, fechar);
+  modal.querySelector('input,select,textarea,button:not([data-fechar])')?.focus();
+  return fechar;
+}
+
+const cabecalho = (titulo, sub) => `<div class="sheet-head"><div><h2>${titulo}</h2>${sub ? `<p>${sub}</p>` : ''}</div><button class="icon-btn" data-fechar aria-label="Fechar">${ic(I.x, 18)}</button></div>`;
+
+function sucesso(fechar, modal, s) {
+  modal.querySelector('.sheet').innerHTML = `
+    <div class="grabber"></div>
+    <div class="success">
+      <i>${ic(I.check, 34)}</i>
+      <h2>Pedido enviado!</h2>
+      <p>Recebemos sua ${esc(s.tipo_nome.toLowerCase())}. Você acompanha cada etapa na aba Acompanhar.</p>
+      <span class="proto">Protocolo ${esc(s.protocolo)}</span>
+      <div class="sheet-actions"><button class="btn btn-primary btn-block" data-ir="solicitacoes">Acompanhar agora</button></div>
+    </div>`;
+  modal.querySelector('[data-ir]').addEventListener('click', () => { fechar(); location.hash = 'solicitacoes'; });
+}
+
+async function enviarSolicitacao(form, fechar, modal, corpo) {
+  const btn = form.querySelector('[type=submit]');
+  const erro = form.querySelector('.form-error');
+  erro.hidden = true;
+  carregando(btn, true, 'Enviando…');
+  try {
+    const s = await api('/solicitacoes', { method: 'POST', body: corpo });
+    await atualizarPainel();
+    sucesso(fechar, modal, s);
+  } catch (e) {
+    if (e.status === 401) return fechar();
+    erro.textContent = e.message;
+    erro.hidden = false;
+    carregando(btn, false);
+  }
+}
+
+const valorDigitado = (v) => {
+  const n = Number(String(v).replace(/\./g, '').replace(',', '.').replace(/[^\d.]/g, ''));
+  return Number.isFinite(n) && n > 0 ? n : null;
+};
+function mascaraValor(input) {
+  input.addEventListener('input', () => {
+    const d = input.value.replace(/\D/g, '').slice(0, 9);
+    input.value = d ? (Number(d) / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2 }) : '';
+  });
+}
+
+function modalNovaProposta() {
+  abrirModal(`
+    ${cabecalho('Nova proposta', 'Diga quanto precisa. Nossa equipe simula as melhores condições e responde por aqui.')}
+    <form novalidate>
+      <div class="form-error" role="alert" hidden></div>
+      <div class="field"><label for="np-valor">Quanto você precisa?</label>
+        <input id="np-valor" class="input" inputmode="numeric" placeholder="R$ 0,00" required></div>
+      <div class="field"><label for="np-prazo">Em quantas parcelas? <span class="hint">(opcional)</span></label>
+        <select id="np-prazo" class="input"><option value="">Quero a melhor sugestão</option>${[24, 36, 48, 60, 72, 84, 96].map((n) => `<option value="${n}">${n} parcelas</option>`).join('')}</select></div>
+      <div class="field"><label for="np-obs">Algo mais que devemos saber? <span class="hint">(opcional)</span></label>
+        <textarea id="np-obs" class="input" maxlength="1000" placeholder="Ex.: sou servidor estadual, prefiro parcelas menores"></textarea></div>
+      <div class="sheet-actions"><button class="btn btn-primary btn-block" type="submit">Enviar proposta</button></div>
+    </form>`, (modal, fechar) => {
+    const form = modal.querySelector('form');
+    mascaraValor($('#np-valor', modal));
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const valor = valorDigitado($('#np-valor', modal).value);
+      const erro = form.querySelector('.form-error');
+      if (!valor || valor < 100) { erro.textContent = 'Informe um valor a partir de R$ 100,00.'; erro.hidden = false; return; }
+      enviarSolicitacao(form, fechar, modal, {
+        tipo: 'nova_proposta', valor_desejado: valor,
+        prazo_desejado: $('#np-prazo', modal).value || null, observacao: $('#np-obs', modal).value,
+      });
+    });
+  });
+}
+
+function modalRefinanciar(contratoId) {
+  const ativos = estado.painel.contratos.filter((c) => c.status === 'ativo');
+  if (!ativos.length) {
+    abrirModal(`${cabecalho('Refinanciar')}${vazio(I.refresh, 'Nenhum contrato ativo', 'O refinanciamento é feito a partir de um contrato ativo. Que tal uma nova proposta?')}
+      <div class="sheet-actions" style="margin-top:16px"><button class="btn btn-primary btn-block" id="ir-nova">Fazer nova proposta</button></div>`,
+    (modal, fechar) => modal.querySelector('#ir-nova').addEventListener('click', () => { fechar(); modalNovaProposta(); }));
+    return;
+  }
+  const escolhido = ativos.find((c) => c.id === contratoId) || ativos[0];
+  abrirModal(`
+    ${cabecalho('Refinanciar contrato', 'Pedimos uma simulação sem compromisso. Você decide depois de ver as condições.')}
+    <form novalidate>
+      <div class="form-error" role="alert" hidden></div>
+      <div class="field"><label for="rf-contrato">Contrato</label>
+        <select id="rf-contrato" class="input">${ativos.map((c) => `<option value="${esc(c.id)}"${c.id === escolhido.id ? ' selected' : ''}>${esc(c.produto)} · Nº ${esc(c.numero)} · ${brl(c.valor_parcela)}/mês</option>`).join('')}</select></div>
+      <div class="detail-list" id="rf-resumo"></div>
+      <div class="field"><label for="rf-valor">Valor novo que gostaria de liberar <span class="hint">(opcional)</span></label>
+        <input id="rf-valor" class="input" inputmode="numeric" placeholder="R$ 0,00"></div>
+      <div class="field"><label for="rf-obs">Objetivo <span class="hint">(opcional)</span></label>
+        <select id="rf-obs" class="input">
+          <option value="">Escolha uma opção</option>
+          <option>Liberar dinheiro novo</option>
+          <option>Diminuir o valor da parcela</option>
+          <option>Diminuir a taxa de juros</option>
+          <option>Ainda não sei, quero uma simulação</option>
+        </select></div>
+      <div class="sheet-actions"><button class="btn btn-primary btn-block" type="submit">Pedir simulação</button></div>
+    </form>`, (modal, fechar) => {
+    const form = modal.querySelector('form');
+    mascaraValor($('#rf-valor', modal));
+    const resumo = () => {
+      const c = ativos.find((x) => x.id === $('#rf-contrato', modal).value);
+      $('#rf-resumo', modal).innerHTML = `
+        <div><span>Parcelas pagas</span><b>${c.parcelas_pagas} de ${c.prazo}</b></div>
+        <div><span>Taxa atual</span><b>${pct(c.taxa_mensal)} a.m.</b></div>
+        <div><span>Saldo devedor estimado</span><b>${brl(c.saldo_estimado)}</b></div>`;
+    };
+    resumo();
+    $('#rf-contrato', modal).addEventListener('change', resumo);
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const valor = valorDigitado($('#rf-valor', modal).value);
+      enviarSolicitacao(form, fechar, modal, {
+        tipo: 'refinanciamento', contrato_id: $('#rf-contrato', modal).value,
+        valor_desejado: valor && valor >= 100 ? valor : null, observacao: $('#rf-obs', modal).value,
+      });
+    });
+  });
+}
+
+function modalContrato(id) {
+  const c = estado.painel.contratos.find((x) => x.id === id);
+  if (!c) return;
+  const [cls, nome] = BADGE_CONTRATO[c.status] || ['b-gray', c.status];
+  abrirModal(`
+    ${cabecalho(esc(c.produto), `Nº ${esc(c.numero)}${c.banco ? ` · ${esc(c.banco)}` : ''}`)}
+    <div style="margin-bottom:16px"><span class="badge ${cls}">${nome}</span></div>
+    <div style="margin-bottom:18px">
+      <div class="progress-row"><span>${c.parcelas_pagas} de ${c.prazo} parcelas descontadas</span><b>${c.progresso}%</b></div>
+      <div class="progress"><div style="width:${c.progresso}%"></div></div>
+    </div>
+    <div class="detail-list">
+      <div><span>Valor liberado</span><b>${brl(c.valor_liberado)}</b></div>
+      <div><span>Valor da parcela</span><b>${brl(c.valor_parcela)}</b></div>
+      <div><span>Taxa de juros</span><b>${pct(c.taxa_mensal)} ao mês</b></div>
+      ${c.cet_anual != null ? `<div><span>CET</span><b>${pct(c.cet_anual)} ao ano</b></div>` : ''}
+      <div><span>Prazo</span><b>${c.prazo} meses</b></div>
+      <div><span>Parcelas restantes</span><b>${c.parcelas_restantes}</b></div>
+      ${c.status === 'ativo' ? `<div><span>Saldo devedor estimado</span><b>${brl(c.saldo_estimado)}</b></div>` : ''}
+      ${c.convenio ? `<div><span>Convênio</span><b>${esc(c.convenio)}</b></div>` : ''}
+      <div><span>Data da contratação</span><b>${data(c.data_contratacao)}</b></div>
+      ${c.proximo_vencimento ? `<div><span>Próximo desconto</span><b>${data(c.proximo_vencimento)}</b></div>` : ''}
+    </div>
+    ${c.status === 'ativo' ? '<p class="hint" style="margin:-6px 0 18px">O saldo é uma estimativa. Para o valor oficial de quitação, fale com o Atendimento.</p>' : ''}
+    <div class="sheet-actions two">
+      ${c.tem_documento ? `<button class="btn btn-ghost" id="baixar-doc">${ic(I.pdf, 18)}Baixar contrato</button>` : '<button class="btn btn-ghost" disabled>Contrato em preparação</button>'}
+      ${c.status === 'ativo' ? `<button class="btn btn-primary" id="ir-refin">${ic(I.refresh, 18)}Refinanciar</button>` : ''}
+    </div>`, (modal, fechar) => {
+    modal.querySelector('#ir-refin')?.addEventListener('click', () => { fechar(); modalRefinanciar(c.id); });
+    const btn = modal.querySelector('#baixar-doc');
+    btn?.addEventListener('click', async () => {
+      // Abre a aba antes do await para o navegador do celular não bloquear
+      const aba = window.open('', '_blank');
+      carregando(btn, true, 'Abrindo…');
+      try {
+        const { url } = await api(`/contratos/${encodeURIComponent(c.id)}/documento`);
+        if (aba) { aba.opener = null; aba.location.href = url; } else location.href = url;
+      } catch (e) {
+        aba?.close();
+        toast(e.message, true);
+      } finally {
+        carregando(btn, false);
+      }
+    });
+  });
+}
+
+function modalSenha() {
+  abrirModal(`
+    ${cabecalho('Alterar senha', 'Use 8 caracteres ou mais, com letras e números.')}
+    <form novalidate>
+      <div class="form-error" role="alert" hidden></div>
+      <div class="field"><label for="s-atual">Senha atual</label><input id="s-atual" type="password" class="input" autocomplete="current-password" required></div>
+      <div class="field"><label for="s-nova">Nova senha</label><input id="s-nova" type="password" class="input" autocomplete="new-password" required></div>
+      <div class="field"><label for="s-conf">Repita a nova senha</label><input id="s-conf" type="password" class="input" autocomplete="new-password" required></div>
+      <div class="sheet-actions"><button class="btn btn-primary btn-block" type="submit">Salvar nova senha</button></div>
+    </form>`, (modal, fechar) => {
+    const form = modal.querySelector('form');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const erro = form.querySelector('.form-error');
+      const nova = $('#s-nova', modal).value;
+      const mostrar = (m) => { erro.textContent = m; erro.hidden = false; };
+      if (nova.length < 8 || !/[A-Za-z]/.test(nova) || !/\d/.test(nova)) return mostrar('A nova senha precisa ter 8+ caracteres, com letras e números.');
+      if (nova !== $('#s-conf', modal).value) return mostrar('As senhas não são iguais.');
+      const btn = form.querySelector('[type=submit]');
+      carregando(btn, true, 'Salvando…');
+      try {
+        await api('/senha', { method: 'PUT', body: { senha_atual: $('#s-atual', modal).value, nova_senha: nova } });
+        fechar();
+        toast('Senha alterada. Outros aparelhos foram desconectados.');
+      } catch (er) {
+        if (er.status === 401) return fechar();
+        mostrar(er.message);
+        carregando(btn, false);
+      }
+    });
+  });
+}
+
+function confirmarCancelamento(id) {
+  const s = estado.painel.solicitacoes.find((x) => x.id === id);
+  if (!s) return;
+  abrirModal(`
+    ${cabecalho('Cancelar solicitação?', `${esc(s.tipo_nome)} · protocolo ${esc(s.protocolo)}`)}
+    <p class="hint" style="margin-bottom:20px;font-size:14px">Se mudar de ideia depois, é só fazer um novo pedido.</p>
+    <div class="sheet-actions two">
+      <button class="btn btn-ghost" data-fechar>Voltar</button>
+      <button class="btn btn-danger" id="confirmar">Cancelar solicitação</button>
+    </div>`, (modal, fechar) => {
+    const btn = modal.querySelector('#confirmar');
+    btn.addEventListener('click', async () => {
+      carregando(btn, true);
+      try {
+        await api(`/solicitacoes/${encodeURIComponent(id)}/cancelar`, { method: 'POST' });
+        fechar();
+        await atualizarPainel();
+        toast('Solicitação cancelada.');
+      } catch (e) {
+        if (e.status !== 401) toast(e.message, true);
+        fechar();
+      }
+    });
+  });
+}
+
+/* ════════════ Assistente (chat) ════════════ */
+const SUGESTOES = ['Quanto falta para quitar?', 'Como está minha proposta?', 'Qual a taxa dos meus contratos?', 'Como funciona o refinanciamento?'];
+
+function bolha(m) {
+  const d = document.createElement('div');
+  d.className = `msg ${m.role === 'user' ? 'me' : 'bot'}`;
+  d.textContent = m.content;
+  return d;
+}
+
+function montarChat() {
+  const body = $('#chat-body');
+  const chips = $('#chat-chips');
+  if (!body) return;
+  body.innerHTML = '';
+  if (!estado.chat.length) {
+    body.appendChild(bolha({ role: 'assistant', content: `Olá, ${estado.painel.cliente.primeiro_nome}! Sou o assistente da Antecipey. Posso explicar seus contratos, parcelas e o andamento das suas propostas. Como posso ajudar?` }));
+  }
+  estado.chat.forEach((m) => body.appendChild(bolha(m)));
+  if (estado.enviando) body.insertAdjacentHTML('beforeend', '<div class="msg bot typing" id="digitando"><span></span><span></span><span></span></div>');
+  body.scrollTop = body.scrollHeight;
+
+  chips.innerHTML = estado.chat.length ? '' : SUGESTOES.map((s) => `<button type="button" class="chip">${esc(s)}</button>`).join('');
+  chips.querySelectorAll('.chip').forEach((b) => b.addEventListener('click', () => enviarChat(b.textContent)));
+
+  $('#chat-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const input = $('#chat-input');
+    const texto = input.value.trim();
+    if (!texto) return;
+    input.value = '';
+    enviarChat(texto);
+  });
+  $('#chat-limpar').addEventListener('click', () => { estado.chat = []; store.del('ant_chat'); montarChat(); });
+  $('.send').disabled = estado.enviando;
+}
+
+async function enviarChat(texto) {
+  if (estado.enviando) return;
+  estado.chat.push({ role: 'user', content: texto.slice(0, 1200) });
+  estado.enviando = true;
+  store.set('ant_chat', estado.chat);
+  montarChat();
+  try {
+    const { texto: resposta } = await api('/chat', { method: 'POST', body: { mensagens: estado.chat.slice(-16) } });
+    estado.chat.push({ role: 'assistant', content: resposta });
+  } catch (e) {
+    if (e.status === 401) return;
+    estado.chat.push({ role: 'assistant', content: e.message });
+  } finally {
+    estado.enviando = false;
+    store.set('ant_chat', estado.chat.slice(-30));
+    if (rotaAtual() === 'ajuda') { montarChat(); $('#chat-input')?.focus(); }
+  }
+}
+
+/* ════════════ Ações (cliques) ════════════ */
+document.addEventListener('click', (e) => {
+  const el = e.target.closest('[data-acao],[data-filtro]');
+  if (!el || !estado.painel) return;
+  if (el.dataset.filtro) { estado.filtro = el.dataset.filtro; render(); return; }
+  const { acao, id } = el.dataset;
+  if (acao === 'nova') modalNovaProposta();
+  else if (acao === 'refinanciar') modalRefinanciar(id);
+  else if (acao === 'contrato') modalContrato(id);
+  else if (acao === 'cancelar') confirmarCancelamento(id);
+  else if (acao === 'senha') modalSenha();
+});
+
+document.addEventListener('submit', async (e) => {
+  if (e.target.id !== 'form-chamado') return;
+  e.preventDefault();
+  const texto = $('#chamado-texto').value.trim();
+  if (!texto) { toast('Escreva como podemos ajudar.', true); return; }
+  const btn = e.target.querySelector('[type=submit]');
+  carregando(btn, true, 'Enviando…');
+  try {
+    const s = await api('/solicitacoes', { method: 'POST', body: { tipo: 'atendimento', observacao: texto } });
+    await atualizarPainel();
+    toast(`Chamado aberto · protocolo ${s.protocolo}`);
+  } catch (er) {
+    if (er.status !== 401) toast(er.message, true);
+    carregando(btn, false);
+  }
+});
+
+/* ════════════ Login / sessão ════════════ */
+function desenharCanaisLogin(c) {
+  const links = [
+    c.whatsapp && `<a class="btn btn-ghost btn-sm" href="${esc(c.whatsapp)}" target="_blank" rel="noopener">${ic(I.wa, 16)}WhatsApp</a>`,
+    c.telefone && `<a class="btn btn-ghost btn-sm" href="${esc(c.telefone)}">${ic(I.phone, 16)}${esc(c.telefone_exibicao)}</a>`,
+  ].filter(Boolean);
+  $('#login-canais').innerHTML = links.join('');
+  $('#login-canais').hidden = !links.length;
+}
+
+function mostrarLogin(aviso) {
+  $('#boot').hidden = true;
+  $('#app').hidden = true;
+  $('#login').hidden = false;
+  $('#modal-root').innerHTML = '';
+  document.title = 'Área do Cliente · Antecipey';
+  const erro = $('#login-error');
+  if (aviso) { erro.textContent = aviso; erro.hidden = false; } else erro.hidden = true;
+  fetch('/api/cliente/canais').then((r) => r.ok && r.json()).then((c) => c && desenharCanaisLogin(c)).catch(() => {});
+}
+
+function mostrarApp() {
+  const { cliente } = estado.painel;
+  $('#boot').hidden = true;
+  $('#login').hidden = true;
+  $('#app').hidden = false;
+  $('#top-nome').textContent = cliente.nome;
+  $('#top-cpf').textContent = `CPF ${cliente.cpf}`;
+  $('#top-avatar').textContent = cliente.nome.split(' ').filter(Boolean).slice(0, 2).map((p) => p[0]).join('').toUpperCase();
+  render();
+}
+
+async function atualizarPainel() {
+  estado.painel = await api('/painel');
+  render();
+}
+
+$('#cpf').addEventListener('input', (e) => { e.target.value = mascaraCpf(e.target.value); });
+document.querySelectorAll('[data-eye]').forEach((b) => b.addEventListener('click', () => {
+  const input = document.getElementById(b.dataset.eye);
+  const mostrar = input.type === 'password';
+  input.type = mostrar ? 'text' : 'password';
+  b.setAttribute('aria-label', mostrar ? 'Ocultar senha' : 'Mostrar senha');
+}));
+
+$('#login-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const erro = $('#login-error');
+  const cpf = $('#cpf').value.replace(/\D/g, '');
+  const senha = $('#senha').value;
+  erro.hidden = true;
+  if (cpf.length !== 11 || !senha) { erro.textContent = 'Preencha o CPF e a senha.'; erro.hidden = false; return; }
+  const btn = $('#login-btn');
+  carregando(btn, true, 'Entrando…');
+  try {
+    await api('/login', { method: 'POST', body: { cpf, senha } });
+    estado.painel = await api('/painel');
+    estado.chat = [];
+    store.del('ant_chat');
+    $('#senha').value = '';
+    if (!location.hash) history.replaceState(null, '', '#inicio');
+    mostrarApp();
+  } catch (er) {
+    erro.textContent = er.message;
+    erro.hidden = false;
+  } finally {
+    carregando(btn, false);
+  }
+});
+
+$('#btn-sair').addEventListener('click', async () => {
+  try { await api('/logout', { method: 'POST' }); } catch { /* sai mesmo assim */ }
+  estado.painel = null;
+  estado.chat = [];
+  store.del('ant_chat');
+  history.replaceState(null, '', location.pathname);
+  mostrarLogin();
+});
+
+// Início: se já tem sessão, entra direto
+(async () => {
+  try {
+    const res = await fetch('/api/cliente/painel', { credentials: 'same-origin', headers: { 'X-Antecipey': '1' } });
+    if (res.ok) {
+      estado.painel = await res.json();
+      mostrarApp();
+    } else {
+      mostrarLogin();
+    }
+  } catch {
+    mostrarLogin('Sem conexão. Verifique sua internet.');
+  }
+})();
+})();
+</script>
+</body>
+</html>

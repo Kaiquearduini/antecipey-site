@@ -17,6 +17,11 @@
   status = 200
 
 [[redirects]]
+  from = "/cliente"
+  to = "/cliente.html"
+  status = 200
+
+[[redirects]]
   from = "/servicos"
   to = "/servicos.html"
   status = 200
@@ -25,3 +30,59 @@
   from = "/servico"
   to = "/servico.html"
   status = 200
+
+# Código do servidor não é página: não deixa abrir pelo navegador
+[[redirects]]
+  from = "/lib/*"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/routes/*"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/scripts/*"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/supabase/*"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/netlify/*"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/server.js"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/package*"
+  to = "/404"
+  status = 404
+  force = true
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "SAMEORIGIN"
+
+[[headers]]
+  for = "/cliente*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    Cache-Control = "no-store"

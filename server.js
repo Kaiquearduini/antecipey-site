@@ -1,19 +1,15 @@
 require('dotenv').config();
 const express = require('express');
 const path = require('path');
-const { createClient } = require('@supabase/supabase-js');
+const db = require('./lib/db');
+const rotasCliente = require('./routes/cliente');
+const rotasIntegracao = require('./routes/integracao');
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
 
-// Supabase com service role key — nunca exposta ao browser
-const db = createClient(
-    process.env.SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_KEY,
-    { auth: { persistSession: false } }
-);
-
-app.use(express.json());
+app.disable('x-powered-by');
+app.use(express.json({ limit: '50kb' }));
 
 // Na Netlify a API roda como função em /.netlify/functions/api
 app.use((req, res, next) => {
@@ -29,6 +25,10 @@ app.get('/', (req, res) => {
 
 app.get('/admin', (req, res) => {
     res.sendFile(path.join(__dirname, 'admin.html'));
+});
+
+app.get('/cliente', (req, res) => {
+    res.sendFile(path.join(__dirname, 'cliente.html'));
 });
 
 app.get('/servicos', (req, res) => {
@@ -195,6 +195,22 @@ app.put('/api/admin/content/:key', requireAdmin, async (req, res) => {
     const { data, error } = await db.from('site_content').update({ value: req.body.value }).eq('key', req.params.key).select().single();
     if (error) return res.status(500).json({ error: error.message });
     res.json(data);
+});
+
+// ════════════════════════════════
+//  ÁREA DO CLIENTE e INTEGRAÇÃO
+// ════════════════════════════════
+app.use('/api/cliente', rotasCliente);
+app.use('/api/integracao', rotasIntegracao);
+
+app.use('/api', (req, res) => res.status(404).json({ error: 'Não encontrado' }));
+
+// Erros inesperados: registra no log e não expõe detalhes
+app.use((err, req, res, next) => {
+    if (err.type === 'entity.parse.failed') return res.status(400).json({ error: 'JSON inválido' });
+    if (err.type === 'entity.too.large') return res.status(413).json({ error: 'Conteúdo muito grande' });
+    console.error('[api]', req.method, req.originalUrl, err);
+    res.status(500).json({ error: 'Erro interno. Tente novamente em instantes.' });
 });
 
 module.exports = app;

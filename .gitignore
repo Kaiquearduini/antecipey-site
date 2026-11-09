@@ -5,3 +5,5 @@ node_modules/
 .vercel
 .netlify
 supabase/.temp
+USUARIO-TESTE.txt
+PEDIDO-DNS-KINGHOST.txt
