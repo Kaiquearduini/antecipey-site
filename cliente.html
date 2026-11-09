@@ -77,7 +77,7 @@ select.input option{background:#1b1f1e}
 .login-side{display:none}
 .login-main{display:flex;flex-direction:column;padding:28px 20px calc(28px + var(--safe-b));max-width:460px;width:100%;margin:0 auto}
 .login-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:48px}
-.logo{height:30px;width:auto;display:block}
+.logo{height:30px;width:auto;max-width:none;display:block;flex:none;align-self:flex-start;aspect-ratio:1024/310;object-fit:contain}
 .back-site{font-size:13px;color:var(--muted);display:inline-flex;gap:6px;align-items:center}
 .back-site:hover{color:var(--text)}
 .login h1{font-size:30px;line-height:1.1;letter-spacing:-.03em;font-weight:700;margin-bottom:10px}
@@ -330,7 +330,7 @@ a.contact:hover{border-color:rgba(0,224,130,.4);background:rgba(0,224,130,.05)}
 <!-- ══════════ LOGIN ══════════ -->
 <section id="login" class="login" hidden>
   <aside class="login-side">
-    <img src="assets/antecipey-logo-transparent.png" alt="Antecipey" class="logo" style="height:34px;position:relative;z-index:1">
+    <img src="assets/antecipey-logo-transparent.png" alt="Antecipey" class="logo" style="height:40px;position:relative;z-index:1">
     <h2>Sua vida financeira, <span class="grad">acompanhada de perto.</span></h2>
     <div class="login-feats">
       <div class="login-feat"><i><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6M7 4h7l5 5v11a1 1 0 01-1 1H7a1 1 0 01-1-1V5a1 1 0 011-1z"/></svg></i>Seus contratos em um só lugar</div>
